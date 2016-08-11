@@ -10,6 +10,12 @@ public class GUIManager : MonoBehaviour {
     public GameObject ButtonNextTurnObj;
     public Image PlayerTurnIcon;
 
+    void Awake()
+    {
+        EventManager.OnTurnPhaseChange += ToggleButtonCollect;
+        EventManager.OnTurnPhaseChange += ToggleButtonNextTurn;
+    }
+
 	// Use this for initialization
 	void Start () {
 	
@@ -25,9 +31,20 @@ public class GUIManager : MonoBehaviour {
         MegaMan.NextTurn();
     }
 
-    public void Collect()
+    public void ToggleButtonCollect(TurnPhase turnPhase)
     {
-        MegaMan.GridMan.CheckForCompletedRegions();
-        MegaMan.CurrentTurnPhase = TurnPhase.Buy;
+        print("Collect: " + turnPhase + " " + (turnPhase == TurnPhase.Place));
+        ButtonCollectObj.SetActive(turnPhase == TurnPhase.Place);
+    }
+
+    public void ToggleButtonNextTurn(TurnPhase turnPhase)
+    {
+        ButtonNextTurnObj.SetActive(turnPhase == TurnPhase.Buy);
+    }
+
+    public void CollectAndGoToBuyPhase()
+    {
+        MegaMan.GridMan.CheckForCompletedRegions(); //TODO: Make into event
+        EventManager.ChangeTurnPhase(TurnPhase.Buy);
     }
 }

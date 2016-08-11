@@ -88,4 +88,10 @@ public class CustomBehaviour : MonoBehaviour {
     {
 
     }
+
+    // - - Delegates
+
+    public delegate void d_NoArgVoid();
+
+    public static event d_NoArgVoid lol;
 }

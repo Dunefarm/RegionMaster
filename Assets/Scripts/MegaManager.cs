@@ -97,16 +97,16 @@ public class MegaManager : MonoBehaviour {
         }
     }
 
-    int _playerNo = 0;
-    public TurnPhase _currentTurnPhase = TurnPhase.Beginning;
+    private int _playerNo = 0;
+    private TurnPhase _currentTurnPhase = TurnPhase.Beginning;
+
 
     public void NextTurn()
     {
         ColMan.CleanUp();
         GridMan.FillGrid();
         PlayerNo = (PlayerNo + 1) % 2;
-        CurrentTurnPhase = TurnPhase.End;
-        //NextPhase();
+        EventManager.ChangeTurnPhase(TurnPhase.End);
     }
 
     void DrawCard(int amount)
@@ -114,18 +114,101 @@ public class MegaManager : MonoBehaviour {
         CurrentDeck.DrawCard(amount);
     }
 
-    //public void NextPhase()
-    //{
-    //    int nextPhase = ((int)CurrentTurnPhase + 1) % 4;
-    //    print(nextPhase);
-    //    CurrentTurnPhase = (TurnPhase)nextPhase;
-    //}
+    public void SetCurrentTurnPhase(TurnPhase newPhase)
+    {
+        _currentTurnPhase = newPhase;
+        switch (newPhase)
+        {
+            case TurnPhase.Beginning:
+                SetCurrentTurnPhaseToBeginning();
+                break;
+            case TurnPhase.Place:
+                SetCurrentTurnPhaseToPlace();
+                break;
+            case TurnPhase.Buy:
+                SetCurrentTurnPhaseToBuy();
+                break;
+            case TurnPhase.End:
+                SetCurrentTurnPhaseToEnd();
+                break;
+        }
+    }
+
+    public void SetCurrentTurnPhaseToBeginning()
+    {
+        _currentTurnPhase = TurnPhase.Beginning;
+        DrawCard(3);
+    }
+
+    public void SetCurrentTurnPhaseToPlace()
+    {
+        _currentTurnPhase = TurnPhase.Place;
+
+    }
+
+    public void SetCurrentTurnPhaseToBuy()
+    {
+        _currentTurnPhase = TurnPhase.Buy;
+    }
+
+    public void SetCurrentTurnPhaseToEnd()
+    {
+        _currentTurnPhase = TurnPhase.End;
+        Markers.ClearMarkers();
+        Hand.DiscardHand();
+    }
+
+    public void NextTurnPhase()
+    {
+        if(_currentTurnPhase == TurnPhase.Beginning)
+            EventManager.ChangeTurnPhase(TurnPhase.Place);
+        else if(_currentTurnPhase == TurnPhase.Place)
+            EventManager.ChangeTurnPhase(TurnPhase.Buy);
+        else if(_currentTurnPhase == TurnPhase.Buy)
+            EventManager.ChangeTurnPhase(TurnPhase.End);
+        else if(_currentTurnPhase == TurnPhase.End)
+            EventManager.ChangeTurnPhase(TurnPhase.Beginning);
+    }
+
+    void Awake()
+    {
+        EventManager.OnTurnPhaseChange += SetCurrentTurnPhase;
+    }
 
     void Start()
     {
+        EventManager.OnSomethingChange += PrintSomeShit;
+        EventManager.OnSomethingChange += PrintSomeOtherShit;
         CurrentDeck = Decks[0];
         CurrentDiscardPile = DiscardPiles[0];
         PlayerNo = 0;
-        CurrentTurnPhase = TurnPhase.Beginning;
+        EventManager.ChangeTurnPhase(TurnPhase.Beginning);
+        EventManager.CallOnSomethingChange();
+    }
+
+    void Update()
+    {
+        if (CheckIfShouldChangeTurnPhase())
+        {
+            NextTurnPhase();
+        }
+    }
+
+    public void PrintSomeShit()
+    {
+        print("MegaMan printed some shit!");
+    }
+
+    public void PrintSomeOtherShit()
+    {
+        print("MegaMan printed some other shit");
+    }
+
+    private bool CheckIfShouldChangeTurnPhase()
+    {
+        if (_currentTurnPhase == TurnPhase.Beginning ||
+            _currentTurnPhase == TurnPhase.End)
+            return true;
+        return false;
     }
 }
