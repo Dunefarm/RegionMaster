@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public enum TurnPhase {Beginning, Place, Buy, End}
 
 public class MegaManager : MonoBehaviour {
 
@@ -114,48 +113,23 @@ public class MegaManager : MonoBehaviour {
         CurrentDeck.DrawCard(amount);
     }
 
-    public void SetCurrentTurnPhase(TurnPhase newPhase)
+    public void OnTurnPhaseChange(TurnPhase newPhase)
     {
         _currentTurnPhase = newPhase;
         switch (newPhase)
         {
             case TurnPhase.Beginning:
-                SetCurrentTurnPhaseToBeginning();
+                DrawCard(3);
                 break;
             case TurnPhase.Place:
-                SetCurrentTurnPhaseToPlace();
                 break;
             case TurnPhase.Buy:
-                SetCurrentTurnPhaseToBuy();
                 break;
             case TurnPhase.End:
-                SetCurrentTurnPhaseToEnd();
+                Markers.ClearMarkers();
+                Hand.DiscardHand();
                 break;
         }
-    }
-
-    public void SetCurrentTurnPhaseToBeginning()
-    {
-        _currentTurnPhase = TurnPhase.Beginning;
-        DrawCard(3);
-    }
-
-    public void SetCurrentTurnPhaseToPlace()
-    {
-        _currentTurnPhase = TurnPhase.Place;
-
-    }
-
-    public void SetCurrentTurnPhaseToBuy()
-    {
-        _currentTurnPhase = TurnPhase.Buy;
-    }
-
-    public void SetCurrentTurnPhaseToEnd()
-    {
-        _currentTurnPhase = TurnPhase.End;
-        Markers.ClearMarkers();
-        Hand.DiscardHand();
     }
 
     public void NextTurnPhase()
@@ -172,7 +146,7 @@ public class MegaManager : MonoBehaviour {
 
     void Awake()
     {
-        EventManager.OnTurnPhaseChange += SetCurrentTurnPhase;
+        EventManager.OnTurnPhaseChange += OnTurnPhaseChange;
     }
 
     void Start()
