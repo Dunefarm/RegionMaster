@@ -17,7 +17,8 @@ public class MegaManager : MonoBehaviour {
     public Deck CurrentDeck;
     public List<DiscardPile> DiscardPiles = new List<DiscardPile>();
     public DiscardPile CurrentDiscardPile;
-    public List<Player> Players = new List<Player>(); 
+    public List<Player> Players = new List<Player>();
+    private int NUMBER_OF_PLAYERS = 2;
 
     public Token.OwnerTypes CurrentPlayer = Token.OwnerTypes.White;
 

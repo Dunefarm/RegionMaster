@@ -9,6 +9,17 @@ public class Player
     public DiscardPile DiscardPile;
     public Hand Hand;
 
+    private Vector3 DECK_PLACEMENT = new Vector3(5.22f, -6.7f, 0);
+    private Vector3 DISCARD_PILE_PLACEMENT = new Vector3(8.76f, -6.7f, 0);
+
+    private MegaManager _megaManager;
+
+    public Player(MegaManager megaMan, int playerNo)
+    {
+        _megaManager = megaMan;
+        Number = playerNo;
+    }
+
     // Use this for initialization
 	void Start () {
 	
