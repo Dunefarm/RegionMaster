@@ -33,7 +33,6 @@ public class GUIManager : MonoBehaviour {
 
     public void ToggleButtonCollect(TurnPhase turnPhase)
     {
-        print("Collect: " + turnPhase + " " + (turnPhase == TurnPhase.Place));
         ButtonCollectObj.SetActive(turnPhase == TurnPhase.Place);
     }
 

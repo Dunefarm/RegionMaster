@@ -6,7 +6,13 @@ public enum TurnPhase { Beginning, Place, Buy, End }
 
 public class TurnPhases : MonoBehaviour {
 
-    private TurnPhase _currentTurnPhase = TurnPhase.Beginning;
+    public TurnPhase CurrentTurnPhase = TurnPhase.Beginning;
+
+    void Awake()
+    {
+        //EventManager.OnTurnPhaseChange += SetCurrentTurnPhase;
+        EventManager.OnTryTurnPhaseChange += SetCurrentTurnPhase;
+    }
 
     void Start()
     {
@@ -21,9 +27,10 @@ public class TurnPhases : MonoBehaviour {
         }
     }
 
-    public void SetCurrentTurnPhase(TurnPhase newPhase)
+    public bool SetCurrentTurnPhase(TurnPhase newPhase)
     {
-        _currentTurnPhase = newPhase;
+        CurrentTurnPhase = newPhase;
+        bool success = true;
         switch (newPhase)
         {
             case TurnPhase.Beginning:
@@ -38,44 +45,48 @@ public class TurnPhases : MonoBehaviour {
             case TurnPhase.End:
                 SetCurrentTurnPhaseToEnd();
                 break;
+            default:
+                success = false;
+                break;
         }
+        return success;
     }
 
     public void SetCurrentTurnPhaseToBeginning()
     {
-        _currentTurnPhase = TurnPhase.Beginning;
+        CurrentTurnPhase = TurnPhase.Beginning;
     }
 
     public void SetCurrentTurnPhaseToPlace()
     {
-        _currentTurnPhase = TurnPhase.Place;
+        CurrentTurnPhase = TurnPhase.Place;
     }
 
     public void SetCurrentTurnPhaseToBuy()
     {
-        _currentTurnPhase = TurnPhase.Buy;
+        CurrentTurnPhase = TurnPhase.Buy;
     }
 
     public void SetCurrentTurnPhaseToEnd()
     {
-        _currentTurnPhase = TurnPhase.End;
+        CurrentTurnPhase = TurnPhase.End;
     }
 
     public void NextTurnPhase()
     {
-        if (_currentTurnPhase == TurnPhase.Beginning)
+        if (CurrentTurnPhase == TurnPhase.Beginning)
             EventManager.ChangeTurnPhase(TurnPhase.Place);
-        else if (_currentTurnPhase == TurnPhase.Place)
+        else if (CurrentTurnPhase == TurnPhase.Place)
             EventManager.ChangeTurnPhase(TurnPhase.Buy);
-        else if (_currentTurnPhase == TurnPhase.Buy)
+        else if (CurrentTurnPhase == TurnPhase.Buy)
             EventManager.ChangeTurnPhase(TurnPhase.End);
-        else if (_currentTurnPhase == TurnPhase.End)
+        else if (CurrentTurnPhase == TurnPhase.End)
             EventManager.ChangeTurnPhase(TurnPhase.Beginning);
     }
 
     private bool CheckIfShouldChangeTurnPhase()
     {
-        return _currentTurnPhase == TurnPhase.Beginning ||
-               _currentTurnPhase == TurnPhase.End;
+        return CurrentTurnPhase == TurnPhase.Beginning ||
+               CurrentTurnPhase == TurnPhase.End;
     }
 }

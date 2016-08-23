@@ -6,36 +6,6 @@ using System.Collections.Generic;
 
 public class MegaManager : MonoBehaviour {
 
-    public TurnPhase CurrentTurnPhase
-    {
-        get { return _currentTurnPhase; }
-        set
-        {
-            GUIMan.ButtonCollectObj.SetActive(false);
-            GUIMan.ButtonNextTurnObj.SetActive(false);
-            _currentTurnPhase = value;
-            switch (value)
-            {
-                case TurnPhase.Beginning:
-                    DrawCard(3);
-                    CurrentTurnPhase = TurnPhase.Place;
-                    break;
-                case TurnPhase.Place:
-                    GUIMan.ButtonCollectObj.SetActive(true);
-                    break;
-                case TurnPhase.Buy:
-                    GUIMan.ButtonNextTurnObj.SetActive(true);
-                    break;
-                case TurnPhase.End:
-                    Markers.ClearMarkers();
-                    Hand.DiscardHand();
-                    CurrentTurnPhase = TurnPhase.Beginning;
-                    break;
-            }
-            print(_currentTurnPhase.ToString());
-        }
-    }
-
     public GridManager GridMan;
     public CollectionManager ColMan;
     public GUIManager GUIMan;
@@ -44,20 +14,12 @@ public class MegaManager : MonoBehaviour {
     public Markers Markers;
     public Hand Hand;
     public List<Deck> Decks = new List<Deck>();
-    //public Deck Deck1;
-    //public Deck Deck2;
     public Deck CurrentDeck;
     public List<DiscardPile> DiscardPiles = new List<DiscardPile>();
-    //public DiscardPile DiscardPile1;
-    //public DiscardPile DiscardPile2;
     public DiscardPile CurrentDiscardPile;
+    public List<Player> Players = new List<Player>(); 
 
     public Token.OwnerTypes CurrentPlayer = Token.OwnerTypes.White;
-    //public TokenMarkers Markers
-    //{
-    //    get { return MarkerMan.Amount; }
-    //    set { MarkerMan.Amount = value; }
-    //}
 
     public void ChangeAmountOfMarkers(TokenMarkers markers)
     {
@@ -97,9 +59,28 @@ public class MegaManager : MonoBehaviour {
     }
 
     private int _playerNo = 0;
-    private TurnPhase _currentTurnPhase = TurnPhase.Beginning;
 
+    public TurnPhases TurnPhases;
 
+    void Awake()
+    {
+        EventManager.OnTurnPhaseChange += OnTurnPhaseChange;
+        TurnPhases = gameObject.AddComponent<TurnPhases>();
+    }
+
+    void Start()
+    {
+        CurrentDeck = Decks[0];
+        CurrentDiscardPile = DiscardPiles[0];
+        PlayerNo = 0;
+        EventManager.ChangeTurnPhase(TurnPhase.Beginning);
+        EventManager.CallOnSomethingChange();
+    }
+
+    void Update()
+    {
+
+    }
     public void NextTurn()
     {
         ColMan.CleanUp();
@@ -115,7 +96,6 @@ public class MegaManager : MonoBehaviour {
 
     public void OnTurnPhaseChange(TurnPhase newPhase)
     {
-        _currentTurnPhase = newPhase;
         switch (newPhase)
         {
             case TurnPhase.Beginning:
@@ -130,59 +110,5 @@ public class MegaManager : MonoBehaviour {
                 Hand.DiscardHand();
                 break;
         }
-    }
-
-    public void NextTurnPhase()
-    {
-        if(_currentTurnPhase == TurnPhase.Beginning)
-            EventManager.ChangeTurnPhase(TurnPhase.Place);
-        else if(_currentTurnPhase == TurnPhase.Place)
-            EventManager.ChangeTurnPhase(TurnPhase.Buy);
-        else if(_currentTurnPhase == TurnPhase.Buy)
-            EventManager.ChangeTurnPhase(TurnPhase.End);
-        else if(_currentTurnPhase == TurnPhase.End)
-            EventManager.ChangeTurnPhase(TurnPhase.Beginning);
-    }
-
-    void Awake()
-    {
-        EventManager.OnTurnPhaseChange += OnTurnPhaseChange;
-    }
-
-    void Start()
-    {
-        EventManager.OnSomethingChange += PrintSomeShit;
-        EventManager.OnSomethingChange += PrintSomeOtherShit;
-        CurrentDeck = Decks[0];
-        CurrentDiscardPile = DiscardPiles[0];
-        PlayerNo = 0;
-        EventManager.ChangeTurnPhase(TurnPhase.Beginning);
-        EventManager.CallOnSomethingChange();
-    }
-
-    void Update()
-    {
-        if (CheckIfShouldChangeTurnPhase())
-        {
-            NextTurnPhase();
-        }
-    }
-
-    public void PrintSomeShit()
-    {
-        print("MegaMan printed some shit!");
-    }
-
-    public void PrintSomeOtherShit()
-    {
-        print("MegaMan printed some other shit");
-    }
-
-    private bool CheckIfShouldChangeTurnPhase()
-    {
-        if (_currentTurnPhase == TurnPhase.Beginning ||
-            _currentTurnPhase == TurnPhase.End)
-            return true;
-        return false;
     }
 }

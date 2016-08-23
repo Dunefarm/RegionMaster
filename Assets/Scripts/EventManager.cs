@@ -6,11 +6,13 @@ public class EventManager : MonoBehaviour
 
     public delegate void d_NoArgVoid();
     public delegate void d_TurnPhase(TurnPhase turnPhase);
+    public delegate void d_int(int value);
     public delegate bool d_TurnPhaseBool(TurnPhase turnPhase);
 
     public static event d_NoArgVoid OnSomethingChange;
     public static event d_TurnPhase OnTurnPhaseChange;
     public static event d_TurnPhaseBool OnTryTurnPhaseChange;
+    public static event d_int OnTryDrawCard;
 
     public static void CallOnSomethingChange()
     {
@@ -20,19 +22,26 @@ public class EventManager : MonoBehaviour
 
     public static void ChangeTurnPhase(TurnPhase turnPhase)
     {
-        if (OnTryTurnPhaseChange != null)
+        if (OnTryTurnPhaseChange != null && OnTryTurnPhaseChange(turnPhase))
         {
-            if (OnTryTurnPhaseChange(turnPhase))
+            if (OnTurnPhaseChange != null)
             {
+                OnTurnPhaseChange(turnPhase);
             }
         }
-        if (OnTurnPhaseChange != null)
-            OnTurnPhaseChange(turnPhase);
     }
 
     private static void TryChangeTurnPhase(TurnPhase turnPhase)
     {
         
+    }
+
+    public static void TryDrawCard(int value)
+    {
+        if (OnTryDrawCard != null)
+        {
+            OnTryDrawCard(value);
+        }
     }
 
 	// Use this for initialization
@@ -45,26 +54,59 @@ public class EventManager : MonoBehaviour
 	void Update () {
 	
 	}
-
-    public class SingleArgCallback
+    
+    
+    /* Attempt at making an event wrapper
+    public class CustomEvent
     {
-        System.Action<object> internalCallback;
-
+        private readonly bool _unlimitedSubscriptions = true;
         bool _alreadySubscribed = false;
 
-        public void Subscribe(System.Action<object> callback)
+        public CustomEvent(bool canHaveUnlimitedSubscribers = true)
         {
-            if (_alreadySubscribed) return;
-            _alreadySubscribed = true;
-            internalCallback = callback;
+            _unlimitedSubscriptions = canHaveUnlimitedSubscribers;
         }
 
-        public void RaiseEvent()
+        System.Action<object> _singleArgSubscriptions;
+        System.Action _noArgSubscriptions;
+
+        public void Subscribe(System.Action method)
         {
-            if (internalCallback != null)
+            if (!_unlimitedSubscriptions && _alreadySubscribed)
+                return;
+            _alreadySubscribed = true;
+            _noArgSubscriptions = method;
+        }
+
+        public void Subscribe(System.Action<object> method)
+        {
+            if (!_unlimitedSubscriptions && _alreadySubscribed)
+                return;
+            _alreadySubscribed = true;
+            _singleArgSubscriptions = method;
+        }
+
+        public void Unsubscribe(System.Action<object> method)
+        {
+            _singleArgSubscriptions -= method;
+        }
+
+        public void Invoke()
+        {
+            if (_singleArgSubscriptions != null)
             {
-                internalCallback(5);
+                _singleArgSubscriptions();
+            }
+            if (_noArgSubscriptions != null)
+            {
+                _noArgSubscriptions
             }
         }
+
+        public void Clear()
+        {
+            _singleArgSubscriptions = null;
+        }
     }
+    */
 }

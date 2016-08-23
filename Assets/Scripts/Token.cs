@@ -78,6 +78,7 @@ public class Token : CustomBehaviour {
     OwnerTypes _owner = OwnerTypes.None;
 
     MegaManager _megaMan;
+    private TurnPhases _turnPhases;
 
     // Use this for initialization
     void Awake ()
@@ -85,7 +86,8 @@ public class Token : CustomBehaviour {
         _transform = transform;
         _renderer = GetComponentInChildren<Renderer>();
         _megaMan = FindObjectOfType<MegaManager>();
-	}
+        _turnPhases = _megaMan.TurnPhases;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -131,8 +133,7 @@ public class Token : CustomBehaviour {
 
     public override void OnMouseClicked()
     {
-        print("Clicked on Token! Current Phase: " + _megaMan.CurrentTurnPhase + ". And token owner: " + Owner);
-        if (_megaMan.CurrentTurnPhase == TurnPhase.Place && Owner == Token.OwnerTypes.None)
+        if (_megaMan.TurnPhases.CurrentTurnPhase == TurnPhase.Place && Owner == Token.OwnerTypes.None)
         {
             switch (Color)
             {
