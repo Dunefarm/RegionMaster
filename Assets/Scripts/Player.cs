@@ -9,6 +9,7 @@ public class Player
     public DiscardPile DiscardPile;
     public Hand Hand;
     public ManaPool ManaPool;
+    public Transform DiscardPileTranform;
 
     private Vector3 DECK_PLACEMENT = new Vector3(5.22f, -6.7f, 0);
     private Vector3 DISCARD_PILE_PLACEMENT = new Vector3(8.76f, -6.7f, 0);
@@ -32,6 +33,7 @@ public class Player
         Deck.SetOwner(this);
         DiscardPile = (MonoBehaviour.Instantiate(discardPilePrefab, DISCARD_PILE_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<DiscardPile>();
         DiscardPile.SetOwner(this);
+        DiscardPileTranform = DiscardPile.transform;
         HAND_TRANSFORM = new GameObject().transform;
         HAND_TRANSFORM.position = camMan.transform.TransformPoint(-7.2f, -5.6f, 33.8f);
         HAND_TRANSFORM.rotation = camMan.transform.rotation;

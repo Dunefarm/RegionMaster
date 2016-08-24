@@ -26,9 +26,10 @@ public class Card : CustomBehaviour {
     public List<CardAbility> Abilities = new List<CardAbility>();
     public ManaPool ManaCost = new ManaPool();
 
+    [HideInInspector] public Finite2DCoord ShopCoord = new Finite2DCoord(-1, -1);
     [HideInInspector] public MegaManager MegaMan;
 
-    Finite2DCoord ShopCoord = new Finite2DCoord(-1, -1);
+    
     Vector3 _originalHandPosition = Vector3.zero;
     CardLocation _currentLocation = CardLocation.Hand;
     bool _draggingCard = false;
@@ -101,7 +102,12 @@ public class Card : CustomBehaviour {
         HandPosition = -1;
         CurrentLocation = CardLocation.Discard;
         Owner.DiscardPile.PutCardInDiscardPile(this);
-        //MegaMan.DiscardPiles[OwnerNo].PutCardInDiscardPile(this);
+    }
+
+    public void BuyCard()
+    {
+        Owner = MegaMan.CurrentPlayer;
+        PutInDiscardPile();
     }
 
     public void PutInDeck()
@@ -165,7 +171,12 @@ public class Card : CustomBehaviour {
         {
             if (CurrentLocation == CardLocation.Shop)
             {
-                    ReturnToLocation();
+                if (Vector3.Distance(transform.position, MegaMan.CurrentPlayer.DiscardPileTranform.position) < 10)
+                {
+                    MegaMan.Shop.RemoveFromShop(this);
+                    BuyCard();
+                }
+                ReturnToLocation();
             }
             else if(CurrentLocation == CardLocation.Hand)
             {

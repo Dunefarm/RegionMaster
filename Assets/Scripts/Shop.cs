@@ -32,4 +32,9 @@ public class Shop : MonoBehaviour {
     {
         return new Vector3(coord.x * 3.35f, coord.y * -4.45f, 0) + transform.position;
     }
+
+    public void RemoveFromShop(Card card)
+    {
+        Cards[card.ShopCoord.x, card.ShopCoord.y] = null;
+    }
 }
