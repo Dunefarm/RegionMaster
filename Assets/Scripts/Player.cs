@@ -84,15 +84,3 @@ public class Player
         return PlayerNumber != -1;
     }
 }
-
-public class ManaPool
-{
-    public int Red;
-    public int Green;
-    public int Blue;
-
-    public int Total
-    {
-        get { return Red + Green + Blue; }
-    }
-}

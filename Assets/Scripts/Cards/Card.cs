@@ -18,20 +18,17 @@ public class Card : CustomBehaviour {
 
     public Player Owner;
     public enum CardLocation { OutOfGame, Deck, Hand, Play, Discard, Shop}
-
-    
-
     public int OwnerNo = -1;
     public string NameOfCard = "N/A";
     public string RulesText = "N/A";
     public bool Displayed = false;
     public LayerMask TableLayerMask;
-    Finite2DCoord ShopCoord = new Finite2DCoord(-1, -1);
     public List<CardAbility> Abilities = new List<CardAbility>();
+    public ManaPool ManaCost = new ManaPool();
 
     [HideInInspector] public MegaManager MegaMan;
 
-
+    Finite2DCoord ShopCoord = new Finite2DCoord(-1, -1);
     Vector3 _originalHandPosition = Vector3.zero;
     CardLocation _currentLocation = CardLocation.Hand;
     bool _draggingCard = false;
@@ -39,18 +36,6 @@ public class Card : CustomBehaviour {
     public Card(Player player)
     {
         Owner = player;
-    }
-
-    public struct TokenColors
-    {
-        public int Red, Green, Blue;
-
-        public TokenColors(int r, int g, int b)
-        {
-            Red = r;
-            Green = g;
-            Blue = b;
-        }
     }
 
     public CardLocation CurrentLocation
