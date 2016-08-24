@@ -60,9 +60,9 @@ public class Mouse : MonoBehaviour {
     //    Token token = hit.transform.root.GetComponent<Token>();
     //    if (token == null)
     //        return;
-    //    if (token.Owner == Token.OwnerTypes.None)
+    //    if (token.OwnerTypeOwner == Token.OwnerTypes.None)
     //    {
-    //        token.Owner = token.GetCurrentPlayer();
+    //        token.OwnerTypeOwner = token.GetCurrentPlayer();
     //        //colMan.AddTokenToPool(token);
     //        //GridMan.CheckForCompletedRegions();
     //        //GameObject marker = (GameObject) Instantiate(PlayerMarker, token.transform.position, Quaternion.identity);

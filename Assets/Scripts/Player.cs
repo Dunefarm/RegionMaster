@@ -17,6 +17,11 @@ public class Player
     private MegaManager _megaManager;
     private CameraManager _cameraManager;
 
+    public Player()
+    {
+        PlayerNumber = -1;
+        //empty placeholder object
+    }
 
     public Player(MegaManager megaMan, int playerNo, GameObject deckPrefab, GameObject discardPilePrefab, CameraManager camMan)
     {
@@ -26,6 +31,7 @@ public class Player
         Deck = (MonoBehaviour.Instantiate(deckPrefab, DECK_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<Deck>();
         Deck.SetOwner(this);
         DiscardPile = (MonoBehaviour.Instantiate(discardPilePrefab, DISCARD_PILE_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<DiscardPile>();
+        DiscardPile.SetOwner(this);
         HAND_TRANSFORM = new GameObject().transform;
         HAND_TRANSFORM.position = camMan.transform.TransformPoint(-7.2f, -5.6f, 33.8f);
         HAND_TRANSFORM.rotation = camMan.transform.rotation;
@@ -71,6 +77,11 @@ public class Player
     {
         Deck.gameObject.SetActive(false);
         DiscardPile.gameObject.SetActive(false);
+    }
+
+    public bool IsActualPlayer()
+    {
+        return PlayerNumber != -1;
     }
 }
 

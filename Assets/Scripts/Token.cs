@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class Token : CustomBehaviour {
 
     public enum Placement {Bag, Grid, PlayerPool}
-    public enum OwnerTypes {None, White, Black}
     public enum ColorType {Red, Green, Blue}
 
     public Placement Place = Placement.Bag;
@@ -17,29 +17,22 @@ public class Token : CustomBehaviour {
     [HideInInspector] public bool CheckedInGrid = false;
     public Finite2DCoord GridCoord = new Finite2DCoord(-1, -1);
 
-    public OwnerTypes Owner
+    private Player _owner;
+    Transform _transform;
+    Renderer _renderer;
+    ColorType _color;
+    MegaManager _megaMan;
+    private TurnPhases _turnPhases;
+
+    public Player Owner
     {
-        get { return _owner; }
-        set
+        set { _owner = value; }
+        get
         {
-            _owner = value;
-            switch(value)
-            {
-                case OwnerTypes.Black:
-                    BlackMarker.enabled = true;
-                    WhiteMarker.enabled = false;
-                    break;
-                case OwnerTypes.White:
-                    BlackMarker.enabled = false;
-                    WhiteMarker.enabled = true;
-                    break;
-                case OwnerTypes.None:
-                    BlackMarker.enabled = false;
-                    WhiteMarker.enabled = false;
-                    break;
-            }
+            return _owner ?? new Player(); //"??" seems to mean "return if not null, else..."
         }
     }
+
     public ColorType Color
     {
         get { return _color; }
@@ -70,15 +63,6 @@ public class Token : CustomBehaviour {
         }
     }
 
-    
-
-    Transform _transform;
-    Renderer _renderer;
-    ColorType _color;
-    OwnerTypes _owner = OwnerTypes.None;
-
-    MegaManager _megaMan;
-    private TurnPhases _turnPhases;
 
     // Use this for initialization
     void Awake ()
@@ -88,11 +72,6 @@ public class Token : CustomBehaviour {
         _megaMan = FindObjectOfType<MegaManager>();
         _turnPhases = _megaMan.TurnPhases;
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     public void PlaceInGrid(Finite2DCoord newGridCoord, Vector3 pos)
     {
@@ -103,7 +82,7 @@ public class Token : CustomBehaviour {
 
     public void PlaceInBag()
     {
-        Owner = OwnerTypes.None;
+        RemoveOwnerAndMarker();
         Place = Placement.Bag;
         _transform.position = Vector3.one * 1000;
         _renderer.enabled = false;
@@ -118,53 +97,78 @@ public class Token : CustomBehaviour {
         GridCoord = new Finite2DCoord(-1, -1);
     }
 
-    public OwnerTypes GetCurrentPlayer()
-    {
-        int playerNo = _megaMan.CurrentPlayerNumber;
-        switch(playerNo)
-        {
-            case 0:
-                return OwnerTypes.White;
-            case 1:
-                return OwnerTypes.Black;
-        }
-        return OwnerTypes.None;
-    }
-
     public override void OnMouseClicked()
     {
-        if (_megaMan.TurnPhases.CurrentTurnPhase == TurnPhase.Place && Owner == Token.OwnerTypes.None)
+        if (_megaMan.TurnPhases.CurrentTurnPhase == TurnPhase.Place && _owner == null)
         {
             switch (Color)
             {
                 case ColorType.Red:
-                    print("It was red!");
                     if (_megaMan.Markers.Amount.r > 0)
                     {
                         _megaMan.Markers.AddMarkers(new TokenMarkers(-1, 0, 0));
-                        AssignOwner();
+                        AssignOwnerAndMarker();
                     }
                     break;
                 case ColorType.Green:
                     if (_megaMan.Markers.Amount.g > 0)
                     {
                         _megaMan.Markers.AddMarkers(new TokenMarkers(0, -1, 0));
-                        AssignOwner();
+                        AssignOwnerAndMarker();
                     }
                     break;
                 case ColorType.Blue:
                     if (_megaMan.Markers.Amount.b > 0)
                     {
                         _megaMan.Markers.AddMarkers(new TokenMarkers(0, 0, -1));
-                        AssignOwner();
+                        AssignOwnerAndMarker();
                     }
                     break;
             }
         }
     }
 
-    void AssignOwner()
+    void AssignOwnerAndMarker()
     {
         Owner = GetCurrentPlayer();
+        AssignMarker(Owner);
+    }
+
+    void RemoveOwnerAndMarker()
+    {
+        Owner = null;
+        AssignMarker(null);
+    }
+
+    public Player GetCurrentPlayer()
+    {
+        return _megaMan.CurrentPlayer;
+    }
+
+    void AssignMarker(Player newOwner)
+    {
+        if (newOwner != null)
+        {
+            if (newOwner.PlayerNumber == 0)
+            {
+                BlackMarker.enabled = false;
+                WhiteMarker.enabled = true;
+            }
+            else if (newOwner.PlayerNumber == 1)
+            {
+                BlackMarker.enabled = true;
+                WhiteMarker.enabled = false;
+            }
+        }
+        else
+        {
+            BlackMarker.enabled = false;
+            WhiteMarker.enabled = false;
+        }
+    }
+
+    public bool HasOwner()
+    {
+        return _owner != null;
     }
 }

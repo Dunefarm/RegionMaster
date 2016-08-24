@@ -66,6 +66,7 @@ public class GridManager : MonoBehaviour {
         {
             GameObject token = (GameObject)Instantiate(TokenPrefab, Vector3.one * 1000, Quaternion.identity);
             Token tokenScript = token.GetComponent<Token>();
+            //tokenScript.Owner = new Player();
             tokenScript.Color = color;
             Tokens.Add(tokenScript);
             TokensInBag.Add(tokenScript);
@@ -87,7 +88,7 @@ public class GridManager : MonoBehaviour {
         {
             for (int j = 0; j < 8; j++)
             {
-                if(TokensInGrid[i,j] != null && !TokensInGrid[i, j].CheckedInGrid && TokensInGrid[i,j].Owner == MegaMan.CurrentPlayer)
+                if (TokensInGrid[i,j] != null && !TokensInGrid[i, j].CheckedInGrid && TokensInGrid[i,j].Owner == MegaMan.CurrentPlayer)
                 {
                     currentTokens.Clear();
                     if(RecursiveCheckNeighbors(i, j, TokensInGrid[i, j].Color, ref currentTokens))
@@ -113,15 +114,15 @@ public class GridManager : MonoBehaviour {
         bool hasOwner = true;
         if (TokensInGrid[i, j].Owner == MegaMan.CurrentPlayer)
             currentTokens.Add(TokensInGrid[i, j]);
-        else if (TokensInGrid[i, j].Owner == Token.OwnerTypes.None)
+        else if (!TokensInGrid[i, j].HasOwner())
             return false;
         else
             return true;
 
 
-        //if (TokensInGrid[i, j].Owner == Token.OwnerTypes.None)
+        //if (TokensInGrid[i, j].OwnerTypeOwner == Token.OwnerTypes.None)
         //    hasOwner = false;
-        //else if(TokensInGrid[i, j].Owner == MegaMan.CurrentPlayer)
+        //else if(TokensInGrid[i, j].OwnerTypeOwner == MegaMan.CurrentPlayer)
         //    currentTokens.Add(TokensInGrid[i, j]);
 
         if (i > 0)
@@ -178,13 +179,4 @@ public class GridManager : MonoBehaviour {
             }
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-	    
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            print(TokensInBag.Count);
-        }
-	}
 }

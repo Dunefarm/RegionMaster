@@ -24,16 +24,11 @@ public class MegaManager : MonoBehaviour
     private int NUMBER_OF_PLAYERS = 2;
     private int _currentPlayerNumber = -1;
 
-    public Token.OwnerTypes CurrentPlayer = Token.OwnerTypes.White;
+    //public Token.OwnerTypes CurrentPlayer = Token.OwnerTypes.White;
 
-    public DiscardPile CurrentDiscardPile
+    public Player CurrentPlayer
     {
-        get { return Players[_currentPlayerNumber].DiscardPile; }
-    }
-
-    public Deck CurrentDeck
-    {
-        get { return Players[_currentPlayerNumber].Deck; }
+        get { return Players[_currentPlayerNumber]; }
     }
 
     public void ChangeAmountOfMarkers(TokenMarkers markers)
@@ -98,7 +93,6 @@ public class MegaManager : MonoBehaviour
                 break;
             case TurnPhase.End:
                 Markers.ClearMarkers();
-                print("Player: " + _currentPlayerNumber);
                 Players[_currentPlayerNumber].Hand.DiscardHand();
                 break;
         }

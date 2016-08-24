@@ -65,14 +65,7 @@ public class Deck : MonoBehaviour {
 
     void ShuffleDiscardPileIntoDeck()
     {
-        if (Owner.DiscardPile.Cards.Count > 0)
-        {
-            foreach (Card card in Owner.DiscardPile.Cards)
-            {
-                card.PutInDeck();
-            }
-        }
-        Owner.DiscardPile.Cards.Clear();
+        Owner.DiscardPile.PutDiscardPileOnBottomOfDeck();
         ShuffleDeck();
     }
 
