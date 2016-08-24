@@ -4,7 +4,11 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 
-public class MegaManager : MonoBehaviour {
+public class MegaManager : MonoBehaviour
+{
+
+    public GameObject DeckPrefab;
+    public GameObject DiscardPilePrefab;
 
     public GridManager GridMan;
     public CollectionManager ColMan;
@@ -14,13 +18,23 @@ public class MegaManager : MonoBehaviour {
     public Markers Markers;
     public Hand Hand;
     public List<Deck> Decks = new List<Deck>();
-    public Deck CurrentDeck;
     public List<DiscardPile> DiscardPiles = new List<DiscardPile>();
-    public DiscardPile CurrentDiscardPile;
     public List<Player> Players = new List<Player>();
+
     private int NUMBER_OF_PLAYERS = 2;
+    private int _currentPlayerNumber = -1;
 
     public Token.OwnerTypes CurrentPlayer = Token.OwnerTypes.White;
+
+    public DiscardPile CurrentDiscardPile
+    {
+        get { return Players[_currentPlayerNumber].DiscardPile; }
+    }
+
+    public Deck CurrentDeck
+    {
+        get { return Players[_currentPlayerNumber].Deck; }
+    }
 
     public void ChangeAmountOfMarkers(TokenMarkers markers)
     {
@@ -28,38 +42,10 @@ public class MegaManager : MonoBehaviour {
 
     }
 
-    public int PlayerNo
+    public int CurrentPlayerNumber
     {
-        get { return _playerNo; }
-        set
-        {
-            if (value < 0 || value > 1)
-                return;
-            _playerNo = value;
-            CurrentDeck.gameObject.SetActive(false);
-            CurrentDiscardPile.gameObject.SetActive(false);
-            CurrentDeck = Decks[value];
-            CurrentDiscardPile = DiscardPiles[value];
-            CurrentDeck.gameObject.SetActive(true);
-            CurrentDiscardPile.gameObject.SetActive(true);
-            switch (value)
-            {
-                case 0:
-                    GUIMan.PlayerTurnIcon.color = Color.white;
-                    CurrentPlayer = Token.OwnerTypes.White;
-                    break;
-                case 1:
-                    GUIMan.PlayerTurnIcon.color = Color.black;
-                    CurrentPlayer = Token.OwnerTypes.Black;
-                    break;
-                default:
-                    GUIMan.PlayerTurnIcon.color = Color.cyan;
-                    break;
-            }
-        }
+        get { return _currentPlayerNumber; }
     }
-
-    private int _playerNo = 0;
 
     public TurnPhases TurnPhases;
 
@@ -71,9 +57,12 @@ public class MegaManager : MonoBehaviour {
 
     void Start()
     {
-        CurrentDeck = Decks[0];
-        CurrentDiscardPile = DiscardPiles[0];
-        PlayerNo = 0;
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++)
+        {
+            Player player = new Player(this, i, DeckPrefab, DiscardPilePrefab, CamMan);
+            Players.Add(player);
+        }
+        EventManager.ActivatePlayer(_currentPlayerNumber);
         EventManager.ChangeTurnPhase(TurnPhase.Beginning);
         EventManager.CallOnSomethingChange();
     }
@@ -86,20 +75,21 @@ public class MegaManager : MonoBehaviour {
     {
         ColMan.CleanUp();
         GridMan.FillGrid();
-        PlayerNo = (PlayerNo + 1) % 2;
         EventManager.ChangeTurnPhase(TurnPhase.End);
     }
 
-    void DrawCard(int amount)
+    private void DrawCard(int amount)
     {
-        CurrentDeck.DrawCard(amount);
+        Players[_currentPlayerNumber].DrawCard(amount);
     }
 
     public void OnTurnPhaseChange(TurnPhase newPhase)
     {
         switch (newPhase)
         {
-            case TurnPhase.Beginning:
+            case TurnPhase.Beginning: //This might result in some stack problems!!
+                _currentPlayerNumber = (_currentPlayerNumber + 1) % 2;
+                EventManager.ActivatePlayer(_currentPlayerNumber);
                 DrawCard(3);
                 break;
             case TurnPhase.Place:
@@ -108,7 +98,8 @@ public class MegaManager : MonoBehaviour {
                 break;
             case TurnPhase.End:
                 Markers.ClearMarkers();
-                Hand.DiscardHand();
+                print("Player: " + _currentPlayerNumber);
+                Players[_currentPlayerNumber].Hand.DiscardHand();
                 break;
         }
     }

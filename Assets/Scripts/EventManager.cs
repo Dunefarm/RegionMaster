@@ -13,6 +13,7 @@ public class EventManager : MonoBehaviour
     public static event d_TurnPhase OnTurnPhaseChange;
     public static event d_TurnPhaseBool OnTryTurnPhaseChange;
     public static event d_int OnTryDrawCard;
+    public static event d_int OnActivatePlayer;
 
     public static void CallOnSomethingChange()
     {
@@ -41,6 +42,14 @@ public class EventManager : MonoBehaviour
         if (OnTryDrawCard != null)
         {
             OnTryDrawCard(value);
+        }
+    }
+
+    public static void ActivatePlayer(int number)
+    {
+        if (OnActivatePlayer != null)
+        {
+            OnActivatePlayer(number);
         }
     }
 

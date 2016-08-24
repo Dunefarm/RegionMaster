@@ -2,10 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Hand : MonoBehaviour {
+public class Hand
+{
 
     public List<Card> Cards = new List<Card>();
     public Transform CardInHandPoint;
+
+    public Hand(Transform handTrans)
+    {
+        CardInHandPoint = handTrans;
+        EventManager.OnTurnPhaseChange += OnTurnPhaseChange;
+    }
 
     public void PutCardInHand(Card newCard)
     {
@@ -28,7 +35,6 @@ public class Hand : MonoBehaviour {
     {
         if (Cards.Contains(theCard))
         {
-            print("Removed " + theCard.transform.name);
             Cards.Remove(theCard);
         }
         ArrangeCards();
@@ -37,13 +43,14 @@ public class Hand : MonoBehaviour {
     void ArrangeCards()
     {
         float width = Cards.Count;
-        Vector3 shift = Vector3.right * width * 0.5f + Vector3.back * 0.05f;
+        Vector3 shift = Vector3.right*width*0.5f + Vector3.back*0.05f;
         float weight = 0;
-        for(int i = 0; i < Cards.Count; i++)
+        for (int i = 0; i < Cards.Count; i++)
         {
-            if(Cards.Count > 1)
-                weight = (float)i / (Cards.Count-1);
-            Cards[i].transform.position = Vector3.Lerp(CardInHandPoint.position - shift, CardInHandPoint.position + shift, weight);
+            if (Cards.Count > 1)
+                weight = (float) i/(Cards.Count - 1);
+            Cards[i].transform.position = Vector3.Lerp(CardInHandPoint.position - shift,
+                CardInHandPoint.position + shift, weight);
             Cards[i].transform.rotation = CardInHandPoint.rotation;
             Cards[i].HandPosition = i;
         }
@@ -52,20 +59,18 @@ public class Hand : MonoBehaviour {
 
     public void DiscardHand()
     {
-        foreach(Card card in Cards)
+        foreach (Card card in Cards)
         {
             card.PutInDiscardPile();
         }
         Cards.Clear();
     }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public void OnTurnPhaseChange(TurnPhase newPhase)
+    {
+        if (newPhase == TurnPhase.End)
+        {
+            //DiscardHand();
+        }
+    }
 }

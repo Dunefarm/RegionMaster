@@ -16,8 +16,30 @@ public class Card : CustomBehaviour {
 
 
 
-
+    public Player Owner;
     public enum CardLocation { OutOfGame, Deck, Hand, Play, Discard, Shop}
+
+    
+
+    public int OwnerNo = -1;
+    public string NameOfCard = "N/A";
+    public string RulesText = "N/A";
+    public bool Displayed = false;
+    public LayerMask TableLayerMask;
+    Finite2DCoord ShopCoord = new Finite2DCoord(-1, -1);
+    public List<CardAbility> Abilities = new List<CardAbility>();
+
+    [HideInInspector] public MegaManager MegaMan;
+
+
+    Vector3 _originalHandPosition = Vector3.zero;
+    CardLocation _currentLocation = CardLocation.Hand;
+    bool _draggingCard = false;
+
+    public Card(Player player)
+    {
+        Owner = player;
+    }
 
     public struct TokenColors
     {
@@ -37,21 +59,6 @@ public class Card : CustomBehaviour {
         set { _currentLocation = value; }
     }
 
-    public int OwnerNo = -1;
-    public string NameOfCard = "N/A";
-    public string RulesText = "N/A";
-    public bool Displayed = false;
-    public LayerMask TableLayerMask;
-    Finite2DCoord ShopCoord = new Finite2DCoord(-1, -1);
-    public List<CardAbility> Abilities = new List<CardAbility>();
-
-    [HideInInspector] public MegaManager MegaMan;
-
-
-    Vector3 _originalHandPosition = Vector3.zero;
-    CardLocation _currentLocation = CardLocation.Hand;
-    bool _draggingCard = false;
-
     protected override void CustomAwake()
     {
         MegaMan = FindObjectOfType<MegaManager>();
@@ -70,13 +77,18 @@ public class Card : CustomBehaviour {
             PutInHand();
     }
 
+    public void SetOwner(Player player)
+    {
+        Owner = player;
+        OwnerNo = Owner.PlayerNumber;
+    }
+
     public virtual void PlayCard()
     {
-        print("PLAAAAAAAAAAAAAAYED!!");
         if (CurrentLocation != CardLocation.Hand)
             return;
         CurrentLocation = CardLocation.Play;
-        MegaMan.Hand.RemoveCardInHand(this);
+        Owner.Hand.RemoveCardInHand(this);
         foreach(CardAbility abi in Abilities)
         {
             abi.ActivateAbility();
@@ -94,7 +106,7 @@ public class Card : CustomBehaviour {
 
     public void PutInHand()
     {
-        MegaMan.Hand.PutCardInHand(this);
+        Owner.Hand.PutCardInHand(this);
         CurrentLocation = CardLocation.Hand;
         ShopCoord = new Finite2DCoord(-1, -1);
     }
@@ -103,14 +115,15 @@ public class Card : CustomBehaviour {
     {
         HandPosition = -1;
         CurrentLocation = CardLocation.Discard;
-        MegaMan.DiscardPiles[OwnerNo].PutCardInDiscardPile(this);
+        Owner.DiscardPile.PutCardInDiscardPile(this);
+        //MegaMan.DiscardPiles[OwnerNo].PutCardInDiscardPile(this);
     }
 
     public void PutInDeck()
     {
         HandPosition = -1;
         CurrentLocation = CardLocation.Deck;
-        MegaMan.Decks[OwnerNo].PutCardOnBottomOfDeck(this);
+        Owner.Deck.PutCardOnBottomOfDeck(this);
     }
 
     public void ToggleDisplay()
@@ -124,7 +137,7 @@ public class Card : CustomBehaviour {
         else
         {
             Displayed = true;
-            MegaMan.Hand.RemoveCardInHand(this);
+            Owner.Hand.RemoveCardInHand(this);
             transform.position = MegaMan.CamMan.CardCloseUpPoint.position;
             transform.rotation = MegaMan.CamMan.CardCloseUpPoint.rotation;
         }

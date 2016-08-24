@@ -3,21 +3,35 @@ using System.Collections;
 
 public class Player
 {
-
-    public int Number;
+    
+    public int PlayerNumber;
     public Deck Deck;
     public DiscardPile DiscardPile;
     public Hand Hand;
+    public ManaPool ManaPool;
 
     private Vector3 DECK_PLACEMENT = new Vector3(5.22f, -6.7f, 0);
     private Vector3 DISCARD_PILE_PLACEMENT = new Vector3(8.76f, -6.7f, 0);
+    private Transform HAND_TRANSFORM;
 
     private MegaManager _megaManager;
+    private CameraManager _cameraManager;
 
-    public Player(MegaManager megaMan, int playerNo)
+
+    public Player(MegaManager megaMan, int playerNo, GameObject deckPrefab, GameObject discardPilePrefab, CameraManager camMan)
     {
         _megaManager = megaMan;
-        Number = playerNo;
+        _cameraManager = camMan;
+        PlayerNumber = playerNo;
+        Deck = (MonoBehaviour.Instantiate(deckPrefab, DECK_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<Deck>();
+        Deck.SetOwner(this);
+        DiscardPile = (MonoBehaviour.Instantiate(discardPilePrefab, DISCARD_PILE_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<DiscardPile>();
+        HAND_TRANSFORM = new GameObject().transform;
+        HAND_TRANSFORM.position = camMan.transform.TransformPoint(-7.2f, -5.6f, 33.8f);
+        HAND_TRANSFORM.rotation = camMan.transform.rotation;
+        HAND_TRANSFORM.Rotate(30.12f, 0, 0, Space.Self);
+        Hand = new Hand(HAND_TRANSFORM);
+        EventManager.OnActivatePlayer += ActivatePlayer;
     }
 
     // Use this for initialization
@@ -30,6 +44,23 @@ public class Player
 	
 	}
 
+    public void ActivatePlayer(int no)
+    {
+        if (no == PlayerNumber)
+        {
+            StartPlayersTurn();
+        }
+        else
+        {
+            EndPlayersTurn();
+        }
+    }
+
+    public void DrawCard(int numberOfCards)
+    {
+        Deck.DrawCard(numberOfCards);
+    }
+
     public void StartPlayersTurn()
     {
         Deck.gameObject.SetActive(true);
@@ -38,7 +69,19 @@ public class Player
 
     public void EndPlayersTurn()
     {
-        Deck.gameObject.SetActive(true);
-        DiscardPile.gameObject.SetActive(true);
+        Deck.gameObject.SetActive(false);
+        DiscardPile.gameObject.SetActive(false);
+    }
+}
+
+public class ManaPool
+{
+    public int Red;
+    public int Green;
+    public int Blue;
+
+    public int Total
+    {
+        get { return Red + Green + Blue; }
     }
 }

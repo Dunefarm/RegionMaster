@@ -11,6 +11,7 @@ public class Deck : MonoBehaviour {
     public List<Card> Cards = new List<Card>();
     public MegaManager MegaMan;
     public int OwnerNo = -1;
+    public Player Owner;
 
 	// Use this for initialization
 	void Awake ()
@@ -21,10 +22,17 @@ public class Deck : MonoBehaviour {
             GameObject obj = (GameObject)Instantiate(cardObj, Vector3.one * 1000, Quaternion.identity);
             Card tempCard = obj.GetComponent<Card>();
             tempCard.OwnerNo = OwnerNo;
+            tempCard.SetOwner(Owner);
             Cards.Add(tempCard);
         }
         ShuffleDeck();
 	}
+
+    public void SetOwner(Player player)
+    {
+        Owner = player;
+        OwnerNo = Owner.PlayerNumber;
+    }
 
     public void ShuffleDeck()
     {
@@ -57,15 +65,14 @@ public class Deck : MonoBehaviour {
 
     void ShuffleDiscardPileIntoDeck()
     {
-        print(MegaMan);
-        if (MegaMan.CurrentDiscardPile.Cards.Count > 0)
+        if (Owner.DiscardPile.Cards.Count > 0)
         {
-            foreach (Card card in MegaMan.CurrentDiscardPile.Cards)
+            foreach (Card card in Owner.DiscardPile.Cards)
             {
                 card.PutInDeck();
             }
         }
-        MegaMan.CurrentDiscardPile.Cards.Clear();
+        Owner.DiscardPile.Cards.Clear();
         ShuffleDeck();
     }
 

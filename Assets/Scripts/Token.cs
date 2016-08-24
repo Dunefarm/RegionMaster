@@ -7,6 +7,16 @@ public class Token : CustomBehaviour {
     public enum OwnerTypes {None, White, Black}
     public enum ColorType {Red, Green, Blue}
 
+    public Placement Place = Placement.Bag;
+    public Material Red;
+    public Material Green;
+    public Material Blue;
+    public Renderer Renderer;
+    public Renderer WhiteMarker;
+    public Renderer BlackMarker;
+    [HideInInspector] public bool CheckedInGrid = false;
+    public Finite2DCoord GridCoord = new Finite2DCoord(-1, -1);
+
     public OwnerTypes Owner
     {
         get { return _owner; }
@@ -30,7 +40,6 @@ public class Token : CustomBehaviour {
             }
         }
     }
-    public Placement Place = Placement.Bag;
     public ColorType Color
     {
         get { return _color; }
@@ -61,16 +70,7 @@ public class Token : CustomBehaviour {
         }
     }
 
-    public Material Red;
-    public Material Green;
-    public Material Blue;
-    public Renderer Renderer;
-    public Renderer WhiteMarker;
-    public Renderer BlackMarker;
-
-    [HideInInspector]
-    public bool CheckedInGrid = false;
-    public Finite2DCoord GridCoord = new Finite2DCoord(-1, -1);
+    
 
     Transform _transform;
     Renderer _renderer;
@@ -120,7 +120,7 @@ public class Token : CustomBehaviour {
 
     public OwnerTypes GetCurrentPlayer()
     {
-        int playerNo = _megaMan.PlayerNo;
+        int playerNo = _megaMan.CurrentPlayerNumber;
         switch(playerNo)
         {
             case 0:
