@@ -23,6 +23,8 @@ public class GridManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        ColMan = MegaMan.CollectionManager;
+
         SpawnTokensInBag(30, Token.ColorType.Red);
         SpawnTokensInBag(30, Token.ColorType.Green);
         SpawnTokensInBag(30, Token.ColorType.Blue);

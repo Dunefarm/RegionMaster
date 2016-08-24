@@ -13,8 +13,9 @@ public class Mouse : MonoBehaviour {
     CustomBehaviour CurrentlyClickedCustom;
 
 	// Use this for initialization
-	void Start () {
-	
+	void Start ()
+	{
+	    colMan = MegaMan.CollectionManager;
 	}
 	
 	// Update is called once per frame

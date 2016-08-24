@@ -11,7 +11,6 @@ public class MegaManager : MonoBehaviour
     public GameObject DiscardPilePrefab;
 
     public GridManager GridMan;
-    public CollectionManager ColMan;
     public GUIManager GUIMan;
     public CameraManager CamMan;
     public Shop Shop;
@@ -20,6 +19,9 @@ public class MegaManager : MonoBehaviour
     public List<Deck> Decks = new List<Deck>();
     public List<DiscardPile> DiscardPiles = new List<DiscardPile>();
     public List<Player> Players = new List<Player>();
+
+    public TurnPhases TurnPhases;
+    public CollectionManager CollectionManager;
 
     private int NUMBER_OF_PLAYERS = 2;
     private int _currentPlayerNumber = -1;
@@ -42,12 +44,11 @@ public class MegaManager : MonoBehaviour
         get { return _currentPlayerNumber; }
     }
 
-    public TurnPhases TurnPhases;
-
     void Awake()
     {
         EventManager.OnTurnPhaseChange += OnTurnPhaseChange;
         TurnPhases = gameObject.AddComponent<TurnPhases>();
+        CollectionManager = new CollectionManager(this);
     }
 
     void Start()
@@ -68,7 +69,7 @@ public class MegaManager : MonoBehaviour
     }
     public void NextTurn()
     {
-        ColMan.CleanUp();
+        CollectionManager.CleanUp();
         GridMan.FillGrid();
         EventManager.ChangeTurnPhase(TurnPhase.End);
     }
