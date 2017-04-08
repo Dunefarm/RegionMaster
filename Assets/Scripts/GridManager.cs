@@ -3,24 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class GridManager : MonoBehaviour {
+[SerializeField]
+public class GridManager {
 
-    public int TokenAmount = 30;
-    public int GridSize = 8;
+    public GridManager(Grid newGrid)
+    {
+        grid = newGrid;
+    }
 
     public Token[,] TokensInGrid;
-
-    public Transform UpperLeftCorner;
-    public Transform LowerRightCorner;
 
     [HideInInspector]
     public TokenHolder TokenBag = new TokenHolder();
 
-    // Use this for initialization
-    void Start ()
+    private Grid grid;
+    private int TokenAmount = 30;
+    private int GridSize = 8;
+
+    public void BeginNewGame()
     {
         TokensInGrid = new Token[GridSize, GridSize];
-
         CreateStartingTokenBag();
         RefillGrid();
     }
@@ -57,15 +59,15 @@ public class GridManager : MonoBehaviour {
 
     void PlaceTokenInGrid(Token token, Finite2DCoord coord)
     {
-        token.PlaceInGrid(coord, GridCoordinateToVector3(coord.x, coord.y));
+        token.PlaceInGrid(coord, grid.GridCoordinateToVector3(coord.x, coord.y));
     }
 
-    public Vector3 GridCoordinateToVector3(int i, int j)
-    {
-        float x = Mathf.Lerp(UpperLeftCorner.position.x, LowerRightCorner.position.x, i / (float)(GridSize - 1));
-        float y = Mathf.Lerp(UpperLeftCorner.position.y, LowerRightCorner.position.y, j / (float)(GridSize - 1));
-        return new Vector3(x, y, 0);
-    }
+    //public Vector3 GridCoordinateToVector3(int i, int j)
+    //{
+    //    float x = Mathf.Lerp(grid.UpperLeftCorner.position.x, grid.LowerRightCorner.position.x, i / (float)(GridSize - 1));
+    //    float y = Mathf.Lerp(grid.UpperLeftCorner.position.y, grid.LowerRightCorner.position.y, j / (float)(GridSize - 1));
+    //    return new Vector3(x, y, 0);
+    //}
 
     public Token PullTokenFromGrid(Token token)
     {
@@ -112,12 +114,6 @@ public class GridManager : MonoBehaviour {
             return false;
         else
             return true;
-
-
-        //if (TokensInGrid[i, j].OwnerTypeOwner == Token.OwnerTypes.None)
-        //    hasOwner = false;
-        //else if(TokensInGrid[i, j].OwnerTypeOwner == MegaMan.CurrentPlayer)
-        //    currentTokens.Add(TokensInGrid[i, j]);
 
         if (i > 0)
         {

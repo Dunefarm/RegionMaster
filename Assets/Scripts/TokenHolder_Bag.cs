@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TokenHolder_Bag : MonoBehaviour {
+public class TokenHolder_Bag : TokenHolder {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public override Token AddToken(Token token)
+    {
+        if (token == null || Tokens.Contains(token))
+            return null;
+
+
+        Tokens.Add(token);
+        return token;
+    }
+
+
 }

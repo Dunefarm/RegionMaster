@@ -53,6 +53,8 @@ public class MegaManager : MonoBehaviour
 
     void Start()
     {
+        SetUpGrid();
+
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++)
         {
             Player player = new Player(this, i, DeckPrefab, DiscardPilePrefab, CamMan);
@@ -61,6 +63,13 @@ public class MegaManager : MonoBehaviour
         EventManager.ActivatePlayer(_currentPlayerNumber);
         EventManager.ChangeTurnPhase(TurnPhase.Beginning);
         EventManager.CallOnSomethingChange();
+    }
+
+    void SetUpGrid()
+    {
+        Grid grid = Instantiate(Resources.Load("Grid") as GameObject).GetComponent<Grid>();
+        GridMan = new GridManager(grid);
+        GridMan.BeginNewGame();
     }
 
     void Update()
