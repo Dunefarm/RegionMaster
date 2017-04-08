@@ -5,100 +5,91 @@ using System.Linq;
 
 public class GridManager : MonoBehaviour {
 
-    public CollectionManager ColMan;
-    public MegaManager MegaMan;
+    public int TokenAmount = 30;
+    public int GridSize = 8;
 
-    public GameObject TokenPrefab;
-    public List<Token> Tokens = new List<Token>();
-    public List<Token> TokensInBag = new List<Token>();
-    public Token[,] TokensInGrid = new Token[8, 8];
-
-    public Material RedMat;
-    public Material GreenMat;
-    public Material BlueMat;
+    public Token[,] TokensInGrid;
 
     public Transform UpperLeftCorner;
     public Transform LowerRightCorner;
 
+    [HideInInspector]
+    public TokenHolder TokenBag = new TokenHolder();
+
     // Use this for initialization
     void Start ()
     {
-        ColMan = MegaMan.CollectionManager;
+        TokensInGrid = new Token[GridSize, GridSize];
 
-        SpawnTokensInBag(30, Token.ColorType.Red);
-        SpawnTokensInBag(30, Token.ColorType.Green);
-        SpawnTokensInBag(30, Token.ColorType.Blue);
+        CreateStartingTokenBag();
+        RefillGrid();
+    }
 
-        float x;
-        float y;
-        for (int i = 0; i < 8; i++)
+    void CreateStartingTokenBag()
+    {
+        for(int i = 0; i < TokenAmount; i++)
         {
-            for (int j = 0; j < 8; j++)
+            SpawnTokenInBag(Token.ColorType.Red);
+            SpawnTokenInBag(Token.ColorType.Green);
+            SpawnTokenInBag(Token.ColorType.Blue);
+        }
+    }
+
+    void SpawnTokenInBag(Token.ColorType color)
+    {
+        Token token = TokenBag.InstantiateAndPoolToken(color);
+    }
+
+    public void RefillGrid()
+    {
+        for (int i = 0; i < GridSize; i++)
+        {
+            for (int j = 0; j < GridSize; j++)
             {
-                x = Mathf.Lerp(UpperLeftCorner.position.x, LowerRightCorner.position.x, i / 7f);
-                y = Mathf.Lerp(UpperLeftCorner.position.y, LowerRightCorner.position.y, j / 7f);
-                int randomID = Random.Range(0, TokensInBag.Count);
-                TokensInGrid[i, j] = TokensInBag[randomID];
-                TokensInBag[randomID].PlaceInGrid(new Finite2DCoord(i, j), new Vector3(x, y, 0));
-                TokensInBag.RemoveAt(randomID);
+                if (TokensInGrid[i, j] != null)
+                    continue;
+                Token randomToken = TokenBag.PullRandomToken();
+                TokensInGrid[i, j] = randomToken;
+                PlaceTokenInGrid(randomToken, new Finite2DCoord(i, j));
             }
         }
     }
 
-    Token.ColorType RandomColor()
+    void PlaceTokenInGrid(Token token, Finite2DCoord coord)
     {
-        switch(Random.Range(0,3))
-        {
-            case 0:
-                return Token.ColorType.Red;
-            case 1:
-                return Token.ColorType.Green;
-            case 2:
-                return Token.ColorType.Blue;
-            default:
-                return Token.ColorType.Blue; //why not...
-        }
+        token.PlaceInGrid(coord, GridCoordinateToVector3(coord.x, coord.y));
     }
 
-    void SpawnTokensInBag(int amount, Token.ColorType color)
+    public Vector3 GridCoordinateToVector3(int i, int j)
     {
-        if (amount < 1)
-            return;
-        for (int i = 0; i < amount; i++)
-        {
-            GameObject token = (GameObject)Instantiate(TokenPrefab, Vector3.one * 1000, Quaternion.identity);
-            Token tokenScript = token.GetComponent<Token>();
-            //tokenScript.Owner = new Player();
-            tokenScript.Color = color;
-            Tokens.Add(tokenScript);
-            TokensInBag.Add(tokenScript);
-        }
+        float x = Mathf.Lerp(UpperLeftCorner.position.x, LowerRightCorner.position.x, i / (float)(GridSize - 1));
+        float y = Mathf.Lerp(UpperLeftCorner.position.y, LowerRightCorner.position.y, j / (float)(GridSize - 1));
+        return new Vector3(x, y, 0);
     }
 
-    public void RemoveTokenFromGrid(Token token)
+    public Token PullTokenFromGrid(Token token)
     {
-        if (token.GridCoord.x == -1)
-            return;
+        if (token.GridCoord.x == -1 || token.GridCoord.y == -1)
+            return null;
         TokensInGrid[token.GridCoord.x, token.GridCoord.y] = null;
         token.GridCoord = new Finite2DCoord(-1, -1);
+        return token;
     }
 
-    public void CheckForCompletedRegions()
+    public List<Token> GetCompletedRegions(Player currentPlayer)
     {
         List<Token> currentTokens = new List<Token>();
-        for (int i = 0; i < 8; i++)
+        List<Token> collectedTokens = new List<Token>();
+        for (int i = 0; i < GridSize; i++)
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < GridSize; j++)
             {
-                if (TokensInGrid[i,j] != null && !TokensInGrid[i, j].CheckedInGrid && TokensInGrid[i,j].Owner == MegaMan.CurrentPlayer)
+                if (TokensInGrid[i,j] != null && !TokensInGrid[i, j].CheckedInGrid && TokensInGrid[i,j].Owner == currentPlayer)
                 {
                     currentTokens.Clear();
-                    if(RecursiveCheckNeighbors(i, j, TokensInGrid[i, j].Color, ref currentTokens))
+                    if(RecursiveCheckNeighbors(i, j, TokensInGrid[i, j].Color, ref currentTokens, currentPlayer))
                     {
-                        foreach (Token token in currentTokens)
-                        {
-                            ColMan.AddTokenToPool(token);
-                        }
+                        collectedTokens.AddRange(currentTokens);
                     }
                 }
             }
@@ -108,13 +99,14 @@ public class GridManager : MonoBehaviour {
             if(token != null)
                 token.CheckedInGrid = false;
         }
+        return collectedTokens;
     }
 
-    bool RecursiveCheckNeighbors (int i, int j, Token.ColorType color, ref List<Token> currentTokens)
+    bool RecursiveCheckNeighbors (int i, int j, Token.ColorType color, ref List<Token> currentTokens, Player currentPlayer)
     {
         TokensInGrid[i, j].CheckedInGrid = true;
         bool hasOwner = true;
-        if (TokensInGrid[i, j].Owner == MegaMan.CurrentPlayer)
+        if (TokensInGrid[i, j].Owner == currentPlayer)
             currentTokens.Add(TokensInGrid[i, j]);
         else if (!TokensInGrid[i, j].HasOwner())
             return false;
@@ -131,15 +123,15 @@ public class GridManager : MonoBehaviour {
         {
             if(TokensInGrid[i - 1, j] != null && !TokensInGrid[i-1,j].CheckedInGrid && TokensInGrid[i-1,j].Color == color)
             {
-                if (!RecursiveCheckNeighbors(i - 1, j, color, ref currentTokens))
+                if (!RecursiveCheckNeighbors(i - 1, j, color, ref currentTokens, currentPlayer))
                     hasOwner = false;
             }
         }
-        if (i < 7)
+        if (i < (GridSize - 1))
         {
             if (TokensInGrid[i + 1, j] != null && !TokensInGrid[i + 1, j].CheckedInGrid && TokensInGrid[i + 1, j].Color == color)
             {
-                if (!RecursiveCheckNeighbors(i + 1, j, color, ref currentTokens))
+                if (!RecursiveCheckNeighbors(i + 1, j, color, ref currentTokens, currentPlayer))
                     hasOwner = false;
             }
         }
@@ -147,38 +139,19 @@ public class GridManager : MonoBehaviour {
         {
             if (TokensInGrid[i, j - 1] != null && !TokensInGrid[i, j - 1].CheckedInGrid && TokensInGrid[i, j - 1].Color == color)
             {
-                if (!RecursiveCheckNeighbors(i, j - 1, color, ref currentTokens))
+                if (!RecursiveCheckNeighbors(i, j - 1, color, ref currentTokens, currentPlayer))
                     hasOwner = false;
             }
         }
-        if (j < 7)
+        if (j < (GridSize - 1))
         {
             if (TokensInGrid[i, j + 1] != null && !TokensInGrid[i, j + 1].CheckedInGrid && TokensInGrid[i, j + 1].Color == color)
             {
-                if (!RecursiveCheckNeighbors(i, j + 1, color, ref currentTokens))
+                if (!RecursiveCheckNeighbors(i, j + 1, color, ref currentTokens, currentPlayer))
                     hasOwner = false;
             }
         }
 
         return hasOwner;
-    }
-
-    public void FillGrid()
-    {
-        float x, y;
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                if (TokensInGrid[i, j] != null)
-                    continue;
-                x = Mathf.Lerp(UpperLeftCorner.position.x, LowerRightCorner.position.x, i / 7f);
-                y = Mathf.Lerp(UpperLeftCorner.position.y, LowerRightCorner.position.y, j / 7f);
-                int randomID = Random.Range(0, TokensInBag.Count);
-                TokensInGrid[i, j] = TokensInBag[randomID];
-                TokensInBag[randomID].PlaceInGrid(new Finite2DCoord(i, j), new Vector3(x, y, 0));
-                TokensInBag.RemoveAt(randomID);
-            }
-        }
     }
 }

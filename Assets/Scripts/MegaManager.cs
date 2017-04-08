@@ -70,7 +70,7 @@ public class MegaManager : MonoBehaviour
     public void NextTurn()
     {
         CollectionManager.CleanUp();
-        GridMan.FillGrid();
+        GridMan.RefillGrid();
         EventManager.ChangeTurnPhase(TurnPhase.End);
     }
 

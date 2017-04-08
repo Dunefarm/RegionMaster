@@ -30,6 +30,14 @@ public class CollectionManager {
         ManaPool = new ManaPool();
     }
 
+    public void AddTokensToPool(List<Token> tokens)
+    {
+        for(int i = 0; i < tokens.Count; i++)
+        {
+            AddTokenToPool(tokens[i]);
+        }
+    }
+
     public void AddTokenToPool(Token newToken)
     {
         int rowSize;
@@ -56,8 +64,9 @@ public class CollectionManager {
                 ManaPool.Blue++;
                 break;
         }
-        _megaManager.GridMan.RemoveTokenFromGrid(newToken);
-        newToken.PlaceInPlayerPool(newPos);
+        newToken = _megaManager.GridMan.PullTokenFromGrid(newToken);
+        if(newToken != null)
+            newToken.PlaceInPlayerPool(newPos);
     }
 
     public void CleanUp()

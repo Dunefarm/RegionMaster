@@ -86,7 +86,8 @@ public class Token : CustomBehaviour {
         Place = Placement.Bag;
         _transform.position = Vector3.one * 1000;
         _renderer.enabled = false;
-        _megaMan.GridMan.TokensInBag.Add(this);
+        _megaMan.GridMan.TokenBag.AddToken(this);
+        //_megaMan.GridMan.TokensInBag.Add(this);
         GridCoord = new Finite2DCoord(-1, -1);
     }
 

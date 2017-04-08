@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class GUIManager : MonoBehaviour {
 
@@ -43,7 +44,8 @@ public class GUIManager : MonoBehaviour {
 
     public void CollectAndGoToBuyPhase()
     {
-        MegaMan.GridMan.CheckForCompletedRegions(); //TODO: Make into event
+        List<Token> tokens = MegaMan.GridMan.GetCompletedRegions(MegaMan.CurrentPlayer); //TODO: Make into event
+        MegaMan.CollectionManager.AddTokensToPool(tokens);
         EventManager.ChangeTurnPhase(TurnPhase.Buy);
     }
 }
