@@ -55,12 +55,8 @@ public class MegaManager : MonoBehaviour
     {
         SetUpGrid();
         SetupMarkerHolder();
+        SetupPlayers();
 
-        for (int ID = 0; ID < NUMBER_OF_PLAYERS; ID++)
-        {
-            Player player = new Player(ID, DiscardPilePrefab, CamMan);
-            Players.Add(player);
-        }
         EventManager.ActivatePlayer(_currentPlayerNumber);
         EventManager.ChangeTurnPhase(TurnPhase.Beginning);
         EventManager.CallOnSomethingChange();
@@ -79,10 +75,15 @@ public class MegaManager : MonoBehaviour
         Markers = markers;
     }
 
-    void Update()
+    void SetupPlayers()
     {
-
+        for (int ID = 0; ID < NUMBER_OF_PLAYERS; ID++)
+        {
+            Player player = new Player(ID, DiscardPilePrefab, CamMan);
+            Players.Add(player);
+        }
     }
+
     public void NextTurn()
     {
         CollectionManager.CleanUp();

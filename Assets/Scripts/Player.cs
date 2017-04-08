@@ -8,7 +8,6 @@ public class Player
     public Deck Deck;
     public DiscardPile DiscardPile;
     public Hand Hand;
-    public ManaPool ManaPool;
     public Transform DiscardPileTranform;
 
     private Vector3 DECK_PLACEMENT = new Vector3(5.22f, -6.7f, 0);

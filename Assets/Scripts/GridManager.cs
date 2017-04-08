@@ -17,8 +17,8 @@ public class GridManager {
     public TokenHolder TokenBag = new TokenHolder();
 
     private Grid grid;
-    private int TokenAmount = 30;
-    private int GridSize = 8;
+    private int TOKEN_AMOUNT = 30;
+    private int GridSize;
     private bool[,] CellsChecked;
 
     public void BeginNewGame()
@@ -29,13 +29,12 @@ public class GridManager {
 
     void CreateStartingTokenBag()
     {
-        for(int i = 0; i < TokenAmount; i++)
+        for(int i = 0; i < TOKEN_AMOUNT; i++)
         {
             SpawnTokenInBag(Token.ColorType.Red);
             SpawnTokenInBag(Token.ColorType.Green);
             SpawnTokenInBag(Token.ColorType.Blue);
         }
-        MonoBehaviour.print(TokenBag.Tokens.Count);
     }
 
     void SpawnTokenInBag(Token.ColorType color)
@@ -45,14 +44,16 @@ public class GridManager {
 
     public void SetupGrid()
     {
+        GridSize = grid.GridSize;
         CellsChecked = new bool[GridSize, GridSize];
         GridCells = new GridCell[GridSize, GridSize];
+
         for (int i = 0; i < GridSize; i++)
         {
             for (int j = 0; j < GridSize; j++)
             {
                 Finite2DCoord coord = new Finite2DCoord(i, j);
-                GridCells[i, j] = new GridCell(coord, grid.GridCoordinateToVector3(coord));
+                GridCells[i, j] = new GridCell(grid.GridCoordinateToVector3(coord));
             }
         }
         RefillGrid();
@@ -82,7 +83,6 @@ public class GridManager {
         List<Token> tokens = new List<Token>();
         for (int cellNo = 0; cellNo < cells.Count; cellNo++)
         {
-            MonoBehaviour.print(cells[cellNo].Token);
             tokens.Add(cells[cellNo].PullToken());
         }
         return tokens;

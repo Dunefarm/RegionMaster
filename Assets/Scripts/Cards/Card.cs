@@ -24,7 +24,7 @@ public class Card : CustomBehaviour {
     public bool Displayed = false;
     public LayerMask TableLayerMask;
     public List<CardAbility> Abilities = new List<CardAbility>();
-    public ManaPool ManaCost = new ManaPool();
+    public ManaCost ManaCost = new ManaCost();
 
     [HideInInspector] public Finite2DCoord ShopCoord = new Finite2DCoord(-1, -1);
     [HideInInspector] public MegaManager MegaMan;

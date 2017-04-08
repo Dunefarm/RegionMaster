@@ -4,13 +4,11 @@ using System.Collections.Generic;
 
 public class GridCell {
 
-    public GridCell(Finite2DCoord newCoord, Vector3 newPos)
+    public GridCell(Vector3 newPos)
     {
-        Coordinate = newCoord;
         Position = newPos;
     }
 
-    public Finite2DCoord Coordinate;
     public Vector3 Position;
     public Token Token;
     public GridToken GridToken;
@@ -68,7 +66,6 @@ public class GridCell {
 
     void OnMouseClicked()
     {
-        MonoBehaviour.print("Clicked (" + Coordinate.x + ", " + Coordinate.y + ").");
         if (MegaManager.TurnPhases.CurrentTurnPhase == TurnPhase.Place)
         {
             if (_owner == null)
