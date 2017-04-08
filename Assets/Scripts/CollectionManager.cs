@@ -115,10 +115,6 @@ public class CollectionManager {
 
     public void CleanUp()
     {
-        foreach(Token token in _collectedTokens)
-        {
-            token.PlaceInBag();
-        }
         _collectedTokens.Clear();
         RedTokens.Clear();
         BlueTokens.Clear();
@@ -146,17 +142,15 @@ public class CollectionManager {
         }
         for (int r = RedTokens.Count - 1; r > ManaPool.Red - 1; r--)
         {
-            RedTokens[r].PlaceInBag();
+
             RedTokens.RemoveAt(r);
         }
         for (int g = RedTokens.Count - 1; g > ManaPool.Green - 1; g--)
         {
-            GreenTokens[g].PlaceInBag();
             GreenTokens.RemoveAt(g);
         }
         for (int b = RedTokens.Count - 1; b > ManaPool.Blue - 1; b--)
         {
-            BlueTokens[b].PlaceInBag();
             BlueTokens.RemoveAt(b);
         }
     }

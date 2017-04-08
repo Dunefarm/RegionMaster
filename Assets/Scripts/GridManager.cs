@@ -35,6 +35,7 @@ public class GridManager {
             SpawnTokenInBag(Token.ColorType.Green);
             SpawnTokenInBag(Token.ColorType.Blue);
         }
+        MonoBehaviour.print(TokenBag.Tokens.Count);
     }
 
     void SpawnTokenInBag(Token.ColorType color)

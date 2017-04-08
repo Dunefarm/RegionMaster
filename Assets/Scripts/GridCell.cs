@@ -44,8 +44,6 @@ public class GridCell {
     {
         if(GridToken != null)
             MonoBehaviour.Destroy(GridToken.gameObject);
-        if(Token != null)
-            Token.Owner = null;
         Token = null;
         _owner = null;
     }
