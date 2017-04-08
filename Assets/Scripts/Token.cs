@@ -73,13 +73,6 @@ public class Token : CustomBehaviour {
         _turnPhases = MegaManager.TurnPhases;
     }
 
-    public void PlaceInGrid(Finite2DCoord newGridCoord, Vector3 pos)
-    {
-        _transform.position = pos;
-        _renderer.enabled = true;
-        GridCoord = newGridCoord;
-    }
-
     public void PlaceInBag()
     {
         RemoveOwnerAndMarker();
@@ -96,37 +89,6 @@ public class Token : CustomBehaviour {
         Place = Placement.PlayerPool;
         _transform.position = pos;
         GridCoord = new Finite2DCoord(-1, -1);
-    }
-
-    public override void OnMouseClicked()
-    {
-        if (MegaManager.TurnPhases.CurrentTurnPhase == TurnPhase.Place && _owner == null)
-        {
-            switch (Color)
-            {
-                case ColorType.Red:
-                    if (MegaManager.Markers.Amount.r > 0)
-                    {
-                        MegaManager.Markers.AddMarkers(new TokenMarkers(-1, 0, 0));
-                        AssignOwnerAndMarker();
-                    }
-                    break;
-                case ColorType.Green:
-                    if (MegaManager.Markers.Amount.g > 0)
-                    {
-                        MegaManager.Markers.AddMarkers(new TokenMarkers(0, -1, 0));
-                        AssignOwnerAndMarker();
-                    }
-                    break;
-                case ColorType.Blue:
-                    if (MegaManager.Markers.Amount.b > 0)
-                    {
-                        MegaManager.Markers.AddMarkers(new TokenMarkers(0, 0, -1));
-                        AssignOwnerAndMarker();
-                    }
-                    break;
-            }
-        }
     }
 
     void AssignOwnerAndMarker()

@@ -54,7 +54,7 @@ public class GridManager {
                 GridCells[i, j] = new GridCell(coord, grid.GridCoordinateToVector3(coord));
             }
         }
-                RefillGrid();
+        RefillGrid();
     }
 
     public void RefillGrid()
@@ -73,11 +73,7 @@ public class GridManager {
 
     void PlaceTokenInGrid(Token token, Finite2DCoord coord)
     {
-        token.PlaceInGrid(coord, Vector3.one * 100);
         GridCells[coord.x, coord.y].AddToken(token);
-
-        //Temporarily commented out!
-        //token.PlaceInGrid(coord, grid.GridCoordinateToVector3(coord.x, coord.y));
     }
 
     public static List<Token> PullTokensFromGrid(List<GridCell> cells)

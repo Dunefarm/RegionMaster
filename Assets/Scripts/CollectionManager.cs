@@ -6,10 +6,27 @@ using UnityEngine.Networking.NetworkSystem;
 
 public class CollectionManager {
 
+    public class ManaToken
+    {
+        public Token Token;
+        public Transform PhysicalToken;
+
+        public void Clear()
+        {
+            MonoBehaviour.Destroy(PhysicalToken.gameObject);
+            Token = null;
+        }
+    }
+
     private float TOKEN_SEPARATION = 1.16f;
     private Vector3 RED_PLACEMENT;
     private Vector3 GREEN_PLACEMENT;
     private Vector3 BLUE_PLACEMENT;
+
+    public static List<ManaToken> RedManaTokens = new List<ManaToken>();
+    public static List<ManaToken> GreenManaTokens = new List<ManaToken>();
+    public static List<ManaToken> BlueManaTokens = new List<ManaToken>();
+    public static List<ManaToken> AllManaTokens = new List<ManaToken>();
 
     public static List<Token> RedTokens = new List<Token>();
     public static List<Token> BlueTokens = new List<Token>();
@@ -66,7 +83,34 @@ public class CollectionManager {
         }
         //newToken = _megaManager.GridMan.PullTokenFromGrid(newToken);
         //if(newToken != null)
-        newToken.PlaceInPlayerPool(newPos);
+        CreatePhysicalToken(newToken, newPos);
+        //newToken.PlaceInPlayerPool(newPos);
+    }
+
+    void CreatePhysicalToken(Token token, Vector3 position)
+    {
+        ManaToken mana = new ManaToken();
+        mana.Token = token;
+        Transform physicalToken;
+        if (token.Color == Token.ColorType.Red)
+        {
+            physicalToken = ((GameObject)MonoBehaviour.Instantiate(Resources.Load("Prefabs/RedManaToken") as GameObject, position, Quaternion.identity)).transform;
+            mana.PhysicalToken = physicalToken;
+            RedManaTokens.Add(mana);
+        }
+        else if (token.Color == Token.ColorType.Green)
+        {
+            physicalToken = ((GameObject)MonoBehaviour.Instantiate(Resources.Load("Prefabs/GreenManaToken") as GameObject, position, Quaternion.identity)).transform;
+            mana.PhysicalToken = physicalToken;
+            GreenManaTokens.Add(mana);
+        }
+        else
+        {
+            physicalToken = ((GameObject)MonoBehaviour.Instantiate(Resources.Load("Prefabs/BlueManaToken") as GameObject, position, Quaternion.identity)).transform;
+            mana.PhysicalToken = physicalToken;
+            BlueManaTokens.Add(mana);
+        }
+        AllManaTokens.Add(mana);
     }
 
     public void CleanUp()
@@ -80,6 +124,12 @@ public class CollectionManager {
         BlueTokens.Clear();
         GreenTokens.Clear();
         ManaPool.Clear();
+
+        foreach(ManaToken mana in AllManaTokens)
+        {
+            mana.Clear();
+        }
+        AllManaTokens = new List<ManaToken>();
     }
 
     public bool CheckIfCanAfford(ManaPool manaCost)
