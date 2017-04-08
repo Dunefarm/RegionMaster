@@ -10,18 +10,10 @@ public class New_Card {
     public string Name = "Name of the card";
     public string CardText = "Card abilities.";
     public string CardFlavor = "Card flavor.";
-    public CardHolder CardHolder;
 
-    //ONLY CALL FROM HOLDER!
-    public void PullCardOutOfHolder()
+    public CardHolder CardHolder
     {
-        CardHolder = null;
-    }
-
-    //ONLY CALL FROM HOLDER
-    public void AddCardToHolder(CardHolder holder)
-    {
-        CardHolder = holder;
+        get { return CardHolder.CardHolders[this]; }
     }
 
     public static New_Card CreatePlaceHolderCard(int cost = 1, Color color = Color.Colorless, string name = "Placeholder Card")

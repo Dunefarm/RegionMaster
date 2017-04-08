@@ -6,14 +6,15 @@ using System.Linq;
 public class CardHolder {
 
     public List<New_Card> Cards = new List<New_Card>();
+    public static Dictionary<New_Card, CardHolder> CardHolders = new Dictionary<New_Card, CardHolder>();
 
     public virtual New_Card PullCardOut(New_Card card)
     {
         if (Cards.Count == 0 || !Cards.Contains(card))
             return null;
 
-        card.PullCardOutOfHolder();
         Cards.Remove(card);
+        CardHolders.Remove(card);
         return card;
     }
 
@@ -39,7 +40,6 @@ public class CardHolder {
             return null;
 
         New_Card card = Cards[index];
-        card.PullCardOutOfHolder();
         Cards.Remove(card);
         return card;
     }
@@ -60,7 +60,7 @@ public class CardHolder {
         if (card == null || Cards.Contains(card))
             return;
 
-        card.AddCardToHolder(this);
+        CardHolders.Add(card, this);
         Cards.Add(card);
     }
 
@@ -75,7 +75,7 @@ public class CardHolder {
         if (atIndex > Cards.Count || atIndex < 0)
             return;
 
-        card.AddCardToHolder(this);
+        CardHolders.Add(card, this);
         Cards.Insert(atIndex, card);
     }
 

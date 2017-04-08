@@ -41,7 +41,11 @@ public class GridCell {
     public void Clear()
     {
         if(GridToken != null)
+        {
+            GridTokenOwnership.Remove(GridToken);
             MonoBehaviour.Destroy(GridToken.gameObject);
+        }
+
         Token = null;
         _owner = null;
     }
