@@ -17,7 +17,7 @@ public class TokenHolder {
 
     public Token InstantiateAndPoolToken(Token.ColorType color)
     {
-        GameObject tokenObject = (GameObject)MonoBehaviour.Instantiate(Resources.Load("Token") as GameObject, Vector3.one * 1000, Quaternion.identity);
+        GameObject tokenObject = (GameObject)MonoBehaviour.Instantiate(Resources.Load("Prefabs/Token") as GameObject, Vector3.one * 1000, Quaternion.identity);
         Token token = tokenObject.GetComponent<Token>();
         //tokenScript.Owner = new Player();
         token.Color = color;
@@ -31,7 +31,7 @@ public class TokenHolder {
             return;
         for (int i = 0; i < amount; i++)
         {
-            GameObject token = (GameObject)MonoBehaviour.Instantiate(Resources.Load("Token") as GameObject, Vector3.one * 1000, Quaternion.identity);
+            GameObject token = (GameObject)MonoBehaviour.Instantiate(Resources.Load("Prefabs/Token") as GameObject, Vector3.one * 1000, Quaternion.identity);
             Token tokenScript = token.GetComponent<Token>();
             //tokenScript.Owner = new Player();
             tokenScript.Color = color;

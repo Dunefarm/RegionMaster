@@ -12,6 +12,7 @@ public class GridManager {
     }
 
     public Token[,] TokensInGrid;
+    public GridCell[,] GridCells;
 
     [HideInInspector]
     public TokenHolder TokenBag = new TokenHolder();
@@ -22,9 +23,11 @@ public class GridManager {
 
     public void BeginNewGame()
     {
-        TokensInGrid = new Token[GridSize, GridSize];
         CreateStartingTokenBag();
-        RefillGrid();
+        SetupGrid();
+
+        GridCell testCell = new GridCell(new Finite2DCoord(0,0), new Vector3(2, -7, 0));
+        testCell.CreateGridToken();
     }
 
     void CreateStartingTokenBag()
@@ -40,6 +43,21 @@ public class GridManager {
     void SpawnTokenInBag(Token.ColorType color)
     {
         Token token = TokenBag.InstantiateAndPoolToken(color);
+    }
+
+    public void SetupGrid()
+    {
+        TokensInGrid = new Token[GridSize, GridSize];
+        GridCells = new GridCell[GridSize, GridSize];
+        for (int i = 0; i < GridSize; i++)
+        {
+            for (int j = 0; j < GridSize; j++)
+            {
+                Finite2DCoord coord = new Finite2DCoord(i, j);
+                GridCells[i, j] = new GridCell(coord, grid.GridCoordinateToVector3(coord));
+            }
+        }
+                RefillGrid();
     }
 
     public void RefillGrid()

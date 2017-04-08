@@ -106,7 +106,7 @@ public class Card : CustomBehaviour {
 
     public void BuyCard()
     {
-        Owner = MegaMan.CurrentPlayer;
+        Owner = MegaManager.CurrentPlayer;
         PutInDiscardPile();
     }
 
@@ -171,7 +171,7 @@ public class Card : CustomBehaviour {
         {
             if (CurrentLocation == CardLocation.Shop)
             {
-                if (Vector3.Distance(transform.position, MegaMan.CurrentPlayer.DiscardPileTranform.position) < 10)
+                if (Vector3.Distance(transform.position, MegaManager.CurrentPlayer.DiscardPileTranform.position) < 10)
                 {
                     MegaMan.Shop.RemoveFromShop(this);
                     BuyCard();

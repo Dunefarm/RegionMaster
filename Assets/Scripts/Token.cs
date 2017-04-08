@@ -143,7 +143,7 @@ public class Token : CustomBehaviour {
 
     public Player GetCurrentPlayer()
     {
-        return _megaMan.CurrentPlayer;
+        return MegaManager.CurrentPlayer;
     }
 
     void AssignMarker(Player newOwner)

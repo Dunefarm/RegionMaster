@@ -44,7 +44,7 @@ public class GUIManager : MonoBehaviour {
 
     public void CollectAndGoToBuyPhase()
     {
-        List<Token> tokens = MegaMan.GridMan.GetCompletedRegions(MegaMan.CurrentPlayer); //TODO: Make into event
+        List<Token> tokens = MegaMan.GridMan.GetCompletedRegions(MegaManager.CurrentPlayer); //TODO: Make into event
         MegaMan.CollectionManager.AddTokensToPool(tokens);
         EventManager.ChangeTurnPhase(TurnPhase.Buy);
     }

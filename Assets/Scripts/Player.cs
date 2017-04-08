@@ -15,20 +15,16 @@ public class Player
     private Vector3 DISCARD_PILE_PLACEMENT = new Vector3(8.76f, -6.7f, 0);
     private Transform HAND_TRANSFORM;
 
-    private MegaManager _megaManager;
-    private CameraManager _cameraManager;
-
     public Player()
     {
         PlayerNumber = -1;
         //empty placeholder object
     }
 
-    public Player(MegaManager megaMan, int playerNo, GameObject deckPrefab, GameObject discardPilePrefab, CameraManager camMan)
+    public Player(int playerNo, GameObject discardPilePrefab, CameraManager camMan)
     {
-        _megaManager = megaMan;
-        _cameraManager = camMan;
         PlayerNumber = playerNo;
+        GameObject deckPrefab = Resources.Load("Prefabs/Deck") as GameObject;
         Deck = (MonoBehaviour.Instantiate(deckPrefab, DECK_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<Deck>();
         Deck.SetOwner(this);
         DiscardPile = (MonoBehaviour.Instantiate(discardPilePrefab, DISCARD_PILE_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<DiscardPile>();

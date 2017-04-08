@@ -7,6 +7,11 @@ public class Grid : MonoBehaviour {
     public Transform LowerRightCorner;
     public int GridSize = 8;
 
+    public Vector3 GridCoordinateToVector3(Finite2DCoord coord)
+    {
+        return GridCoordinateToVector3(coord.x, coord.y);
+    }
+
     public Vector3 GridCoordinateToVector3(int i, int j)
     {
         float x = Mathf.Lerp(UpperLeftCorner.position.x, LowerRightCorner.position.x, i / (float)(GridSize - 1));

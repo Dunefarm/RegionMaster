@@ -18,17 +18,17 @@ public class MegaManager : MonoBehaviour
     public Hand Hand;
     public List<Deck> Decks = new List<Deck>();
     public List<DiscardPile> DiscardPiles = new List<DiscardPile>();
-    public List<Player> Players = new List<Player>();
+    public static List<Player> Players = new List<Player>();
 
     public TurnPhases TurnPhases;
     public CollectionManager CollectionManager;
 
     private int NUMBER_OF_PLAYERS = 2;
-    private int _currentPlayerNumber = -1;
+    private static int _currentPlayerNumber = -1;
 
     //public Token.OwnerTypes CurrentPlayer = Token.OwnerTypes.White;
 
-    public Player CurrentPlayer
+    public static Player CurrentPlayer
     {
         get { return Players[_currentPlayerNumber]; }
     }
@@ -55,9 +55,9 @@ public class MegaManager : MonoBehaviour
     {
         SetUpGrid();
 
-        for (int i = 0; i < NUMBER_OF_PLAYERS; i++)
+        for (int ID = 0; ID < NUMBER_OF_PLAYERS; ID++)
         {
-            Player player = new Player(this, i, DeckPrefab, DiscardPilePrefab, CamMan);
+            Player player = new Player(ID, DiscardPilePrefab, CamMan);
             Players.Add(player);
         }
         EventManager.ActivatePlayer(_currentPlayerNumber);
@@ -67,7 +67,7 @@ public class MegaManager : MonoBehaviour
 
     void SetUpGrid()
     {
-        Grid grid = Instantiate(Resources.Load("Grid") as GameObject).GetComponent<Grid>();
+        Grid grid = Instantiate(Resources.Load("Prefabs/Grid") as GameObject).GetComponent<Grid>();
         GridMan = new GridManager(grid);
         GridMan.BeginNewGame();
     }
