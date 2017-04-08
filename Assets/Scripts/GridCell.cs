@@ -33,31 +33,62 @@ public class GridCell {
         CreateGridToken();
     }
 
+    public Token PullToken()
+    {
+        Token token = Token;
+        Clear();
+        return token;
+    }
+
     public void Clear()
     {
         if(GridToken != null)
-            MonoBehaviour.Destroy(GridToken);
+            MonoBehaviour.Destroy(GridToken.gameObject);
+        if(Token != null)
+            Token.Owner = null;
         Token = null;
+        _owner = null;
+    }
+
+    public bool IsEmpty()
+    {
+        return Token == null;
+    }
+
+    public bool HasOwner()
+    {
+        return _owner != null;
     }
 
     public void CreateGridToken()
     {
-        GridToken = ((GameObject)MonoBehaviour.Instantiate(Resources.Load("Prefabs/GridToken") as GameObject, Position, Quaternion.identity)).GetComponent<GridToken>();
+        string color = Token.Color.ToString();
+        GridToken = ((GameObject)MonoBehaviour.Instantiate(Resources.Load("Prefabs/" + color + "GridToken") as GameObject, Position, Quaternion.identity)).GetComponent<GridToken>();
+        GridToken.Color = Token.Color;
         GridTokenOwnership.Add(GridToken, this);
     }
 
-    public void OnMouseClicked()
+    void OnMouseClicked()
     {
-        if (_owner == null)
-            SetOwner(MegaManager.CurrentPlayer);
+        MonoBehaviour.print("Clicked (" + Coordinate.x + ", " + Coordinate.y + ").");
+        if (MegaManager.TurnPhases.CurrentTurnPhase == TurnPhase.Place)
+        {
+            if (_owner == null)
+                SetOwner(MegaManager.CurrentPlayer);
+        }        
     }
 
     public void SetOwner(Player player)
     {
-        GameObject playerMarkerPrefab = Resources.Load("Prefabs/PlayerMarker_" + player.PlayerNumber) as GameObject;
-        Transform playerMarker = (MonoBehaviour.Instantiate(playerMarkerPrefab, Position, Quaternion.identity) as GameObject).transform;
-        playerMarker.parent = GridToken.transform;
-        _owner = player;
+        if (MegaManager.Markers.ColorAmount(Token.Color) > 0)
+        {
+            MegaManager.Markers.UseMarker(Token.Color);
+            GameObject playerMarkerPrefab = Resources.Load("Prefabs/PlayerMarker_" + player.PlayerNumber) as GameObject;
+            Transform playerMarker = (MonoBehaviour.Instantiate(playerMarkerPrefab, Position, Quaternion.identity) as GameObject).transform;
+            playerMarker.parent = GridToken.transform;
+            _owner = player;
+        }
+            
     }
 
     public static void GridTokenClicked(GridToken token)

@@ -17,6 +17,16 @@ public class Markers : MonoBehaviour {
         }
     }
 
+    public int ColorAmount(Token.ColorType color)
+    {
+        if (color == Token.ColorType.Red)
+            return Amount.r;
+        if (color == Token.ColorType.Green)
+            return Amount.g;
+        else
+            return Amount.b;
+    }
+
     TokenMarkers _amount = new TokenMarkers(0, 0, 0);
 
     public void AddMarkers(TokenMarkers markers)
@@ -25,19 +35,22 @@ public class Markers : MonoBehaviour {
         Amount = newTokenMarker;
     }
 
+    public void UseMarker(Token.ColorType color)
+    {
+        TokenMarkers newTokenMarker;
+
+        if (color == Token.ColorType.Red)
+            newTokenMarker = new TokenMarkers(-1, 0, 0);
+        else if (color == Token.ColorType.Green)
+            newTokenMarker = new TokenMarkers(0, -1, 0);
+        else
+            newTokenMarker = new TokenMarkers(0, 0, -1);
+
+        AddMarkers(newTokenMarker);
+    }
+
     public void ClearMarkers()
     {
         Amount = new TokenMarkers(0, 0, 0);
     }
-
-    // Use this for initialization
-    void Start ()
-    {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

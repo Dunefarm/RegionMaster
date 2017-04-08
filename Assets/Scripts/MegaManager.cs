@@ -14,13 +14,13 @@ public class MegaManager : MonoBehaviour
     public GUIManager GUIMan;
     public CameraManager CamMan;
     public Shop Shop;
-    public Markers Markers;
+    public static Markers Markers;
     public Hand Hand;
     public List<Deck> Decks = new List<Deck>();
     public List<DiscardPile> DiscardPiles = new List<DiscardPile>();
     public static List<Player> Players = new List<Player>();
 
-    public TurnPhases TurnPhases;
+    public static TurnPhases TurnPhases;
     public CollectionManager CollectionManager;
 
     private int NUMBER_OF_PLAYERS = 2;
@@ -54,6 +54,7 @@ public class MegaManager : MonoBehaviour
     void Start()
     {
         SetUpGrid();
+        SetupMarkerHolder();
 
         for (int ID = 0; ID < NUMBER_OF_PLAYERS; ID++)
         {
@@ -70,6 +71,12 @@ public class MegaManager : MonoBehaviour
         Grid grid = Instantiate(Resources.Load("Prefabs/Grid") as GameObject).GetComponent<Grid>();
         GridMan = new GridManager(grid);
         GridMan.BeginNewGame();
+    }
+
+    void SetupMarkerHolder()
+    {
+        Markers markers = Instantiate(Resources.Load("Prefabs/MarkerHolder") as GameObject).GetComponent<Markers>();
+        Markers = markers;
     }
 
     void Update()

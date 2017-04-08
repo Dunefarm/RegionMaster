@@ -70,7 +70,7 @@ public class Token : CustomBehaviour {
         _transform = transform;
         _renderer = GetComponentInChildren<Renderer>();
         _megaMan = FindObjectOfType<MegaManager>();
-        _turnPhases = _megaMan.TurnPhases;
+        _turnPhases = MegaManager.TurnPhases;
     }
 
     public void PlaceInGrid(Finite2DCoord newGridCoord, Vector3 pos)
@@ -100,28 +100,28 @@ public class Token : CustomBehaviour {
 
     public override void OnMouseClicked()
     {
-        if (_megaMan.TurnPhases.CurrentTurnPhase == TurnPhase.Place && _owner == null)
+        if (MegaManager.TurnPhases.CurrentTurnPhase == TurnPhase.Place && _owner == null)
         {
             switch (Color)
             {
                 case ColorType.Red:
-                    if (_megaMan.Markers.Amount.r > 0)
+                    if (MegaManager.Markers.Amount.r > 0)
                     {
-                        _megaMan.Markers.AddMarkers(new TokenMarkers(-1, 0, 0));
+                        MegaManager.Markers.AddMarkers(new TokenMarkers(-1, 0, 0));
                         AssignOwnerAndMarker();
                     }
                     break;
                 case ColorType.Green:
-                    if (_megaMan.Markers.Amount.g > 0)
+                    if (MegaManager.Markers.Amount.g > 0)
                     {
-                        _megaMan.Markers.AddMarkers(new TokenMarkers(0, -1, 0));
+                        MegaManager.Markers.AddMarkers(new TokenMarkers(0, -1, 0));
                         AssignOwnerAndMarker();
                     }
                     break;
                 case ColorType.Blue:
-                    if (_megaMan.Markers.Amount.b > 0)
+                    if (MegaManager.Markers.Amount.b > 0)
                     {
-                        _megaMan.Markers.AddMarkers(new TokenMarkers(0, 0, -1));
+                        MegaManager.Markers.AddMarkers(new TokenMarkers(0, 0, -1));
                         AssignOwnerAndMarker();
                     }
                     break;

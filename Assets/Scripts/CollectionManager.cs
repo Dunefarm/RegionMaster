@@ -11,9 +11,9 @@ public class CollectionManager {
     private Vector3 GREEN_PLACEMENT;
     private Vector3 BLUE_PLACEMENT;
 
-    public List<Token> RedTokens = new List<Token>();
-    public List<Token> BlueTokens = new List<Token>();
-    public List<Token> GreenTokens = new List<Token>();
+    public static List<Token> RedTokens = new List<Token>();
+    public static List<Token> BlueTokens = new List<Token>();
+    public static List<Token> GreenTokens = new List<Token>();
 
     public ManaPool ManaPool;
 
@@ -64,9 +64,9 @@ public class CollectionManager {
                 ManaPool.Blue++;
                 break;
         }
-        newToken = _megaManager.GridMan.PullTokenFromGrid(newToken);
-        if(newToken != null)
-            newToken.PlaceInPlayerPool(newPos);
+        //newToken = _megaManager.GridMan.PullTokenFromGrid(newToken);
+        //if(newToken != null)
+        newToken.PlaceInPlayerPool(newPos);
     }
 
     public void CleanUp()
