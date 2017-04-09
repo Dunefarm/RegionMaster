@@ -11,6 +11,12 @@ public class CardAbility : MonoBehaviour {
     }
 
     public virtual void ActivateAbility()
-    { }
+    {
+    }
+
+    public virtual void ResolveAbility()
+    {
+        AbilityResolver.ActivateNextAbility();
+    }
 
 }

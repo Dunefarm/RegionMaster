@@ -13,6 +13,7 @@ public class MegaManager : MonoBehaviour
     public GridManager GridMan;
     public GUIManager GUIMan;
     public CameraManager CamMan;
+    public AbilityResolver AbilityResolver;
     public Shop Shop;
     public static Markers Markers;
     public Hand Hand;
@@ -33,7 +34,7 @@ public class MegaManager : MonoBehaviour
         get { return Players[_currentPlayerNumber]; }
     }
 
-    public void ChangeAmountOfMarkers(TokenMarkers markers)
+    public void SetAmountOfMarkers(ManaCost markers)
     {
         Markers.Amount = markers;
 
@@ -53,6 +54,7 @@ public class MegaManager : MonoBehaviour
 
     void Start()
     {
+        SetupAbilityResolver();
         SetUpGrid();
         SetupMarkerHolder();
         SetupPlayers();
@@ -60,6 +62,11 @@ public class MegaManager : MonoBehaviour
         EventManager.ActivatePlayer(_currentPlayerNumber);
         EventManager.ChangeTurnPhase(TurnPhase.Beginning);
         EventManager.CallOnSomethingChange();
+    }
+
+    void SetupAbilityResolver()
+    {
+        AbilityResolver = new AbilityResolver();
     }
 
     void SetUpGrid()

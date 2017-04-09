@@ -7,10 +7,8 @@ public class CA_GiveMarkers : CardAbility
 
     public override void ActivateAbility()
     {
-        int R = Red + MegaManager.Markers.Amount.r;
-        int G = Green + MegaManager.Markers.Amount.g;
-        int B = Blue + MegaManager.Markers.Amount.b;
-        MegaManager.Markers.Amount = new TokenMarkers(R, G, B);
+        ManaCost manaCost = new ManaCost(Red, Green, Blue);
+        EventManager.AddMarkersToMarkerPool(manaCost);
     }
 
 }

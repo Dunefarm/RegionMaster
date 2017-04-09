@@ -75,10 +75,7 @@ public class Card : CustomBehaviour {
             return;
         CurrentLocation = CardLocation.Play;
         Owner.Hand.RemoveCardInHand(this);
-        foreach(CardAbility abi in Abilities)
-        {
-            abi.ActivateAbility();
-        }
+        AbilityResolver.AddCardAbilities(Abilities, true);
         PutInDiscardPile();
     }
 

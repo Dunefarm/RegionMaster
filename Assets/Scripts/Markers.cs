@@ -5,52 +5,57 @@ using UnityEngine.UI;
 public class Markers : MonoBehaviour {
 
     public Text Red, Green, Blue;
-    public TokenMarkers Amount
+    public ManaCost Amount
     {
         get { return _amount; }
         set
         {
             _amount = value;
-            Red.text = _amount.r.ToString();
-            Green.text = _amount.g.ToString();
-            Blue.text = _amount.b.ToString();
+            Red.text = _amount.Red.ToString();
+            Green.text = _amount.Green.ToString();
+            Blue.text = _amount.Blue.ToString();
         }
     }
 
     public int ColorAmount(Token.ColorType color)
     {
         if (color == Token.ColorType.Red)
-            return Amount.r;
+            return Amount.Red;
         if (color == Token.ColorType.Green)
-            return Amount.g;
+            return Amount.Green;
         else
-            return Amount.b;
+            return Amount.Blue;
     }
 
-    TokenMarkers _amount = new TokenMarkers(0, 0, 0);
+    ManaCost _amount = new ManaCost(0, 0, 0);
 
-    public void AddMarkers(TokenMarkers markers)
+    void Start()
     {
-        TokenMarkers newTokenMarker = new TokenMarkers(Amount.r + markers.r, Amount.g + markers.g, Amount.b + markers.b);
-        Amount = newTokenMarker;
+        EventManager.OnAddMarkersToMarkerPool += AddMarkers;
+    }
+
+    public void AddMarkers(ManaCost markers)
+    {
+        ManaCost newManaCost = new ManaCost(Amount.Red + markers.Red, Amount.Green + markers.Green, Amount.Blue + markers.Blue);
+        Amount = newManaCost;
     }
 
     public void UseMarker(Token.ColorType color)
     {
-        TokenMarkers newTokenMarker;
+        ManaCost newTokenMarker;
 
         if (color == Token.ColorType.Red)
-            newTokenMarker = new TokenMarkers(-1, 0, 0);
+            newTokenMarker = new ManaCost(-1, 0, 0);
         else if (color == Token.ColorType.Green)
-            newTokenMarker = new TokenMarkers(0, -1, 0);
+            newTokenMarker = new ManaCost(0, -1, 0);
         else
-            newTokenMarker = new TokenMarkers(0, 0, -1);
+            newTokenMarker = new ManaCost(0, 0, -1);
 
         AddMarkers(newTokenMarker);
     }
 
     public void ClearMarkers()
     {
-        Amount = new TokenMarkers(0, 0, 0);
+        Amount = new ManaCost(0, 0, 0);
     }
 }

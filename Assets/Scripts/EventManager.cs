@@ -8,12 +8,14 @@ public class EventManager : MonoBehaviour
     public delegate void d_TurnPhase(TurnPhase turnPhase);
     public delegate void d_int(int value);
     public delegate bool d_TurnPhaseBool(TurnPhase turnPhase);
+    public delegate void d_Manacost(ManaCost manaCost);
 
     public static event d_NoArgVoid OnSomethingChange;
     public static event d_TurnPhase OnTurnPhaseChange;
     public static event d_TurnPhaseBool OnTryTurnPhaseChange;
     public static event d_int OnTryDrawCard;
     public static event d_int OnActivatePlayer;
+    public static event d_Manacost OnAddMarkersToMarkerPool;
 
     public static void CallOnSomethingChange()
     {
@@ -51,6 +53,12 @@ public class EventManager : MonoBehaviour
         {
             OnActivatePlayer(number);
         }
+    }
+
+    public static void AddMarkersToMarkerPool(ManaCost manaCost)
+    {
+        if (OnAddMarkersToMarkerPool != null)
+            OnAddMarkersToMarkerPool(manaCost);
     }
 
 	// Use this for initialization

@@ -12,9 +12,9 @@ public class CardHolderManager : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        Deck.AddCard(New_Card.CreatePlaceHolderCard(1));
-        Deck.AddCard(New_Card.CreatePlaceHolderCard(2));
-        Deck.AddCard(New_Card.CreatePlaceHolderCard(3));
+        Deck.AddCard(New_Card.CreatePlaceholderCard(1));
+        Deck.AddCard(New_Card.CreatePlaceholderCard(2));
+        Deck.AddCard(New_Card.CreatePlaceholderCard(3));
     }
 	
 	// Update is called once per frame
