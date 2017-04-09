@@ -47,7 +47,7 @@ public class MegaManager : MonoBehaviour
 
     void Awake()
     {
-        EventManager.OnTurnPhaseChange += OnTurnPhaseChange;
+        EventManager.OnTurnPhaseBegin += OnTurnPhaseChange;
         TurnPhases = gameObject.AddComponent<TurnPhases>();
         CollectionManager = new CollectionManager(this);
     }
@@ -60,7 +60,7 @@ public class MegaManager : MonoBehaviour
         SetupPlayers();
 
         EventManager.ActivatePlayer(_currentPlayerNumber);
-        EventManager.ChangeTurnPhase(TurnPhase.Beginning);
+        EventManager.TryChangeTurnPhase(TurnPhase.Beginning);
         EventManager.CallOnSomethingChange();
     }
 
@@ -95,7 +95,7 @@ public class MegaManager : MonoBehaviour
     {
         CollectionManager.CleanUp();
         GridMan.RefillGrid();
-        EventManager.ChangeTurnPhase(TurnPhase.End);
+        EventManager.TryChangeTurnPhase(TurnPhase.End);
     }
 
     private void DrawCard(int amount)

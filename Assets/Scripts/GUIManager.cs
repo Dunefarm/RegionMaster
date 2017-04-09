@@ -13,8 +13,11 @@ public class GUIManager : MonoBehaviour {
 
     void Awake()
     {
-        EventManager.OnTurnPhaseChange += ToggleButtonCollect;
-        EventManager.OnTurnPhaseChange += ToggleButtonNextTurn;
+        EventManager.OnTurnPhaseBegin += EnableButtonCollect;
+        EventManager.OnTurnPhaseEnd += DisableButtonCollect;
+
+        EventManager.OnTurnPhaseBegin += EnableButtonNextTurn;
+        EventManager.OnTurnPhaseEnd += DisableButtonNextTurn;
     }
 
 	// Use this for initialization
@@ -32,14 +35,28 @@ public class GUIManager : MonoBehaviour {
         MegaMan.NextTurn();
     }
 
-    public void ToggleButtonCollect(TurnPhase turnPhase)
+    public void EnableButtonCollect(TurnPhase turnPhase)
     {
-        ButtonCollectObj.SetActive(turnPhase == TurnPhase.Place);
+        if(turnPhase == TurnPhase.Place)
+            ButtonCollectObj.SetActive(true);
     }
 
-    public void ToggleButtonNextTurn(TurnPhase turnPhase)
+    public void DisableButtonCollect(TurnPhase turnPhase)
     {
-        ButtonNextTurnObj.SetActive(turnPhase == TurnPhase.Buy);
+        if (turnPhase == TurnPhase.Place)
+            ButtonCollectObj.SetActive(false);
+    }
+
+    public void EnableButtonNextTurn(TurnPhase turnPhase)
+    {
+        if (turnPhase == TurnPhase.Buy)
+            ButtonNextTurnObj.SetActive(true);
+    }
+
+    public void DisableButtonNextTurn(TurnPhase turnPhase)
+    {
+        if (turnPhase == TurnPhase.Buy)
+            ButtonNextTurnObj.SetActive(false);
     }
 
     public void CollectAndGoToBuyPhase()
@@ -47,6 +64,6 @@ public class GUIManager : MonoBehaviour {
         List<GridCell> cells = MegaMan.GridMan.GetCompletedRegions(MegaManager.CurrentPlayer); //TODO: Make into event
         List<Token> tokens = GridManager.PullTokensFromGrid(cells);
         MegaMan.CollectionManager.AddTokensToPool(tokens);
-        EventManager.ChangeTurnPhase(TurnPhase.Buy);
+        EventManager.TryChangeTurnPhase(TurnPhase.Buy);
     }
 }

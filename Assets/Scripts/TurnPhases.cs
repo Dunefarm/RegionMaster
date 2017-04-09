@@ -27,8 +27,9 @@ public class TurnPhases : MonoBehaviour {
         }
     }
 
-    public bool SetCurrentTurnPhase(TurnPhase newPhase)
+    public void SetCurrentTurnPhase(TurnPhase newPhase)
     {
+        TurnPhase previousTurnPhase = CurrentTurnPhase;
         CurrentTurnPhase = newPhase;
         bool success = true;
         switch (newPhase)
@@ -49,7 +50,8 @@ public class TurnPhases : MonoBehaviour {
                 success = false;
                 break;
         }
-        return success;
+        if (success)
+            EventManager.ChangeTurnPhase(newPhase, previousTurnPhase);
     }
 
     public void SetCurrentTurnPhaseToBeginning()
@@ -75,13 +77,13 @@ public class TurnPhases : MonoBehaviour {
     public void NextTurnPhase()
     {
         if (CurrentTurnPhase == TurnPhase.Beginning)
-            EventManager.ChangeTurnPhase(TurnPhase.Place);
+            EventManager.TryChangeTurnPhase(TurnPhase.Place);
         else if (CurrentTurnPhase == TurnPhase.Place)
-            EventManager.ChangeTurnPhase(TurnPhase.Buy);
+            EventManager.TryChangeTurnPhase(TurnPhase.Buy);
         else if (CurrentTurnPhase == TurnPhase.Buy)
-            EventManager.ChangeTurnPhase(TurnPhase.End);
+            EventManager.TryChangeTurnPhase(TurnPhase.End);
         else if (CurrentTurnPhase == TurnPhase.End)
-            EventManager.ChangeTurnPhase(TurnPhase.Beginning);
+            EventManager.TryChangeTurnPhase(TurnPhase.Beginning);
     }
 
     private bool CheckIfShouldChangeTurnPhase()

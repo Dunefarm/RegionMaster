@@ -11,7 +11,7 @@ public class Hand
     public Hand(Transform handTrans)
     {
         CardInHandPoint = handTrans;
-        EventManager.OnTurnPhaseChange += OnTurnPhaseChange;
+        EventManager.OnTurnPhaseBegin += OnTurnPhaseChange;
     }
 
     public void PutCardInHand(Card newCard)

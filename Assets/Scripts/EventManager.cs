@@ -6,13 +6,15 @@ public class EventManager : MonoBehaviour
 
     public delegate void d_NoArgVoid();
     public delegate void d_TurnPhase(TurnPhase turnPhase);
+    public delegate void d_TurnPhaseTwice(TurnPhase turnPhase, TurnPhase previousTurnPhase);
     public delegate void d_int(int value);
     public delegate bool d_TurnPhaseBool(TurnPhase turnPhase);
     public delegate void d_Manacost(ManaCost manaCost);
 
     public static event d_NoArgVoid OnSomethingChange;
-    public static event d_TurnPhase OnTurnPhaseChange;
-    public static event d_TurnPhaseBool OnTryTurnPhaseChange;
+    public static event d_TurnPhase OnTurnPhaseBegin;
+    public static event d_TurnPhase OnTurnPhaseEnd;
+    public static event d_TurnPhase OnTryTurnPhaseChange;
     public static event d_int OnTryDrawCard;
     public static event d_int OnActivatePlayer;
     public static event d_Manacost OnAddMarkersToMarkerPool;
@@ -23,21 +25,23 @@ public class EventManager : MonoBehaviour
             OnSomethingChange();
     }
 
-    public static void ChangeTurnPhase(TurnPhase turnPhase)
+    public static void TryChangeTurnPhase(TurnPhase turnPhase)
     {
-        if (OnTryTurnPhaseChange != null && OnTryTurnPhaseChange(turnPhase))
+        TurnPhase previousTurnPhase = MegaManager.TurnPhases.CurrentTurnPhase;
+        if (OnTryTurnPhaseChange != null)
         {
-            if (OnTurnPhaseChange != null)
-            {
-                OnTurnPhaseChange(turnPhase);
-            }
+            OnTryTurnPhaseChange(turnPhase);
         }
     }
 
-    private static void TryChangeTurnPhase(TurnPhase turnPhase)
+    public static void ChangeTurnPhase(TurnPhase turnPhase, TurnPhase previousTurnPhase)
     {
-        
-    }
+        if (OnTurnPhaseEnd != null)
+            OnTurnPhaseEnd(previousTurnPhase);
+
+        if (OnTurnPhaseBegin != null)
+            OnTurnPhaseBegin(turnPhase);
+}
 
     public static void TryDrawCard(int value)
     {
