@@ -50,7 +50,17 @@ public class CollectionManager {
     public static List<ManaToken> RedManaTokens = new List<ManaToken>();
     public static List<ManaToken> GreenManaTokens = new List<ManaToken>();
     public static List<ManaToken> BlueManaTokens = new List<ManaToken>();
-    public static List<ManaToken> AllManaTokens = new List<ManaToken>();
+    public static List<ManaToken> AllManaTokens
+    {
+        get
+        {
+            List<ManaToken> allManaTokens = new List<ManaToken>();
+            allManaTokens.AddRange(RedManaTokens);
+            allManaTokens.AddRange(GreenManaTokens);
+            allManaTokens.AddRange(BlueManaTokens);
+            return allManaTokens;
+        }
+    }
 
     public ManaPool ManaPool;
 
@@ -106,7 +116,7 @@ public class CollectionManager {
         if (manaToken.Color == Token.ColorType.Red)
         {
             ManaPool.Red++;
-            BlueManaTokens.Add(manaToken);
+            RedManaTokens.Add(manaToken);
         }
         else if (manaToken.Color == Token.ColorType.Green)
         {
@@ -118,18 +128,23 @@ public class CollectionManager {
             ManaPool.Blue++;
             BlueManaTokens.Add(manaToken);
         }
-        AllManaTokens.Add(manaToken);
     }
 
     public void CleanUp()
     {
         ManaPool.Clear();
+        CleanUpManaList(ref RedManaTokens);
+        CleanUpManaList(ref GreenManaTokens);
+        CleanUpManaList(ref BlueManaTokens);
+    }
 
-        foreach(ManaToken mana in AllManaTokens)
+    void CleanUpManaList(ref List<ManaToken> manaList)
+    {
+        foreach (ManaToken mana in manaList)
         {
             mana.Clear();
         }
-        AllManaTokens = new List<ManaToken>();
+        manaList = new List<ManaToken>();
     }
 
     public bool CheckIfCanAfford(ManaCost manaCost)

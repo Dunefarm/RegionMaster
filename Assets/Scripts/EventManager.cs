@@ -11,19 +11,12 @@ public class EventManager : MonoBehaviour
     public delegate bool d_TurnPhaseBool(TurnPhase turnPhase);
     public delegate void d_Manacost(ManaCost manaCost);
 
-    public static event d_NoArgVoid OnSomethingChange;
     public static event d_TurnPhase OnTurnPhaseBegin;
     public static event d_TurnPhase OnTurnPhaseEnd;
     public static event d_TurnPhase OnTryTurnPhaseChange;
     public static event d_int OnTryDrawCard;
     public static event d_int OnActivatePlayer;
     public static event d_Manacost OnAddMarkersToMarkerPool;
-
-    public static void CallOnSomethingChange()
-    {
-        if (OnSomethingChange != null)
-            OnSomethingChange();
-    }
 
     public static void TryChangeTurnPhase(TurnPhase turnPhase)
     {

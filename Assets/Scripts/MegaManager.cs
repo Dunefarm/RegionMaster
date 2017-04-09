@@ -47,7 +47,7 @@ public class MegaManager : MonoBehaviour
 
     void Awake()
     {
-        EventManager.OnTurnPhaseBegin += OnTurnPhaseChange;
+        EventManager.OnTurnPhaseBegin += OnTurnPhaseBegin;
         TurnPhases = gameObject.AddComponent<TurnPhases>();
         CollectionManager = new CollectionManager(this);
     }
@@ -61,7 +61,6 @@ public class MegaManager : MonoBehaviour
 
         EventManager.ActivatePlayer(_currentPlayerNumber);
         EventManager.TryChangeTurnPhase(TurnPhase.Beginning);
-        EventManager.CallOnSomethingChange();
     }
 
     void SetupAbilityResolver()
@@ -98,28 +97,35 @@ public class MegaManager : MonoBehaviour
         EventManager.TryChangeTurnPhase(TurnPhase.End);
     }
 
-    private void DrawCard(int amount)
+    public void OnTurnPhaseBegin(TurnPhase newPhase)
+    {
+        if (newPhase == TurnPhase.Beginning)
+            BeginningOfTurn();
+
+        else if (newPhase == TurnPhase.End)
+            EndOfTurn();
+    }
+
+    void BeginningOfTurn()
+    {
+        NextPlayer();
+        CurrentPlayerDrawsCards(3);
+    }
+
+    void NextPlayer()
+    {
+        _currentPlayerNumber = (_currentPlayerNumber + 1) % 2;
+        EventManager.ActivatePlayer(_currentPlayerNumber);
+    }
+
+    private void CurrentPlayerDrawsCards(int amount)
     {
         Players[_currentPlayerNumber].DrawCard(amount);
     }
 
-    public void OnTurnPhaseChange(TurnPhase newPhase)
+    void EndOfTurn()
     {
-        switch (newPhase)
-        {
-            case TurnPhase.Beginning: //This might result in some stack problems!!
-                _currentPlayerNumber = (_currentPlayerNumber + 1) % 2;
-                EventManager.ActivatePlayer(_currentPlayerNumber);
-                DrawCard(3);
-                break;
-            case TurnPhase.Place:
-                break;
-            case TurnPhase.Buy:
-                break;
-            case TurnPhase.End:
-                Markers.ClearMarkers();
-                Players[_currentPlayerNumber].Hand.DiscardHand();
-                break;
-        }
+        Markers.ClearMarkers();
+        Players[_currentPlayerNumber].Hand.DiscardHand();
     }
 }
