@@ -67,6 +67,14 @@ public class MegaManager : MonoBehaviour
         StartGame();        
     }
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            print(GridManager.TokenBag.Tokens.Count);
+        }
+    }
+
     void StartGame()
     {
         EventManager.ActivatePlayer(_currentPlayerNumber);
@@ -113,7 +121,8 @@ public class MegaManager : MonoBehaviour
 
     public void NextTurn()
     {
-        CollectionManager.CleanUp();
+        List<Token> tokens = CollectionManager.PullOutAllTokens();
+        GridManager.TokenBag.AddTokens(tokens);
         GridManager.RefillGrid();
         EventManager.TryChangeTurnPhase(TurnPhase.End);
     }

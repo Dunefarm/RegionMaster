@@ -33,7 +33,6 @@ public class Card : MonoBehaviour {
     void Awake()
     {
         MegaMan = FindObjectOfType<MegaManager>();
-        //TableLayerMask = (int)LayerMask.NameToLayer("Table");
     }
 
     void Start()

@@ -38,12 +38,11 @@ public class Shop : MonoBehaviour {
     {
         for (int index = 0; index < CardPlacements.Length; index++)
         {
-            if (CardsOnDisplay[index] != null) //Already a card in this space
+            if (CardsOnDisplay[index] != null) //Checks if there's already a card in this space
                 continue;
 
             Card card = DrawCardFromSupply();
             PutCardInShopAt(card, index);
-            //card.transform.parent = transform; // for now...
         }
     }
 
@@ -52,6 +51,7 @@ public class Shop : MonoBehaviour {
         GameObject cardPrefab = Resources.Load("Prefabs/Cards/Card") as GameObject;
         GameObject obj = (GameObject)Instantiate(cardPrefab);
         Card card = obj.GetComponent<Card>();
+        card.ManaCost = new ManaCost(1, 0, 0);
         return card;
     }
 

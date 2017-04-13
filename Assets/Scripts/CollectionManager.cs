@@ -130,21 +130,27 @@ public class CollectionManager {
         }
     }
 
-    public void CleanUp()
+    public List<Token> PullOutAllTokens()
     {
         ManaPool.Clear();
-        CleanUpManaList(ref RedManaTokens);
-        CleanUpManaList(ref GreenManaTokens);
-        CleanUpManaList(ref BlueManaTokens);
+        List<Token> tokens = new List<Token>();
+        tokens.AddRange(CleanUpManaList(ref RedManaTokens));
+        tokens.AddRange(CleanUpManaList(ref GreenManaTokens));
+        tokens.AddRange(CleanUpManaList(ref BlueManaTokens));
+
+        return tokens;
     }
 
-    void CleanUpManaList(ref List<ManaToken> manaList)
+    List<Token> CleanUpManaList(ref List<ManaToken> manaList)
     {
+        List<Token> tokens = new List<Token>();
         foreach (ManaToken mana in manaList)
         {
+            tokens.Add(mana.Token);
             mana.Clear();
         }
         manaList = new List<ManaToken>();
+        return tokens;
     }
 
     public bool CheckIfCanAfford(ManaCost manaCost)
@@ -164,6 +170,7 @@ public class CollectionManager {
 
         for (int r = RedManaTokens.Count - 1; r > ManaPool.Red - 1; r--)
         {
+            //RedManaTokens[r].Clear();
             RedManaTokens.RemoveAt(r);
         }
         for (int g = GreenManaTokens.Count - 1; g > ManaPool.Green - 1; g--)
