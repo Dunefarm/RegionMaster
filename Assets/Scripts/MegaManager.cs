@@ -16,7 +16,6 @@ public class MegaManager : MonoBehaviour
     public AbilityResolver AbilityResolver;
     public Shop Shop;
     public static Markers Markers;
-    public Hand Hand;
     public List<Deck> Decks = new List<Deck>();
     public List<DiscardPile> DiscardPiles = new List<DiscardPile>();
     public static List<Player> Players = new List<Player>();
@@ -32,6 +31,11 @@ public class MegaManager : MonoBehaviour
     public static Player CurrentPlayer
     {
         get { return Players[_currentPlayerNumber]; }
+    }
+
+    public static Hand Hand
+    {
+        get { return CurrentPlayer.Hand; }
     }
 
     public void SetAmountOfMarkers(ManaCost markers)
@@ -59,6 +63,11 @@ public class MegaManager : MonoBehaviour
         SetupMarkerHolder();
         SetupPlayers();
 
+        StartGame();        
+    }
+
+    void StartGame()
+    {
         EventManager.ActivatePlayer(_currentPlayerNumber);
         EventManager.TryChangeTurnPhase(TurnPhase.Beginning);
     }

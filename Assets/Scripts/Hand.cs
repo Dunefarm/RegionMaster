@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Hand
 {
-
+    public static Dictionary<Card, Hand> WhoHoldsThisCard = new Dictionary<Card, Hand>();
     public List<Card> Cards = new List<Card>();
     public Transform CardInHandPoint;
 
@@ -14,28 +14,41 @@ public class Hand
         EventManager.OnTurnPhaseBegin += OnTurnPhaseChange;
     }
 
-    public void PutCardInHand(Card newCard)
+    public void PutCardInHand(Card card)
     {
-        if (!Cards.Contains(newCard))
+        if (!Cards.Contains(card))
         {
-            if (newCard.HandPosition < 0)
+            InstantiatePhysicalCardForHand(card);
+            card.CurrentLocation = Card.CardLocation.Hand;
+            card.ShopCoord = new Finite2DCoord(-1, -1);
+            if (card.HandPosition < 0)
             {
-                Cards.Add(newCard);
-                newCard.HandPosition = Cards.Count - 1;
+                Cards.Add(card);
+                card.HandPosition = Cards.Count - 1;
             }
             else
             {
-                Cards.Insert(newCard.HandPosition, newCard);
+                Cards.Insert(card.HandPosition, card);
             }
+            WhoHoldsThisCard.Add(card, this);
         }
         ArrangeCards();
     }
 
-    public void RemoveCardInHand(Card theCard)
+    void InstantiatePhysicalCardForHand(Card card)
     {
-        if (Cards.Contains(theCard))
+        GameObject prefab = Resources.Load("Prefabs/Cards/PhysicalCard") as GameObject;
+        GameObject obj = (GameObject)MonoBehaviour.Instantiate(prefab);
+        PhysicalCard tempCard = obj.AddComponent<PhysicalCard_Hand>();
+        card.AssignPhysicalRepresentation(tempCard);
+    }
+
+    public void RemoveCardInHand(Card card)
+    {
+        if (Cards.Contains(card))
         {
-            Cards.Remove(theCard);
+            Cards.Remove(card);
+            WhoHoldsThisCard.Remove(card);
         }
         ArrangeCards();
     }
@@ -61,9 +74,10 @@ public class Hand
     {
         foreach (Card card in Cards)
         {
-            card.PutInDiscardPile();
+            MegaManager.CurrentPlayer.DiscardPile.PutCardInDiscardPile(card);
         }
         Cards.Clear();
+        WhoHoldsThisCard.Clear();
     }
 
     public void OnTurnPhaseChange(TurnPhase newPhase)

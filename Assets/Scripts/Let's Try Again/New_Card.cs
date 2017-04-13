@@ -35,7 +35,7 @@ public class New_Card {
 
     public CardHolder CardHolder
     {
-        get { return CardHolder.CardHolders[this]; }
+        get { return null; }
     }
 
     public static New_Card CreatePlaceholderCard(int cost = 1, Color color = Color.Colorless, string name = "Placeholder Card")

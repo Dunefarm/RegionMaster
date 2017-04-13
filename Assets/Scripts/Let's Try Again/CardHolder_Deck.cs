@@ -11,18 +11,18 @@ public class CardHolder_Deck : CardHolder {
         {
             n--;
             int randID = Random.Range(0, n);
-            New_Card temp = Cards[n];
+            Card temp = Cards[n];
             Cards[n] = Cards[randID];
             Cards[randID] = temp;
         }
     }
 
-    public New_Card DrawCard()
+    public Card DrawCard()
     {
         return PullCardOutAtIndex(0);
     }
 
-    public List<New_Card> DrawCards(int amount)
+    public List<Card> DrawCards(int amount)
     {
         return PullCardsOutAtIndex(0, amount);
     }

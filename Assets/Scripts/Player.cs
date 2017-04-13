@@ -23,33 +23,40 @@ public class Player
     public Player(int playerNo, GameObject discardPilePrefab, CameraManager camMan)
     {
         PlayerNumber = playerNo;
+
+        SetupDeck();
+        SetupDiscardPile(discardPilePrefab);
+        SetupHand(camMan);
+
+        EventManager.OnActivatePlayer += ActivatePlayer;
+    }
+
+    private void SetupDeck()
+    {
         GameObject deckPrefab = Resources.Load("Prefabs/Deck") as GameObject;
         Deck = (MonoBehaviour.Instantiate(deckPrefab, DECK_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<Deck>();
         Deck.SetOwner(this);
+    }
+
+    private void SetupDiscardPile(GameObject discardPilePrefab)
+    {
         DiscardPile = (MonoBehaviour.Instantiate(discardPilePrefab, DISCARD_PILE_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<DiscardPile>();
         DiscardPile.SetOwner(this);
         DiscardPileTranform = DiscardPile.transform;
+    }
+
+    private void SetupHand(CameraManager camMan)
+    {
         HAND_TRANSFORM = new GameObject().transform;
         HAND_TRANSFORM.position = camMan.transform.TransformPoint(-7.2f, -5.6f, 33.8f);
         HAND_TRANSFORM.rotation = camMan.transform.rotation;
         HAND_TRANSFORM.Rotate(30.12f, 0, 0, Space.Self);
         Hand = new Hand(HAND_TRANSFORM);
-        EventManager.OnActivatePlayer += ActivatePlayer;
     }
 
-    // Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-    public void ActivatePlayer(int no)
+    public void ActivatePlayer(int number)
     {
-        if (no == PlayerNumber)
+        if (number == PlayerNumber)
         {
             StartPlayersTurn();
         }

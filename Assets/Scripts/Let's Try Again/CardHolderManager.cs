@@ -12,9 +12,7 @@ public class CardHolderManager : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        Deck.AddCard(New_Card.CreatePlaceholderCard(1));
-        Deck.AddCard(New_Card.CreatePlaceholderCard(2));
-        Deck.AddCard(New_Card.CreatePlaceholderCard(3));
+
     }
 	
 	// Update is called once per frame
@@ -22,16 +20,16 @@ public class CardHolderManager : MonoBehaviour {
     {
 	    if(Input.GetKeyDown(KeyCode.Space))
         {
-            New_Card newCard = Deck.DrawCard();
+            Card newCard = Deck.DrawCard();
             if(newCard != null)
             {
                 Hand.AddCard(newCard);
                 PhysicalCard physCard = Instantiate(PhysicalCardPrefab).GetComponent<PhysicalCard>();
                 physCard.AssignCard(newCard);
             }
-            foreach(New_Card card in Hand.Cards)
+            foreach(Card card in Hand.Cards)
             {
-                print("Card cost: " + card.Cost);
+                print("Card cost: " + card.ManaCost);
             }
         }
 	}

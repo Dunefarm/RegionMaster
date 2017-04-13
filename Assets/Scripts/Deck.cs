@@ -19,7 +19,7 @@ public class Deck : MonoBehaviour {
         MegaMan = FindObjectOfType<MegaManager>();
         foreach (GameObject cardObj in CardObjects)
         {
-            GameObject obj = (GameObject)Instantiate(cardObj, Vector3.one * 1000, Quaternion.identity);
+            GameObject obj = (GameObject)Instantiate(cardObj);
             Card tempCard = obj.GetComponent<Card>();
             tempCard.OwnerNo = OwnerNo;
             tempCard.SetOwner(Owner);
@@ -56,11 +56,20 @@ public class Deck : MonoBehaviour {
                 ShuffleDiscardPileIntoDeck();
             if (Cards.Count < 1)
                 break;
-            Cards[0].PutInHand();
-            Cards.RemoveAt(0);
+            Card card = PullCardAt(0);
+            MegaManager.Hand.PutCardInHand(card);
             amount--;
         }
         ResizeDeck();
+    }
+
+    public Card PullCardAt(int index)
+    {
+        if (index < 0 || index > Cards.Count)
+            return null;
+        Card card = Cards[index];
+        Cards.RemoveAt(index);
+        return card;
     }
 
     void ShuffleDiscardPileIntoDeck()
@@ -69,8 +78,10 @@ public class Deck : MonoBehaviour {
         ShuffleDeck();
     }
 
-    public void PutCardOnBottomOfDeck(Card card)
+    public void AddCardToBottomOfDeck(Card card)
     {
+        card.HandPosition = -1;
+        card.CurrentLocation = Card.CardLocation.Deck;
         Cards.Add(card);
     }
 
@@ -78,9 +89,4 @@ public class Deck : MonoBehaviour {
     {
         transform.localScale = new Vector3(1, 1, Cards.Count);
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

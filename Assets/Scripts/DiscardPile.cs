@@ -15,6 +15,9 @@ public class DiscardPile : MonoBehaviour {
 
     public void PutCardInDiscardPile(Card card)
     {
+        card.HandPosition = -1;
+        card.CurrentLocation = Card.CardLocation.Discard;
+        card.DestroyPhysicalRepresentation();
         card.transform.position = Vector3.one * 1000;
         Cards.Add(card);
         ResizeDiscardPile();
@@ -31,7 +34,7 @@ public class DiscardPile : MonoBehaviour {
         {
             foreach (Card card in Cards)
             {
-                card.PutInDeck();
+                MegaManager.CurrentPlayer.Deck.AddCardToBottomOfDeck(card);
             }
         }
         Cards.Clear();
