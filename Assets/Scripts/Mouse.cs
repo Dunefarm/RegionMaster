@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class Mouse : MonoBehaviour {
 
-    public CollectionManager colMan;
     public MegaManager MegaMan;
 
     public Camera cam;
@@ -14,7 +14,6 @@ public class Mouse : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
-	    colMan = MegaMan.CollectionManager;
 	}
 	
 	// Update is called once per frame

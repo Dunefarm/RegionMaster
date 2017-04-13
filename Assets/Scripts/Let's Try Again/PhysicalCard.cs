@@ -37,7 +37,7 @@ public class PhysicalCard : CustomBehaviour {
         if (ZoomedIn)
         {
             ZoomedIn = false;
-            ReturnToLocation();
+            //ReturnToLocation();
             //PutInHand();
         }
         else
@@ -46,21 +46,6 @@ public class PhysicalCard : CustomBehaviour {
             Card.Owner.Hand.RemoveCardInHand(Card);
             Transform.position = Card.MegaMan.CamMan.CardCloseUpPoint.position;
             Transform.rotation = Card.MegaMan.CamMan.CardCloseUpPoint.rotation;
-        }
-    }
-
-    public void ReturnToLocation()
-    {
-        switch (CurrentLocation)
-        {
-            case CardLocation.Hand:
-                ReturnToHand();
-                break;
-            case CardLocation.Shop:
-                Transform.position = Card.MegaMan.Shop.CoordToVector3(ShopCoord);
-                Transform.rotation = Card.MegaMan.Shop.transform.rotation;
-                break;
-
         }
     }
 

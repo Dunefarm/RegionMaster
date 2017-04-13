@@ -17,7 +17,7 @@ public class Card : MonoBehaviour {
 
     public Player Owner;
     public enum CardLocation { OutOfGame, Deck, Hand, Play, Discard, Shop}
-    public int OwnerNo = -1;
+    public int OwnerNumber = -1;
     public string NameOfCard = "N/A";
     public string RulesText = "N/A";
     public Color CardColor = Color.Colorless;
@@ -88,7 +88,7 @@ public class Card : MonoBehaviour {
     public void SetOwner(Player player)
     {
         Owner = player;
-        OwnerNo = Owner.PlayerNumber;
+        OwnerNumber = Owner.PlayerNumber;
     }
 
     public virtual void PlayCard()
@@ -99,13 +99,5 @@ public class Card : MonoBehaviour {
         Owner.Hand.RemoveCardInHand(this);
         AbilityResolver.AddCardAbilities(Abilities, true);
         MegaManager.CurrentPlayer.DiscardPile.PutCardInDiscardPile(this);
-    }
-
-    public void PutInShop(Finite2DCoord coord)
-    {
-        CurrentLocation = CardLocation.Shop;
-        ShopCoord = coord;
-        transform.position = MegaMan.Shop.CoordToVector3(coord);
-        transform.rotation = MegaMan.Shop.transform.rotation;
     }
 }

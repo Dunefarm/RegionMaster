@@ -20,7 +20,7 @@ public static class GridManager {
         grid = newGrid;
     }
 
-    public static void BeginNewGame()
+    public static void SetupNewGame()
     {
         CreateStartingTokenBag();
         SetupGrid();

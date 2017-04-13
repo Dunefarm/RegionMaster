@@ -63,7 +63,7 @@ public class GUIManager : MonoBehaviour {
     {
         List<GridCell> cells = GridManager.GetCompletedRegions(MegaManager.CurrentPlayer); //TODO: Make into event
         List<Token> tokens = GridManager.PullTokensFromGrid(cells);
-        MegaMan.CollectionManager.AddTokensToPool(tokens);
+        MegaManager.CollectionManager.AddTokensToPool(tokens);
         EventManager.TryChangeTurnPhase(TurnPhase.Buy);
     }
 }

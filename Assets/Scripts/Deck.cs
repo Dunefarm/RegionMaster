@@ -10,7 +10,7 @@ public class Deck : MonoBehaviour {
     //[HideInInspector]
     public List<Card> Cards = new List<Card>();
     public MegaManager MegaMan;
-    public int OwnerNo = -1;
+    public int OwnerNumber = -1;
     public Player Owner;
 
 	// Use this for initialization
@@ -21,7 +21,7 @@ public class Deck : MonoBehaviour {
         {
             GameObject obj = (GameObject)Instantiate(cardObj);
             Card tempCard = obj.GetComponent<Card>();
-            tempCard.OwnerNo = OwnerNo;
+            tempCard.OwnerNumber = OwnerNumber;
             tempCard.SetOwner(Owner);
             Cards.Add(tempCard);
         }
@@ -31,7 +31,7 @@ public class Deck : MonoBehaviour {
     public void SetOwner(Player player)
     {
         Owner = player;
-        OwnerNo = Owner.PlayerNumber;
+        OwnerNumber = Owner.PlayerNumber;
     }
 
     public void ShuffleDeck()

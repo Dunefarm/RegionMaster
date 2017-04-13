@@ -13,14 +13,14 @@ public class MegaManager : MonoBehaviour
     public GUIManager GUIMan;
     public CameraManager CamMan;
     public AbilityResolver AbilityResolver;
-    public Shop Shop;
+    public static Shop Shop;
     public static Markers Markers;
     public List<Deck> Decks = new List<Deck>();
     public List<DiscardPile> DiscardPiles = new List<DiscardPile>();
     public static List<Player> Players = new List<Player>();
 
     public static TurnPhases TurnPhases;
-    public CollectionManager CollectionManager;
+    public static CollectionManager CollectionManager;
 
     private int NUMBER_OF_PLAYERS = 2;
     private static int _currentPlayerNumber = -1;
@@ -58,8 +58,9 @@ public class MegaManager : MonoBehaviour
     void Start()
     {
         SetupAbilityResolver();
-        SetUpGrid();
-        SetupMarkerHolder();
+        SetupTable();
+        //SetUpGrid();
+        //SetupMarkerHolder();
         SetupPlayers();
 
         StartGame();        
@@ -76,11 +77,22 @@ public class MegaManager : MonoBehaviour
         AbilityResolver = new AbilityResolver();
     }
 
+    void SetupTable()
+    {
+        GameObject table = Instantiate(Resources.Load("Prefabs/Table")) as GameObject;
+
+        GridManager.AssignGrid(table.GetComponentInChildren<Grid>());
+        GridManager.SetupNewGame();
+
+        Shop = table.GetComponentInChildren<Shop>();
+        Markers = table.GetComponentInChildren<Markers>();
+    }
+
     void SetUpGrid()
     {
         Grid grid = Instantiate(Resources.Load("Prefabs/Grid") as GameObject).GetComponent<Grid>();
         GridManager.AssignGrid(grid);
-        GridManager.BeginNewGame();
+        GridManager.SetupNewGame();
     }
 
     void SetupMarkerHolder()

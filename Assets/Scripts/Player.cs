@@ -87,4 +87,17 @@ public class Player
     {
         return PlayerNumber != -1;
     }
+
+    public bool TryToBuyCard(Card card)
+    {
+        if(MegaManager.CollectionManager.CheckIfCanAfford(card.ManaCost))
+        {
+            MegaManager.Shop.PullCardFromShop(card);
+            DiscardPile.PutCardInDiscardPile(card);
+            return true;
+        }
+
+        MegaManager.Shop.ReturnCard(card);
+        return false;
+    }
 }
