@@ -8,6 +8,7 @@ public class PhysicalCard : CustomBehaviour {
 
     protected Transform Transform;
     protected bool _draggingCard = false;
+    protected PhysicalCardProperties _properties;
 
     public void AssignCard(Card card)
     {
@@ -17,6 +18,16 @@ public class PhysicalCard : CustomBehaviour {
         tempTrans.localPosition = Vector3.zero;
         tempTrans.localRotation = Quaternion.identity;
         Transform = card.transform;
+        SetPhysicalCardProperties();
+    }
+
+    void SetPhysicalCardProperties()
+    {
+        _properties = Transform.GetComponentInChildren<PhysicalCardProperties>();
+        print(_properties);
+        _properties.SetName(Card.Name);
+        _properties.SetRules(Card.RulesText);
+        _properties.SetColor(Card.Color);
     }
 
     public void ToggleZoomIn()
