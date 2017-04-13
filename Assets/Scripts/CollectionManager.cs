@@ -134,14 +134,24 @@ public class CollectionManager {
     {
         ManaPool.Clear();
         List<Token> tokens = new List<Token>();
-        tokens.AddRange(CleanUpManaList(ref RedManaTokens));
-        tokens.AddRange(CleanUpManaList(ref GreenManaTokens));
-        tokens.AddRange(CleanUpManaList(ref BlueManaTokens));
+        tokens.AddRange(PullOutAllTokensFromList(ref RedManaTokens));
+        tokens.AddRange(PullOutAllTokensFromList(ref GreenManaTokens));
+        tokens.AddRange(PullOutAllTokensFromList(ref BlueManaTokens));
 
         return tokens;
     }
 
-    List<Token> CleanUpManaList(ref List<ManaToken> manaList)
+    public Token PullOutToken(ManaToken mana, bool rearrange = false)
+    {
+        Token token = mana.Token;
+        FindManaTokenList(mana).Remove(mana);
+        mana.Clear();
+        //if(rearrange)
+            //Rearrange(); //If this kind of method becomes needed.
+        return token;
+    }
+
+    List<Token> PullOutAllTokensFromList(ref List<ManaToken> manaList)
     {
         List<Token> tokens = new List<Token>();
         foreach (ManaToken mana in manaList)
@@ -151,6 +161,16 @@ public class CollectionManager {
         }
         manaList = new List<ManaToken>();
         return tokens;
+    }
+
+    public List<ManaToken> FindManaTokenList(ManaToken mana)
+    {
+        if (mana.Color == Token.ColorType.Red)
+            return RedManaTokens;
+        else if (mana.Color == Token.ColorType.Green)
+            return GreenManaTokens;
+        else
+            return BlueManaTokens;
     }
 
     public bool CheckIfCanAfford(ManaCost manaCost)
@@ -167,21 +187,22 @@ public class CollectionManager {
         }
 
         ManaPool -= manaCost;
+        List<Token> tokens = new List<Token>();
 
         for (int r = RedManaTokens.Count - 1; r > ManaPool.Red - 1; r--)
         {
-            //RedManaTokens[r].Clear();
-            RedManaTokens.RemoveAt(r);
+            tokens.Add(PullOutToken(RedManaTokens[r]));
         }
         for (int g = GreenManaTokens.Count - 1; g > ManaPool.Green - 1; g--)
         {
-            GreenManaTokens.RemoveAt(g);
-
+            tokens.Add(PullOutToken(GreenManaTokens[g]));
         }
         for (int b = BlueManaTokens.Count - 1; b > ManaPool.Blue - 1; b--)
         {
-            BlueManaTokens.RemoveAt(b);
+            tokens.Add(PullOutToken(BlueManaTokens[b]));
         }
+
+        GridManager.TokenBag.AddTokens(tokens);
     }
 }
 

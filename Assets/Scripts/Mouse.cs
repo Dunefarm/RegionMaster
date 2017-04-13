@@ -27,7 +27,6 @@ public class Mouse : MonoBehaviour {
                 CurrentlyClickedCustom = LookThroughForCustom(hit.transform);
                 if (CurrentlyClickedCustom != null) 
                     CurrentlyClickedCustom.CustomOnMouseDown();
-                //HitToken(hit);
             }
         }
         if (Input.GetMouseButtonUp(0))
@@ -45,7 +44,6 @@ public class Mouse : MonoBehaviour {
                     CurrentlyClickedCustom.CustomOnMouseUpOff();
                 }
                 CurrentlyClickedCustom = null;
-                //HitToken(hit);
             }
         }
         if(Input.GetMouseButton(0) && CurrentlyClickedCustom != null)
