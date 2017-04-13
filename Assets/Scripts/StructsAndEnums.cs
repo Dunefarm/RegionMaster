@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum CardColor { Colorless, Red, Green, Blue };
+
 public struct Finite2DCoord
 {
     public int x, y;
@@ -24,6 +26,7 @@ public struct TokenMarkers
     }
 }
 
+[System.Serializable]
 public struct ManaCost
 {
     public int Red, Green, Blue;

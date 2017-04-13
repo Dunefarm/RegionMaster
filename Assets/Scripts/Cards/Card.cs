@@ -5,46 +5,19 @@ using System.Linq;
 
 public class Card : MonoBehaviour {
 
-
-    //TEMPORARY STUFF!!
-    public int HandPosition = -1;
-
-    public enum Color { Colorless, Red, Green, Blue };
-
-
-
-
-
     public Player Owner;
-    public enum CardLocation { OutOfGame, Deck, Hand, Play, Discard, Shop}
-    public int OwnerNumber = -1;
-    public string NameOfCard = "N/A";
+    public string Name = "N/A";
     public string RulesText = "N/A";
-    public Color CardColor = Color.Colorless;
-    public bool Displayed = false;
-    public LayerMask TableLayerMask;
-    public List<CardAbility> Abilities = new List<CardAbility>();
+    public CardColor Color = CardColor.Colorless;
     public ManaCost ManaCost = new ManaCost();
 
-    [HideInInspector] public Finite2DCoord ShopCoord = new Finite2DCoord(-1, -1);
+    [HideInInspector] public List<CardAbility> Abilities = new List<CardAbility>();
     [HideInInspector] public MegaManager MegaMan;
+    [HideInInspector] public bool Displayed = false;
+    [HideInInspector] public int OwnerNumber = -1;
 
-    
-    Vector3 _originalHandPosition = Vector3.zero;
-    CardLocation _currentLocation = CardLocation.Hand;
-    bool _draggingCard = false;
-    PhysicalCard _physicalCard;
-
-    public Card(Player player)
-    {
-        Owner = player;
-    }
-
-    public CardLocation CurrentLocation
-    {
-        get { return _currentLocation; }
-        set { _currentLocation = value; }
-    }
+    private bool _draggingCard = false;
+    private PhysicalCard _physicalCard;
 
     public PhysicalCard PhysicalCard
     {
@@ -53,15 +26,14 @@ public class Card : MonoBehaviour {
         {
             _physicalCard = value;
             if(_physicalCard != null)
-            {
                 _physicalCard.AssignCard(this);
-            }
         }
     }
 
     void Awake()
     {
         MegaMan = FindObjectOfType<MegaManager>();
+        //TableLayerMask = (int)LayerMask.NameToLayer("Table");
     }
 
     void Start()
@@ -93,11 +65,8 @@ public class Card : MonoBehaviour {
 
     public virtual void PlayCard()
     {
-        if (CurrentLocation != CardLocation.Hand)
-            return;
-        CurrentLocation = CardLocation.Play;
-        Owner.Hand.RemoveCardInHand(this);
+        Card card = Owner.Hand.PullCardOutofHand(this);
         AbilityResolver.AddCardAbilities(Abilities, true);
-        MegaManager.CurrentPlayer.DiscardPile.PutCardInDiscardPile(this);
+        MegaManager.CurrentPlayer.DiscardPile.PutCardInDiscardPile(card);
     }
 }

@@ -20,10 +20,10 @@ public class Deck : MonoBehaviour {
         foreach (GameObject cardObj in CardObjects)
         {
             GameObject obj = (GameObject)Instantiate(cardObj);
-            Card tempCard = obj.GetComponent<Card>();
-            tempCard.OwnerNumber = OwnerNumber;
-            tempCard.SetOwner(Owner);
-            Cards.Add(tempCard);
+            Card card = obj.GetComponent<Card>();
+            card.OwnerNumber = OwnerNumber;
+            card.SetOwner(Owner);
+            Cards.Add(card);
         }
         ShuffleDeck();
 	}
@@ -80,8 +80,6 @@ public class Deck : MonoBehaviour {
 
     public void AddCardToBottomOfDeck(Card card)
     {
-        card.HandPosition = -1;
-        card.CurrentLocation = Card.CardLocation.Deck;
         Cards.Add(card);
     }
 

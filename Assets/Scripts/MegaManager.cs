@@ -9,6 +9,7 @@ public class MegaManager : MonoBehaviour
 
     public GameObject DeckPrefab;
     public GameObject DiscardPilePrefab;
+    public LayerMask TableLayerMask;
 
     public GUIManager GUIMan;
     public CameraManager CamMan;

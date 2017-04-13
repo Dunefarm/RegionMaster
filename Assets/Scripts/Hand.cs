@@ -19,20 +19,10 @@ public class Hand
         if (!Cards.Contains(card))
         {
             InstantiatePhysicalCardForHand(card);
-            card.CurrentLocation = Card.CardLocation.Hand;
-            card.ShopCoord = new Finite2DCoord(-1, -1);
-            if (card.HandPosition < 0)
-            {
-                Cards.Add(card);
-                card.HandPosition = Cards.Count - 1;
-            }
-            else
-            {
-                Cards.Insert(card.HandPosition, card);
-            }
+            Cards.Add(card);
             WhoHoldsThisCard.Add(card, this);
         }
-        ArrangeCards();
+        RearrangeCards();
     }
 
     void InstantiatePhysicalCardForHand(Card card)
@@ -43,17 +33,19 @@ public class Hand
         card.AssignPhysicalRepresentation(tempCard);
     }
 
-    public void RemoveCardInHand(Card card)
+    public Card PullCardOutofHand(Card card)
     {
         if (Cards.Contains(card))
         {
             Cards.Remove(card);
             WhoHoldsThisCard.Remove(card);
+            return card;
         }
-        ArrangeCards();
+        RearrangeCards();
+        return null;
     }
 
-    void ArrangeCards()
+    void RearrangeCards()
     {
         float width = Cards.Count;
         Vector3 shift = Vector3.right*width*0.5f + Vector3.back*0.05f;
@@ -65,7 +57,6 @@ public class Hand
             Cards[i].transform.position = Vector3.Lerp(CardInHandPoint.position - shift,
                 CardInHandPoint.position + shift, weight);
             Cards[i].transform.rotation = CardInHandPoint.rotation;
-            Cards[i].HandPosition = i;
         }
 
     }

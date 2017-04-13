@@ -31,7 +31,7 @@ public class PhysicalCard_Shop : PhysicalCard {
         _draggingCard = true;
         RaycastHit hit;
         Debug.DrawRay(cam.transform.position, cam.ScreenToWorldPoint(mousePos + Vector3.forward * 1000000));
-        if (Physics.Raycast(cam.ScreenPointToRay(mousePos), out hit, Mathf.Infinity, Card.TableLayerMask))
+        if (Physics.Raycast(cam.ScreenPointToRay(mousePos), out hit, Mathf.Infinity, Card.MegaMan.TableLayerMask))
         {
             Transform.position = hit.point + Vector3.back * 1;
         }
