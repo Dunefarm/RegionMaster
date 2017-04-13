@@ -92,12 +92,18 @@ public class Player
     {
         if(MegaManager.CollectionManager.CheckIfCanAfford(card.ManaCost))
         {
-            MegaManager.Shop.PullCardFromShop(card);
-            DiscardPile.PutCardInDiscardPile(card);
+            BuyCard(card);
             return true;
         }
 
         MegaManager.Shop.ReturnCard(card);
         return false;
+    }
+
+    private void BuyCard(Card card)
+    {
+        MegaManager.CollectionManager.Subtract(card.ManaCost);
+        MegaManager.Shop.PullCardFromShop(card);
+        DiscardPile.PutCardInDiscardPile(card);
     }
 }

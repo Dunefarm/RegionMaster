@@ -24,6 +24,14 @@ public class TokenHolder {
         return token;
     }
 
+    public virtual void AddTokens(List<Token> tokens)
+    {
+        for(int i = 0; i < tokens.Count; i++)
+        {
+            AddToken(tokens[i]);
+        }
+    }
+
     public Token PullToken(Token token)
     {
         if (Tokens.Count == 0 || !Tokens.Contains(token))
