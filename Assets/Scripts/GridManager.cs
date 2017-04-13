@@ -3,31 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-[SerializeField]
-public class GridManager {
-
-    public GridManager(Grid newGrid)
-    {
-        grid = newGrid;
-    }
+public static class GridManager {
 
     public static GridCell[,] GridCells;
 
     [HideInInspector]
-    public TokenHolder TokenBag = new TokenHolder();
+    public static TokenHolder TokenBag = new TokenHolder();
 
-    private Grid grid;
-    private int TOKEN_AMOUNT = 30;
-    private int GridSize;
-    private bool[,] CellsChecked;
+    private static Grid grid;
+    private static int TOKEN_AMOUNT = 30;
+    private static int GridSize;
+    private static bool[,] CellsChecked;
 
-    public void BeginNewGame()
+    public static void AssignGrid(Grid newGrid)
+    {
+        grid = newGrid;
+    }
+
+    public static void BeginNewGame()
     {
         CreateStartingTokenBag();
         SetupGrid();
     }
 
-    void CreateStartingTokenBag()
+    static void CreateStartingTokenBag()
     {
         for(int i = 0; i < TOKEN_AMOUNT; i++)
         {
@@ -37,12 +36,12 @@ public class GridManager {
         }
     }
 
-    void SpawnTokenInBag(Token.ColorType color)
+    static void SpawnTokenInBag(Token.ColorType color)
     {
-        Token token = TokenBag.InstantiateAndPoolToken(color);
+        TokenBag.InstantiateAndPoolToken(color);
     }
 
-    public void SetupGrid()
+    public static void SetupGrid()
     {
         GridSize = grid.GridSize;
         CellsChecked = new bool[GridSize, GridSize];
@@ -59,7 +58,7 @@ public class GridManager {
         RefillGrid();
     }
 
-    public void RefillGrid()
+    public static void RefillGrid()
     {
         for (int i = 0; i < GridSize; i++)
         {
@@ -73,7 +72,7 @@ public class GridManager {
         }
     }
 
-    void PlaceTokenInGrid(Token token, Finite2DCoord coord)
+    static void PlaceTokenInGrid(Token token, Finite2DCoord coord)
     {
         GridCells[coord.x, coord.y].AddToken(token);
     }
@@ -88,7 +87,7 @@ public class GridManager {
         return tokens;
     }
 
-    public List<GridCell> GetCompletedRegions(Player currentPlayer)
+    public static List<GridCell> GetCompletedRegions(Player currentPlayer)
     {
         List<GridCell> currentCells = new List<GridCell>();
         List<GridCell> collectedCells = new List<GridCell>();
@@ -110,7 +109,7 @@ public class GridManager {
         return collectedCells;
     }
 
-    bool RecursiveCheckNeighbors (int i, int j, Token.ColorType color, ref List<GridCell> currentCells, Player currentPlayer)
+    static bool RecursiveCheckNeighbors (int i, int j, Token.ColorType color, ref List<GridCell> currentCells, Player currentPlayer)
     {
         CellsChecked[i,j] = true;
         bool hasOwner = true;

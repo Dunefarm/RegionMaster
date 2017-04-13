@@ -4,7 +4,6 @@ using System.Collections;
 public class Mouse : MonoBehaviour {
 
     public CollectionManager colMan;
-    public GridManager GridMan;
     public MegaManager MegaMan;
 
     public Camera cam;

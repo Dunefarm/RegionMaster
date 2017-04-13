@@ -10,7 +10,6 @@ public class MegaManager : MonoBehaviour
     public GameObject DeckPrefab;
     public GameObject DiscardPilePrefab;
 
-    public GridManager GridMan;
     public GUIManager GUIMan;
     public CameraManager CamMan;
     public AbilityResolver AbilityResolver;
@@ -80,8 +79,8 @@ public class MegaManager : MonoBehaviour
     void SetUpGrid()
     {
         Grid grid = Instantiate(Resources.Load("Prefabs/Grid") as GameObject).GetComponent<Grid>();
-        GridMan = new GridManager(grid);
-        GridMan.BeginNewGame();
+        GridManager.AssignGrid(grid);
+        GridManager.BeginNewGame();
     }
 
     void SetupMarkerHolder()
@@ -102,7 +101,7 @@ public class MegaManager : MonoBehaviour
     public void NextTurn()
     {
         CollectionManager.CleanUp();
-        GridMan.RefillGrid();
+        GridManager.RefillGrid();
         EventManager.TryChangeTurnPhase(TurnPhase.End);
     }
 
