@@ -111,48 +111,47 @@ public static class GridManager {
 
     static bool RecursiveCheckNeighbors (int i, int j, Token.ColorType color, ref List<GridCell> currentCells, Player currentPlayer)
     {
-        CellsChecked[i,j] = true;
-        bool hasOwner = true;
+        if (!GridCells[i, j].HasOwner())
+            return false;
+
+        CellsChecked[i, j] = true;
+
         if (GridCells[i, j].Owner == currentPlayer)
             currentCells.Add(GridCells[i, j]);
-        else if (!GridCells[i, j].HasOwner())
-            return false;
         else
-            return true;
+            return true;      
 
-        if (i > 0)
+        bool hasOwner = true;
+
+        if (IsGridCellViable(i - 1, j, color))
         {
-            if(!GridCells[i - 1, j].IsEmpty() && !CellsChecked[i - 1, j] && GridCells[i - 1, j].Token.Color == color)
-            {
-                if (!RecursiveCheckNeighbors(i - 1, j, color, ref currentCells, currentPlayer))
-                    hasOwner = false;
-            }
+            if (!RecursiveCheckNeighbors(i - 1, j, color, ref currentCells, currentPlayer))
+                hasOwner = false;
         }
-        if (i < (GridSize - 1))
+        if (IsGridCellViable(i + 1, j, color))
         {
-            if (!GridCells[i + 1, j].IsEmpty() && !CellsChecked[i + 1, j] && GridCells[i + 1, j].Token.Color == color)
-            {
-                if (!RecursiveCheckNeighbors(i + 1, j, color, ref currentCells, currentPlayer))
-                    hasOwner = false;
-            }
+            if (!RecursiveCheckNeighbors(i + 1, j, color, ref currentCells, currentPlayer))
+                hasOwner = false;
         }
-        if(j > 0)
+        if(IsGridCellViable(i, j - 1, color))
         {
-            if (!GridCells[i, j - 1].IsEmpty() && !CellsChecked[i, j - 1] && GridCells[i, j - 1].Token.Color == color)
-            {
-                if (!RecursiveCheckNeighbors(i, j - 1, color, ref currentCells, currentPlayer))
-                    hasOwner = false;
-            }
+            if (!RecursiveCheckNeighbors(i, j - 1, color, ref currentCells, currentPlayer))
+                hasOwner = false;
         }
-        if (j < (GridSize - 1))
+        if (IsGridCellViable(i, j + 1, color))
         {
-            if (!GridCells[i, j + 1].IsEmpty() && !CellsChecked[i, j + 1] && GridCells[i, j + 1].Token.Color == color)
-            {
-                if (!RecursiveCheckNeighbors(i, j + 1, color, ref currentCells, currentPlayer))
-                    hasOwner = false;
-            }
+            if (!RecursiveCheckNeighbors(i, j + 1, color, ref currentCells, currentPlayer))
+                hasOwner = false;
         }
 
         return hasOwner;
+    }
+
+    private static bool IsGridCellViable(int i, int j, Token.ColorType color)
+    {
+        if (i < 0 || i > GridSize - 1 || j < 0 || j > GridSize - 1)
+            return false;
+
+        return (!GridCells[i, j].IsEmpty() && !CellsChecked[i, j] && GridCells[i, j].Token.Color == color);
     }
 }
