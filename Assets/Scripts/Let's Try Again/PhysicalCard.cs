@@ -27,6 +27,7 @@ public class PhysicalCard : CustomBehaviour {
         _properties.SetName(Card.Name);
         _properties.SetRules(Card.RulesText);
         _properties.SetColor(Card.Color);
+        _properties.SetCost(Card.ManaCost);
     }
 
     public void ToggleZoomIn()

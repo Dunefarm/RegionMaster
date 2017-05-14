@@ -22,6 +22,7 @@ public class PhysicalCardProperties : MonoBehaviour {
         }
     }
 
+    public TextMeshPro CardCost;
     public TextMeshPro CardName;
     public TextMeshPro CardRules;
     public Frames frames;
@@ -50,6 +51,14 @@ public class PhysicalCardProperties : MonoBehaviour {
     {
         frames.TurnOffAllFrames();
         _framesByColor[color].SetActive(true);
+    }
+
+    public void SetCost(ManaCost manaCost)
+    {
+        string cost = new string('R', manaCost.Red);
+        cost += new string('G', manaCost.Green);
+        cost += new string('B', manaCost.Blue);
+        CardCost.text = cost;
     }
 
 }
