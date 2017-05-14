@@ -24,7 +24,6 @@ public class PhysicalCard : CustomBehaviour {
     void SetPhysicalCardProperties()
     {
         _properties = Transform.GetComponentInChildren<PhysicalCardProperties>();
-        print(_properties);
         _properties.SetName(Card.Name);
         _properties.SetRules(Card.RulesText);
         _properties.SetColor(Card.Color);

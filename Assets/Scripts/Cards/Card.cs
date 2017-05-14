@@ -66,6 +66,6 @@ public class Card : MonoBehaviour {
     {
         Card card = Owner.Hand.PullCardOutofHand(this);
         AbilityResolver.AddCardAbilities(Abilities, true);
-        MegaManager.CurrentPlayer.DiscardPile.PutCardInDiscardPile(card);
+        MegaManager.CurrentPlayer.DiscardPile.PutCardInDiscardPile(card); //TODO: Should go into the play area!
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class Shop : MonoBehaviour {
 
+    public Transform ShopSupplyPlacement;
     public GameObject CardPrefab; // for now...
     public Transform CardSockets;
     public Finite2DCoord ShopDimensions = new Finite2DCoord();
@@ -13,6 +14,7 @@ public class Shop : MonoBehaviour {
     public Vector3[] CardPlacements;
 
     private Dictionary<Card, int> _cardIndex = new Dictionary<Card, int>();
+    public static ShopSupply Supply;
 
 	// Use this for initialization
 	void Start ()
@@ -23,6 +25,7 @@ public class Shop : MonoBehaviour {
 
     void SetupShop()
     {
+        SetupSupply();
         int sockets = CardSockets.childCount;
         CardPlacements = new Vector3[sockets];
         CardsOnDisplay = new Card[sockets];
@@ -34,6 +37,15 @@ public class Shop : MonoBehaviour {
         Destroy(CardSockets.gameObject);
     }
 
+    void SetupSupply()
+    {
+        ShopSupplyPlacement.gameObject.SetActive(false);
+        GameObject supplyPrefab = Resources.Load("Prefabs/ShopSupply") as GameObject;
+        Vector3 supplyPlacement = ShopSupplyPlacement.position;
+        Supply = (MonoBehaviour.Instantiate(supplyPrefab, supplyPlacement, Quaternion.identity) as GameObject).GetComponent<ShopSupply>();
+        Supply.transform.parent = transform;
+    }
+
     void RefillShop()
     {
         for (int index = 0; index < CardPlacements.Length; index++)
@@ -42,16 +54,18 @@ public class Shop : MonoBehaviour {
                 continue;
 
             Card card = DrawCardFromSupply();
-            PutCardInShopAt(card, index);
+            if(card != null)
+                PutCardInShopAt(card, index);
         }
     }
 
     private Card DrawCardFromSupply() //Creates placeholder cards for now. Should draw from an actual supply.
     {
-        GameObject cardPrefab = Resources.Load("Prefabs/Cards/Card") as GameObject;
-        GameObject obj = (GameObject)Instantiate(cardPrefab);
-        Card card = obj.GetComponent<Card>();
-        card.ManaCost = new ManaCost(1, 0, 0);
+        Card card = Supply.DrawCard();
+        //GameObject cardPrefab = Resources.Load("Prefabs/Cards/Card") as GameObject;
+        //GameObject obj = (GameObject)Instantiate(cardPrefab);
+        //Card card = obj.GetComponent<Card>();
+        //card.ManaCost = new ManaCost(1, 0, 0);
         return card;
     }
 

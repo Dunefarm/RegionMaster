@@ -14,6 +14,14 @@ public class Hand
         EventManager.OnTurnPhaseBegin += OnTurnPhaseChange;
     }
 
+    public void PutCardsInHand(List<Card> cards)
+    {
+        foreach(Card card in cards)
+        {
+            PutCardInHand(card);
+        }
+    }
+
     public void PutCardInHand(Card card)
     {
         if (!Cards.Contains(card))

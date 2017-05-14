@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player
 {
@@ -10,8 +11,6 @@ public class Player
     public Hand Hand;
     public Transform DiscardPileTranform;
 
-    private Vector3 DECK_PLACEMENT = new Vector3(5.22f, -6.7f, 0);
-    private Vector3 DISCARD_PILE_PLACEMENT = new Vector3(8.76f, -6.7f, 0);
     private Transform HAND_TRANSFORM;
 
     public Player()
@@ -34,13 +33,15 @@ public class Player
     private void SetupDeck()
     {
         GameObject deckPrefab = Resources.Load("Prefabs/Deck") as GameObject;
-        Deck = (MonoBehaviour.Instantiate(deckPrefab, DECK_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<Deck>();
+        Vector3 deckPlacement = MegaManager.Table.DeckPlacement.position;
+        Deck = (MonoBehaviour.Instantiate(deckPrefab, deckPlacement, Quaternion.identity) as GameObject).GetComponent<Deck>();
         Deck.SetOwner(this);
     }
 
     private void SetupDiscardPile(GameObject discardPilePrefab)
     {
-        DiscardPile = (MonoBehaviour.Instantiate(discardPilePrefab, DISCARD_PILE_PLACEMENT, Quaternion.identity) as GameObject).GetComponent<DiscardPile>();
+        Vector3 discardPlacement = MegaManager.Table.DiscardPlacement.position;
+        DiscardPile = (MonoBehaviour.Instantiate(discardPilePrefab, discardPlacement, Quaternion.identity) as GameObject).GetComponent<DiscardPile>();
         DiscardPile.SetOwner(this);
         DiscardPileTranform = DiscardPile.transform;
     }
@@ -66,9 +67,10 @@ public class Player
         }
     }
 
-    public void DrawCard(int numberOfCards)
+    public void DrawCards(int numberOfCards)
     {
-        Deck.DrawCard(numberOfCards);
+        List<Card> drawnCards = Deck.DrawCards(numberOfCards);
+        Hand.PutCardsInHand(drawnCards);
     }
 
     public void StartPlayersTurn()

@@ -9,14 +9,18 @@ public class Deck : MonoBehaviour {
 
     //[HideInInspector]
     public List<Card> Cards = new List<Card>();
-    public MegaManager MegaMan;
     public int OwnerNumber = -1;
     public Player Owner;
 
 	// Use this for initialization
 	void Awake ()
     {
-        MegaMan = FindObjectOfType<MegaManager>();
+        CreateStarterDeck();
+        ShuffleDeck();
+	}
+
+    protected virtual void CreateStarterDeck()
+    {
         foreach (GameObject cardObj in CardObjects)
         {
             GameObject obj = (GameObject)Instantiate(cardObj);
@@ -25,16 +29,15 @@ public class Deck : MonoBehaviour {
             card.SetOwner(Owner);
             Cards.Add(card);
         }
-        ShuffleDeck();
-	}
+    }
 
-    public void SetOwner(Player player)
+    public virtual void SetOwner(Player player)
     {
         Owner = player;
         OwnerNumber = Owner.PlayerNumber;
     }
 
-    public void ShuffleDeck()
+    public virtual void ShuffleDeck()
     {
         int n = Cards.Count;
         while(n > 1)
@@ -48,42 +51,51 @@ public class Deck : MonoBehaviour {
         ResizeDeck();
     }
 
-    public void DrawCard(int amount)
+    public virtual Card DrawCard()
     {
-        while(amount > 0)
-        {
-            if (Cards.Count < 1)
-                ShuffleDiscardPileIntoDeck();
-            if (Cards.Count < 1)
-                break;
-            Card card = PullCardAt(0);
-            MegaManager.Hand.PutCardInHand(card);
-            amount--;
-        }
-        ResizeDeck();
+        if (Cards.Count < 1)
+            ShuffleDiscardPileIntoDeck();
+        if (Cards.Count < 1)
+            return null;
+        return PullCardAt(0);
     }
 
-    public Card PullCardAt(int index)
+    public virtual List<Card> DrawCards(int amount)
+    {
+        List<Card> drawnCards = new List<Card>();
+        while (amount > 0)
+        {
+            Card card = DrawCard();
+            if (card == null)
+                break;
+            drawnCards.Add(card);
+            amount--;
+        }
+        return drawnCards;
+    }
+
+    public virtual Card PullCardAt(int index)
     {
         if (index < 0 || index > Cards.Count)
             return null;
         Card card = Cards[index];
         Cards.RemoveAt(index);
+        ResizeDeck();
         return card;
     }
 
-    void ShuffleDiscardPileIntoDeck()
+    protected virtual void ShuffleDiscardPileIntoDeck()
     {
         Owner.DiscardPile.PutDiscardPileOnBottomOfDeck();
         ShuffleDeck();
     }
 
-    public void AddCardToBottomOfDeck(Card card)
+    public virtual void AddCardToBottomOfDeck(Card card)
     {
         Cards.Add(card);
     }
 
-    void ResizeDeck()
+    protected virtual void ResizeDeck()
     {
         transform.localScale = new Vector3(1, 1, Cards.Count);
     }

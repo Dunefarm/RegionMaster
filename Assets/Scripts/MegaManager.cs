@@ -11,9 +11,11 @@ public class MegaManager : MonoBehaviour
     public GameObject DiscardPilePrefab;
     public LayerMask TableLayerMask;
 
+    
     public GUIManager GUIMan;
     public CameraManager CamMan;
     public AbilityResolver AbilityResolver;
+    public static Table Table;
     public static Shop Shop;
     public static Markers Markers;
     public List<Deck> Decks = new List<Deck>();
@@ -88,13 +90,16 @@ public class MegaManager : MonoBehaviour
 
     void SetupTable()
     {
-        GameObject table = Instantiate(Resources.Load("Prefabs/Table")) as GameObject;
+        Table = FindObjectOfType<Table>();
+            if(Table == null)
 
-        GridManager.AssignGrid(table.GetComponentInChildren<Grid>());
+            Table = (Instantiate(Resources.Load("Prefabs/Table")) as GameObject).GetComponent<Table>();
+
+        GridManager.AssignGrid(Table.GetComponentInChildren<Grid>());
         GridManager.SetupNewGame();
 
-        Shop = table.GetComponentInChildren<Shop>();
-        Markers = table.GetComponentInChildren<Markers>();
+        Shop = Table.GetComponentInChildren<Shop>();
+        Markers = Table.GetComponentInChildren<Markers>();
     }
 
     void SetUpGrid()
@@ -150,7 +155,7 @@ public class MegaManager : MonoBehaviour
 
     private void CurrentPlayerDrawsCards(int amount)
     {
-        Players[_currentPlayerNumber].DrawCard(amount);
+        Players[_currentPlayerNumber].DrawCards(amount);
     }
 
     void EndOfTurn()

@@ -17,6 +17,7 @@ public class DiscardPile : MonoBehaviour {
     {
         card.DestroyPhysicalRepresentation();
         card.transform.position = Vector3.one * 1000;
+        card.Owner = _owner;
         Cards.Add(card);
         ResizeDiscardPile();
     }
