@@ -84,7 +84,7 @@ public class MegaManager : MonoBehaviour
 
     void StartGame()
     {
-        EventManager.ActivatePlayer(_currentPlayerNumber);
+        //EventManager.ActivatePlayer(_currentPlayerNumber);
         EventManager.TryChangeTurnPhase(TurnPhase.Beginning);
     }
 

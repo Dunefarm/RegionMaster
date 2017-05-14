@@ -11,6 +11,7 @@ public class EventManager : MonoBehaviour
     public delegate bool d_TurnPhaseBool(TurnPhase turnPhase);
     public delegate void d_Manacost(ManaCost manaCost);
     public delegate void d_IntPlayer(int value, Player player);
+    public delegate void d_string(string text);
 
     public static event d_TurnPhase OnTurnPhaseBegin;
     public static event d_TurnPhase OnTurnPhaseEnd;
@@ -22,6 +23,7 @@ public class EventManager : MonoBehaviour
     public static event d_int OnAddDamageToPool;
     public static event d_IntPlayer OnDealDamageToPlayer;
     public static event d_NoArgVoid OnTurnEnd;
+    public static event d_string OnDisplayTextInAnnouncement;
 
     public static void TryChangeTurnPhase(TurnPhase turnPhase)
     {
@@ -54,6 +56,8 @@ public class EventManager : MonoBehaviour
 
     public static void ActivatePlayer(int number)
     {
+        DisplayTextInAnnouncement("Player " + (number+1));
+
         if (OnActivatePlayer != null)
         {
             OnActivatePlayer(number);
@@ -90,8 +94,14 @@ public class EventManager : MonoBehaviour
             OnTurnEnd();
     }
 
-	// Use this for initialization
-	void Start ()
+    public static void DisplayTextInAnnouncement(string text)
+    {
+        if (OnDisplayTextInAnnouncement != null)
+            OnDisplayTextInAnnouncement(text);
+    }
+
+    // Use this for initialization
+    void Start ()
     {
 	    
 	}
