@@ -6,7 +6,7 @@ public enum TurnPhase { Beginning, Place, Buy, End }
 
 public class TurnPhases : MonoBehaviour {
 
-    public TurnPhase CurrentTurnPhase = TurnPhase.Beginning;
+    public static TurnPhase CurrentTurnPhase = TurnPhase.Beginning;
 
     void Awake()
     {
@@ -90,5 +90,10 @@ public class TurnPhases : MonoBehaviour {
     {
         return CurrentTurnPhase == TurnPhase.Beginning ||
                CurrentTurnPhase == TurnPhase.End;
+    }
+
+    public static bool IsCurrentPhase(TurnPhase phase)
+    {
+        return phase == CurrentTurnPhase;
     }
 }

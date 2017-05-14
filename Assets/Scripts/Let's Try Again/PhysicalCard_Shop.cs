@@ -28,6 +28,9 @@ public class PhysicalCard_Shop : PhysicalCard {
 
     public override void OnMouseHold(Vector3 mousePos, Camera cam)
     {
+        if (!_draggingCard && (!TurnPhases.IsCurrentPhase(TurnPhase.Buy) || !MegaManager.CollectionManager.CheckIfCanAfford(Card.ManaCost)))
+            return;
+
         _draggingCard = true;
         RaycastHit hit;
         Debug.DrawRay(cam.transform.position, cam.ScreenToWorldPoint(mousePos + Vector3.forward * 1000000));

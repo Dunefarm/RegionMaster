@@ -70,7 +70,7 @@ public class GridCell {
 
     void OnMouseClicked()
     {
-        if (MegaManager.TurnPhases.CurrentTurnPhase == TurnPhase.Place)
+        if (TurnPhases.CurrentTurnPhase == TurnPhase.Place)
         {
             if (_owner == null)
                 SetOwner(MegaManager.CurrentPlayer);

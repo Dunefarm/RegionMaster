@@ -20,7 +20,7 @@ public class EventManager : MonoBehaviour
 
     public static void TryChangeTurnPhase(TurnPhase turnPhase)
     {
-        TurnPhase previousTurnPhase = MegaManager.TurnPhases.CurrentTurnPhase;
+        TurnPhase previousTurnPhase = TurnPhases.CurrentTurnPhase;
         if (OnTryTurnPhaseChange != null)
         {
             OnTryTurnPhaseChange(turnPhase);

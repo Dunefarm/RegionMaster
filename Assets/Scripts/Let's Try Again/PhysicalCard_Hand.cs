@@ -21,6 +21,9 @@ public class PhysicalCard_Hand : PhysicalCard {
 
     public override void OnMouseHold(Vector3 mousePos, Camera cam)
     {
+        if (!TurnPhases.IsCurrentPhase(TurnPhase.Place))
+            return;
+
         _draggingCard = true;
         RaycastHit hit;
         Debug.DrawRay(cam.transform.position, cam.ScreenToWorldPoint(mousePos + Vector3.forward * 1000000));
