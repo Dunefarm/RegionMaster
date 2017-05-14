@@ -6,6 +6,9 @@ public class Table : MonoBehaviour {
     public Shop Shop;
     public Grid Grid;
     public Markers MarkerHolder;
+    public HealthDisplay YourHealth;
+    public HealthDisplay OpponentsHealth;
+    public DamageDisplay DamageDisplay;
     public Transform DeckPlacement;
     public Transform DiscardPlacement;
 

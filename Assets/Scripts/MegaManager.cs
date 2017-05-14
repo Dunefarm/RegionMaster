@@ -35,6 +35,11 @@ public class MegaManager : MonoBehaviour
         get { return Players[_currentPlayerNumber]; }
     }
 
+    public static Player CurrentOpponent
+    {
+        get { return Players[(_currentPlayerNumber + 1) % 2]; }
+    }
+
     public static Hand Hand
     {
         get { return CurrentPlayer.Hand; }

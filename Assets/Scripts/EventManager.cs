@@ -10,6 +10,7 @@ public class EventManager : MonoBehaviour
     public delegate void d_int(int value);
     public delegate bool d_TurnPhaseBool(TurnPhase turnPhase);
     public delegate void d_Manacost(ManaCost manaCost);
+    public delegate void d_IntPlayer(int value, Player player);
 
     public static event d_TurnPhase OnTurnPhaseBegin;
     public static event d_TurnPhase OnTurnPhaseEnd;
@@ -17,6 +18,10 @@ public class EventManager : MonoBehaviour
     public static event d_int OnTryDrawCard;
     public static event d_int OnActivatePlayer;
     public static event d_Manacost OnAddMarkersToMarkerPool;
+    public static event d_NoArgVoid OnOpponentHealthClicked;
+    public static event d_int OnAddDamageToPool;
+    public static event d_IntPlayer OnDealDamageToPlayer;
+    public static event d_NoArgVoid OnTurnEnd;
 
     public static void TryChangeTurnPhase(TurnPhase turnPhase)
     {
@@ -31,6 +36,9 @@ public class EventManager : MonoBehaviour
     {
         if (OnTurnPhaseEnd != null)
             OnTurnPhaseEnd(previousTurnPhase);
+
+        if (previousTurnPhase == TurnPhase.End)
+            EndTurn();
 
         if (OnTurnPhaseBegin != null)
             OnTurnPhaseBegin(turnPhase);
@@ -56,6 +64,30 @@ public class EventManager : MonoBehaviour
     {
         if (OnAddMarkersToMarkerPool != null)
             OnAddMarkersToMarkerPool(manaCost);
+    }
+
+    public static void ClickedOpponentsHealth()
+    {
+        if (OnOpponentHealthClicked != null)
+            OnOpponentHealthClicked();
+    }
+
+    public static void AddDamageToPool(int damageAmount)
+    {
+        if (OnAddDamageToPool != null)
+            OnAddDamageToPool(damageAmount);
+    }
+
+    public static void DealDamageToPlayer(int damageAmount, Player player)
+    {
+        if (OnDealDamageToPlayer != null)
+            OnDealDamageToPlayer(damageAmount, player);
+    }
+
+    public static void EndTurn()
+    {
+        if (OnTurnEnd != null)
+            OnTurnEnd();
     }
 
 	// Use this for initialization

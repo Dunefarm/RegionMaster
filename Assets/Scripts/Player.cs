@@ -10,6 +10,9 @@ public class Player
     public DiscardPile DiscardPile;
     public Hand Hand;
     public Transform DiscardPileTranform;
+    public PlayerHealth Health;
+    public DamageDisplay DamageDisplay;
+    public Damage Damage;
 
     private Transform HAND_TRANSFORM;
 
@@ -26,6 +29,9 @@ public class Player
         SetupDeck();
         SetupDiscardPile(discardPilePrefab);
         SetupHand(camMan);
+        SetupHealth();
+
+        Damage = new Damage();
 
         EventManager.OnActivatePlayer += ActivatePlayer;
     }
@@ -55,6 +61,11 @@ public class Player
         Hand = new Hand(HAND_TRANSFORM);
     }
 
+    private void SetupHealth()
+    {
+        Health = new PlayerHealth();
+    }
+
     public void ActivatePlayer(int number)
     {
         if (number == PlayerNumber)
@@ -77,12 +88,20 @@ public class Player
     {
         Deck.gameObject.SetActive(true);
         DiscardPile.gameObject.SetActive(true);
+        Health.SetDisplay(MegaManager.Table.YourHealth);
     }
 
     public void EndPlayersTurn()
     {
         Deck.gameObject.SetActive(false);
         DiscardPile.gameObject.SetActive(false);
+        if (Health == null)
+            MonoBehaviour.print("Health is null");
+        if (MegaManager.Table == null)
+            MonoBehaviour.print("Table is null");
+        if (MegaManager.Table.OpponentsHealth == null)
+            MonoBehaviour.print("Opponent health is null");
+        Health.SetDisplay(MegaManager.Table.OpponentsHealth);
     }
 
     public bool IsActualPlayer()
@@ -107,5 +126,29 @@ public class Player
         MegaManager.CollectionManager.Subtract(card.ManaCost);
         MegaManager.Shop.PullCardFromShop(card);
         DiscardPile.PutCardInDiscardPile(card);
+    }
+
+    private void AddDamageToPool(int amount)
+    {
+        //DamageDisplay.SetDamageDisplayed(DamageDisplay.Damage + amount);
+    }
+
+    private void OnOpponentHealthClicked()
+    {
+        if (TurnPhases.IsCurrentPhase(TurnPhase.Buy) || TurnPhases.IsCurrentPhase(TurnPhase.Place))
+        {
+           // DealDamageToOpponent(DamageDisplay.Damage);
+            //DamageDisplay.SetDamageDisplayed(0);
+        }
+    }
+
+    private void DealDamageToOpponent(int amount)
+    {
+        MegaManager.Players[(PlayerNumber + 1) % 2].TakeDamage(amount);
+    }
+
+    private void TakeDamage(int amount)
+    {
+        Health.TakeDamage(amount);
     }
 }

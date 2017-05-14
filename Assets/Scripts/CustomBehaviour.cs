@@ -84,6 +84,9 @@ public class CustomBehaviour : MonoBehaviour {
         print("holding me!");
     }
 
+    /// <summary>
+    /// Called if object is clicked. Clicked = Mouse down and up on it in a sufficiently small timespan.
+    /// </summary>
     public virtual void OnMouseClicked()
     {
 
