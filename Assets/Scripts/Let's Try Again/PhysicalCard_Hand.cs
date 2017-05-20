@@ -24,6 +24,7 @@ public class PhysicalCard_Hand : PhysicalCard {
         if (!TurnPhases.IsCurrentPhase(TurnPhase.Place))
             return;
 
+        ZoomOut();
         _draggingCard = true;
         RaycastHit hit;
         Debug.DrawRay(cam.transform.position, cam.ScreenToWorldPoint(mousePos + Vector3.forward * 1000000));

@@ -11,6 +11,7 @@ public class Table : MonoBehaviour {
     public DamageDisplay DamageDisplay;
     public Transform DeckPlacement;
     public Transform DiscardPlacement;
+    public Transform ZoomedInCardPlacement;
 
     // Use this for initialization
     void Awake ()

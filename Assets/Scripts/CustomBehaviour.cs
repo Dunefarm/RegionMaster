@@ -7,8 +7,12 @@ public class CustomBehaviour : MonoBehaviour {
     float _customMouseClickThreshold = 0.1f;
     bool _customOnMouseClicked = false;
 
+    protected bool _mouseHold;
+    protected Transform _transform;
+
     void Awake()
     {
+        _transform = transform;
         CustomAwake();
     }
 
@@ -19,7 +23,7 @@ public class CustomBehaviour : MonoBehaviour {
 
     void Update()
     {
-        if(_customOnMouseClicked)
+        if (_customOnMouseClicked)
         {
             _customMouseClickCounter += Time.deltaTime;
         }
@@ -39,6 +43,7 @@ public class CustomBehaviour : MonoBehaviour {
     {
         _customMouseClickCounter = 0;
         _customOnMouseClicked = true;
+        _mouseHold = true;
         OnMouseDown();
     }
 
@@ -48,6 +53,7 @@ public class CustomBehaviour : MonoBehaviour {
 
     public void CustomOnMouseUp()
     {
+        _mouseHold = false;
         OnMouseUp();
         _customOnMouseClicked = false;
         if (_customMouseClickCounter <= _customMouseClickThreshold)
@@ -92,9 +98,9 @@ public class CustomBehaviour : MonoBehaviour {
 
     }
 
-    // - - Delegates
+    public virtual void OnMouseHover()
+    { }
 
-    public delegate void d_NoArgVoid();
-
-    public static event d_NoArgVoid lol;
+    public virtual void OnMouseStopHover()
+    { }
 }

@@ -31,6 +31,7 @@ public class PhysicalCard_Shop : PhysicalCard {
         if (!_draggingCard && (!TurnPhases.IsCurrentPhase(TurnPhase.Buy) || !MegaManager.CollectionManager.CheckIfCanAfford(Card.ManaCost)))
             return;
 
+        ZoomOut();
         _draggingCard = true;
         RaycastHit hit;
         Debug.DrawRay(cam.transform.position, cam.ScreenToWorldPoint(mousePos + Vector3.forward * 1000000));

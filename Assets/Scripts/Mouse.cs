@@ -9,7 +9,9 @@ public class Mouse : MonoBehaviour {
     public Camera cam;
     public GameObject PlayerMarker;
 
-    CustomBehaviour CurrentlyClickedCustom;
+    CustomBehaviour CurrentlyHoveredCustom;
+    CustomBehaviour LastClickedCustom;
+    CustomBehaviour LastHoveredCustom;
 
 	// Use this for initialization
 	void Start ()
@@ -19,36 +21,71 @@ public class Mouse : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        LastHoveredCustom = CurrentlyHoveredCustom;
+
+        RaycastHit hit;
+        if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
+        {
+            CurrentlyHoveredCustom = LookThroughForCustom(hit.transform);
+        }
+
+        OnMouseStopHover();
+
+        if (CurrentlyHoveredCustom == null)
+            return;
+
+        OnMouseDown();
+        OnMouseUp();
+        OnMouseHold();
+        OnMouseHover();        
+    }
+
+    void OnMouseDown()
+    {
         if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit hit;
-            if(Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
-            {
-                CurrentlyClickedCustom = LookThroughForCustom(hit.transform);
-                if (CurrentlyClickedCustom != null) 
-                    CurrentlyClickedCustom.CustomOnMouseDown();
-            }
+            LastClickedCustom = CurrentlyHoveredCustom;
+            LastClickedCustom.CustomOnMouseDown();
         }
+    }
+
+    void OnMouseUp()
+    {
         if (Input.GetMouseButtonUp(0))
         {
-            RaycastHit hit;
-            if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
-            {
-                CustomBehaviour cust = LookThroughForCustom(hit.transform);
-                if (cust != null && cust == CurrentlyClickedCustom)
-                {
-                    cust.CustomOnMouseUp();
-                }
-                else if(CurrentlyClickedCustom != null)
-                {
-                    CurrentlyClickedCustom.CustomOnMouseUpOff();
-                }
-                CurrentlyClickedCustom = null;
-            }
+            if (LastClickedCustom == null)
+                return;
+
+            if (CurrentlyHoveredCustom == LastClickedCustom)
+                CurrentlyHoveredCustom.CustomOnMouseUp();
+            else
+                LastClickedCustom.CustomOnMouseUpOff();
+
+            LastClickedCustom = null;
         }
-        if(Input.GetMouseButton(0) && CurrentlyClickedCustom != null)
+    }
+
+    void OnMouseHold()
+    {
+        if (Input.GetMouseButton(0) && LastClickedCustom != null)
         {
-            CurrentlyClickedCustom.CustomOnMouseHold(Input.mousePosition, cam);
+            LastClickedCustom.CustomOnMouseHold(Input.mousePosition, cam);
+        }
+    }
+
+    void OnMouseHover()
+    {
+        CurrentlyHoveredCustom.OnMouseHover();
+    }
+
+    void OnMouseStopHover()
+    {
+        if (LastHoveredCustom == null)
+            return;
+
+        if (LastHoveredCustom != CurrentlyHoveredCustom)
+        {
+            LastHoveredCustom.OnMouseStopHover();
         }
     }
 
@@ -66,9 +103,6 @@ public class Mouse : MonoBehaviour {
     //        //marker.transform.parent = token.transform;
     //    }
     //}
-
-    void HitCard()
-    { }
 
     CustomBehaviour LookThroughForCustom(Transform trans)
     {

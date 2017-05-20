@@ -10,6 +10,9 @@ public class PhysicalCard : CustomBehaviour {
     protected bool _draggingCard = false;
     protected PhysicalCardProperties _properties;
 
+    private GameObject ZoomedInCard;
+    private Transform ZoomedInTransform;
+
     public void AssignCard(Card card)
     {
         Card = card;
@@ -52,11 +55,51 @@ public class PhysicalCard : CustomBehaviour {
 
     public override void OnMouseClicked()
     {
-        //ToggleZoomIn(); //I'd rather this works better before I implement it fo real...
+        ToggleZoomIn(); //I'd rather this works better before I implement it fo real...
     }
 
     public override void OnMouseUpOff()
     {
         OnMouseUp();
+    }
+
+    public override void OnMouseHover()
+    {
+        ZoomIn();
+    }
+
+    public override void OnMouseStopHover()
+    {
+        ZoomOut();
+    }
+
+    protected void ZoomIn()
+    {
+        if(!ZoomedIn && !_draggingCard)
+        {
+            if (ZoomedInCard == null)
+            {
+                ZoomedInCard = Instantiate(gameObject, Vector3.zero, Quaternion.identity, _transform) as GameObject;
+                Destroy(ZoomedInCard.GetComponentInChildren<PhysicalCard>());
+                ZoomedInTransform = ZoomedInCard.transform;
+            }
+            ZoomedInTransform.position = MegaManager.Table.ZoomedInCardPlacement.position;
+            ZoomedInTransform.rotation = MegaManager.Table.ZoomedInCardPlacement.rotation;
+            ZoomedInCard.SetActive(true);
+            ZoomedIn = true;
+        }
+
+    }
+
+    protected void ZoomOut()
+    {
+        if (ZoomedIn)
+        {
+            if (ZoomedInCard != null)
+            {
+                ZoomedInCard.SetActive(false);
+            }
+            ZoomedIn = false;
+        }
     }
 }
