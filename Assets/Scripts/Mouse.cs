@@ -31,13 +31,17 @@ public class Mouse : MonoBehaviour {
 
         OnMouseStopHover();
 
-        if (CurrentlyHoveredCustom == null)
-            return;
+        if (CurrentlyHoveredCustom != null)
+        {
+            OnMouseDown();
+            OnMouseHover();
+        }
 
-        OnMouseDown();
-        OnMouseUp();
-        OnMouseHold();
-        OnMouseHover();        
+        if(LastClickedCustom != null)
+        {
+            OnMouseUp();
+            OnMouseHold();
+        }   
     }
 
     void OnMouseDown()
@@ -45,7 +49,7 @@ public class Mouse : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             LastClickedCustom = CurrentlyHoveredCustom;
-            LastClickedCustom.CustomOnMouseDown();
+            LastClickedCustom.CustomOnMouseDown(Input.mousePosition, cam);
         }
     }
 

@@ -6,6 +6,8 @@ public class CustomBehaviour : MonoBehaviour {
     float _customMouseClickCounter = 0;
     float _customMouseClickThreshold = 0.1f;
     bool _customOnMouseClicked = false;
+    float _customScreenspaceDragDistanceThreshold = 0.05f;
+    Vector3 _customMousePositionOnDown;
 
     protected bool _mouseHold;
     protected Transform _transform;
@@ -47,6 +49,15 @@ public class CustomBehaviour : MonoBehaviour {
         OnMouseDown();
     }
 
+    public void CustomOnMouseDown(Vector2 mousePos, Camera cam)
+    {
+        _customMousePositionOnDown = cam.ScreenToViewportPoint(mousePos);
+        _customMouseClickCounter = 0;
+        _customOnMouseClicked = true;
+        _mouseHold = true;
+        OnMouseDown();
+    }
+
     public virtual void OnMouseDown()
     {
     }
@@ -79,7 +90,9 @@ public class CustomBehaviour : MonoBehaviour {
 
     public void CustomOnMouseHold(Vector3 mousePos, Camera cam)
     {
-        if (_customMouseClickCounter > _customMouseClickThreshold)
+        float dist = (_customMousePositionOnDown - cam.ScreenToViewportPoint(mousePos)).sqrMagnitude;
+        if (_customMouseClickCounter > _customMouseClickThreshold
+            || dist >= Mathf.Pow(_customScreenspaceDragDistanceThreshold, 2))
         {
             OnMouseHold(mousePos, cam);
         }
