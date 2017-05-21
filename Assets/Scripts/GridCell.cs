@@ -22,7 +22,8 @@ public class GridCell {
     }
 
     private Player _owner;
-    private static Dictionary<GridToken, GridCell> GridTokenOwnership = new Dictionary<GridToken, GridCell>();
+    private static Dictionary<GridToken, GridCell> GetCellFromToken = new Dictionary<GridToken, GridCell>();
+    //private static GameObject Player1Marker, Player2Marker;
 
     public void AddToken(Token token)
     {
@@ -42,7 +43,7 @@ public class GridCell {
     {
         if(GridToken != null)
         {
-            GridTokenOwnership.Remove(GridToken);
+            GetCellFromToken.Remove(GridToken);
             MonoBehaviour.Destroy(GridToken.gameObject);
         }
 
@@ -65,34 +66,39 @@ public class GridCell {
         string color = Token.Color.ToString();
         GridToken = ((GameObject)MonoBehaviour.Instantiate(Resources.Load("Prefabs/" + color + "GridToken") as GameObject, Position, Quaternion.identity)).GetComponent<GridToken>();
         GridToken.Color = Token.Color;
-        GridTokenOwnership.Add(GridToken, this);
+        GetCellFromToken.Add(GridToken, this);
     }
 
     void OnMouseClicked()
     {
-        if (TurnPhases.CurrentTurnPhase == TurnPhase.Place)
-        {
-            if (_owner == null)
-                SetOwner(MegaManager.CurrentPlayer);
-        }        
+        if (CanPlaceCurrentPlayerMarker())
+            AssignOwner(MegaManager.CurrentPlayer);        
     }
 
-    public void SetOwner(Player player)
+    private bool CanPlaceCurrentPlayerMarker()
     {
-        if (MegaManager.Markers.ColorAmount(Token.Color) > 0)
-        {
-            MegaManager.Markers.UseMarker(Token.Color);
-            GameObject playerMarkerPrefab = Resources.Load("Prefabs/PlayerMarker_" + player.PlayerNumber) as GameObject;
-            Transform playerMarker = (MonoBehaviour.Instantiate(playerMarkerPrefab, Position, Quaternion.identity) as GameObject).transform;
-            playerMarker.parent = GridToken.transform;
-            _owner = player;
-        }
-            
+        return (TurnPhases.CurrentTurnPhase == TurnPhase.Place
+            && _owner == null
+            && MegaManager.Markers.ColorAmount(Token.Color) > 0);
+    }
+
+    public void AssignOwner(Player player)
+    {
+        MegaManager.Markers.UseMarker(Token.Color);
+        AssignPlayerMarker(player);
+        _owner = player;            
+    }
+
+    void AssignPlayerMarker(Player player)
+    {
+        GameObject playerMarkerPrefab = Resources.Load("Prefabs/PlayerMarker_" + player.PlayerNumber) as GameObject;
+        Transform playerMarker = (MonoBehaviour.Instantiate(playerMarkerPrefab, Position, Quaternion.identity) as GameObject).transform;
+        playerMarker.parent = GridToken.transform;
     }
 
     public static void GridTokenClicked(GridToken token)
     {
-        GridCell cell = GridTokenOwnership[token];
+        GridCell cell = GetCellFromToken[token];
         cell.OnMouseClicked();
     }
 }
