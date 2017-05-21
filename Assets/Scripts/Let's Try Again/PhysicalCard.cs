@@ -55,7 +55,8 @@ public class PhysicalCard : CustomBehaviour {
 
     public override void OnMouseClicked()
     {
-        ToggleZoomIn(); //I'd rather this works better before I implement it fo real...
+        _properties.SetOutlineActive(!_properties.Outline.activeInHierarchy);
+        //ToggleZoomIn(); //I'd rather this works better before I implement it fo real...
     }
 
     public override void OnMouseUpOff()

@@ -14,11 +14,6 @@ public class PhysicalCard_Shop : PhysicalCard {
         MegaManager.Shop.ReturnCard(Card);
     }
 
-    public override void OnMouseClicked()
-    {
-        print("Clicked a shop card");
-    }
-
     public override void OnMouseUp()
     {
         if (_draggingCard)

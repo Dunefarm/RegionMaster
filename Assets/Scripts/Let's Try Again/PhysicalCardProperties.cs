@@ -26,6 +26,7 @@ public class PhysicalCardProperties : MonoBehaviour {
     public TextMeshPro CardName;
     public TextMeshPro CardRules;
     public Frames frames;
+    public GameObject Outline;
 
     private Dictionary<CardColor, GameObject> _framesByColor = new Dictionary<CardColor, GameObject>();
 
@@ -59,6 +60,11 @@ public class PhysicalCardProperties : MonoBehaviour {
         cost += new string('G', manaCost.Green);
         cost += new string('B', manaCost.Blue);
         CardCost.text = cost;
+    }
+
+    public void SetOutlineActive(bool newState)
+    {
+        Outline.SetActive(newState);
     }
 
 }
