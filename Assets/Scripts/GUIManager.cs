@@ -58,9 +58,10 @@ public class GUIManager : MonoBehaviour {
 
     public void CollectAndGoToBuyPhase()
     {
-        List<GridCell> cells = GridManager.GetCompletedRegions(MegaManager.CurrentPlayer); //TODO: Make into event
-        List<Token> tokens = GridManager.PullTokensFromGrid(cells);
-        MegaManager.CollectionManager.AddTokensToPool(tokens);
+        //List<GridCell> cells = GridManager.GetCompletedRegions(MegaManager.CurrentPlayer); //TODO: Make into event
+        //List<Token> tokens = GridManager.PullTokensFromGrid(cells);
+        //MegaManager.CollectionManager.AddTokensToPool(tokens);
+        //EventManager.CollectTokens();
         EventManager.TryChangeTurnPhase(TurnPhase.Buy);
     }
 }

@@ -86,7 +86,8 @@ public class GridCell {
     {
         MegaManager.Markers.UseMarker(Token.Color);
         AssignPlayerMarker(player);
-        _owner = player;            
+        _owner = player;
+        EventManager.CollectTokens();
     }
 
     void AssignPlayerMarker(Player player)

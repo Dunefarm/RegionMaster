@@ -124,6 +124,7 @@ public class EventManager : MonoBehaviour
     public static event d_IntPlayer OnDealDamageToPlayer;
     public static event d_NoArgVoid OnTurnEnd;
     public static event d_string OnDisplayTextInAnnouncement;
+    public static event d_NoArgVoid OnCollectTokens;
 
     public static void StartGame()
     {
@@ -214,16 +215,11 @@ public class EventManager : MonoBehaviour
             OnDisplayTextInAnnouncement(text);
     }
 
-    // Use this for initialization
-    void Start ()
+    public static void CollectTokens()
     {
-	    
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+        if (OnCollectTokens != null)
+            OnCollectTokens();
+    }
     
     
     /* Attempt at making an event wrapper

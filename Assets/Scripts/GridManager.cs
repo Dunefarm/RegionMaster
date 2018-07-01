@@ -24,6 +24,7 @@ public static class GridManager {
     {
         SetupGrid();
         EventManager.OnStartGame += SetupNewGame;
+        EventManager.OnCollectTokens += CollectTokens;
     }
 
     public static void SetupNewGame()
@@ -159,5 +160,14 @@ public static class GridManager {
             return false;
 
         return (!GridCells[i, j].IsEmpty() && !CellsChecked[i, j] && GridCells[i, j].Token.Color == color);
+    }
+
+    public static void CollectTokens()
+    {
+        List<GridCell> cells = GetCompletedRegions(Player.GetCurrentPlayer); //TODO: Make into event
+        List<Token> tokens = PullTokensFromGrid(cells);
+        MegaManager.CollectionManager.AddTokensToPool(tokens);
+        if (tokens.Count > 0)
+            RefillGrid();
     }
 }
