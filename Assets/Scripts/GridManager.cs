@@ -25,6 +25,7 @@ public static class GridManager {
         SetupGrid();
         EventManager.OnStartGame += SetupNewGame;
         EventManager.OnCollectTokens += CollectTokens;
+        EventManager.Phases.PlayCardsAndPlaceTokens_OnEnter += CollectTokens;
     }
 
     public static void SetupNewGame()
