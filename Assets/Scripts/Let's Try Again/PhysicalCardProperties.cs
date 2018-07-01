@@ -56,9 +56,18 @@ public class PhysicalCardProperties : MonoBehaviour {
 
     public void SetCost(ManaCost manaCost)
     {
-        string cost = new string('R', manaCost.Red);
+        string cost = "<b><color=#D23F3FFF>";
+        cost += new string('R', manaCost.Red);
+        cost += "</color></b>";
+
+        cost += "<b><color=#23701DFF>";
         cost += new string('G', manaCost.Green);
+        cost += "</color></b>";
+
+        cost += "<b><color=#3E51D2FF>";
         cost += new string('B', manaCost.Blue);
+        cost += "</color></b>";
+
         CardCost.text = cost;
     }
 
