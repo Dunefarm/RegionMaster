@@ -35,3 +35,6 @@ SETUP:
 		- GridManager creates a tokenbag and fills it with tokens.
 		- GridManager fills the grid with tokens from the bag.
 
+TODO:
+- Try and merge the "play" phase and "buy" phase and see how it plays. It feels like more interesting cards can come from this.
+- Cards need to set special states into motion (eg. "destroy a marker", "choose and discard a card", etc).
