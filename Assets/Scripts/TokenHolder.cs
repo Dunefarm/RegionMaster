@@ -6,18 +6,16 @@ public class TokenHolder {
 
     public List<Token> Tokens = new List<Token>();
 
-    public Token InstantiateAndPoolToken(Token.ColorType color)
+    public Token InstantiateAndPoolToken(Token.ColorType color, bool temporary = false)
     {
-        Token token = new Token();
-        //tokenScript.Owner = new Player();
-        token.Color = color;
+        Token token = Token.CreateToken(color, temporary);
         AddToken(token);
         return token;
     }
 
     public virtual Token AddToken(Token token)
     {
-        if (token == null || Tokens.Contains(token))
+        if (token == null || token.Temporary || Tokens.Contains(token))
             return null;
 
         Tokens.Add(token);
