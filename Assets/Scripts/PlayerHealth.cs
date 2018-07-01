@@ -10,6 +10,7 @@ public class PlayerHealth {
     {
         //EventManager.OnTurnPhaseBegin += SwitchDisplay;
         EventManager.OnDealDamageToPlayer += TakeDamageIfTarget;
+        EventManager.OnHealPlayer += HealIfTarget;
     }
 
     public void SetDisplay(HealthDisplay newDisplay)
@@ -21,6 +22,12 @@ public class PlayerHealth {
 	public void TakeDamage(int amount)
     {
         HealthPoints -= amount;
+        Display.SetHealth(HealthPoints);
+    }
+
+    public void HealDamage(int amount)
+    {
+        HealthPoints += amount;
         Display.SetHealth(HealthPoints);
     }
 
@@ -36,5 +43,11 @@ public class PlayerHealth {
     {
         if (player.Health == this)
             TakeDamage(damageAmount);
+    }
+
+    void HealIfTarget(int healAmount, Player player)
+    {
+        if (player.Health == this)
+            HealDamage(healAmount);
     }
 }

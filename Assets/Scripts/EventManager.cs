@@ -120,6 +120,7 @@ public class EventManager : MonoBehaviour
     public static event d_Manacost OnAddMarkersToMarkerPool;
     public static event d_NoArgVoid OnOpponentHealthClicked;
     public static event d_int OnAddDamageToPool;
+    public static event d_IntPlayer OnHealPlayer;
     public static event d_IntPlayer OnDealDamageToPlayer;
     public static event d_NoArgVoid OnTurnEnd;
     public static event d_string OnDisplayTextInAnnouncement;
@@ -187,6 +188,12 @@ public class EventManager : MonoBehaviour
     {
         if (OnAddDamageToPool != null)
             OnAddDamageToPool(damageAmount);
+    }
+
+    public static void HealPlayer(int healAmount, Player player)
+    {
+        if (OnHealPlayer != null)
+            OnHealPlayer(healAmount, player);
     }
 
     public static void DealDamageToPlayer(int damageAmount, Player player)
