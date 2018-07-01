@@ -11,7 +11,7 @@ public class Damage {
         Display = MegaManager.Table.DamageDisplay;
         EventManager.OnAddDamageToPool += AddDamage;
         EventManager.OnOpponentHealthClicked += DealDamageToOpponent;
-        EventManager.OnTurnEnd += OnTurnEnd;
+        EventManager.Phases.EndOfTurn_OnExit += OnExit_EndOfTurn;
     }
 
     public void AddDamage(int amount)
@@ -38,7 +38,7 @@ public class Damage {
         Display.Damage = 0;
     }
 
-    private void OnTurnEnd()
+    private void OnExit_EndOfTurn()
     {
         EmptyPool();
     }

@@ -13,11 +13,11 @@ public class GUIManager : MonoBehaviour {
 
     void Awake()
     {
-        EventManager.OnTurnPhaseBegin += EnableButtonCollect;
-        EventManager.OnTurnPhaseEnd += DisableButtonCollect;
+        EventManager.Phases.PlayCardsAndPlaceTokens_OnEnter += EnableButtonCollect;
+        EventManager.Phases.PlayCardsAndPlaceTokens_OnExit += DisableButtonCollect;
 
-        EventManager.OnTurnPhaseBegin += EnableButtonNextTurn;
-        EventManager.OnTurnPhaseEnd += DisableButtonNextTurn;
+        EventManager.Phases.BuyFromShop_OnEnter += EnableButtonNextTurn;
+        EventManager.Phases.BuyFromShop_OnExit += DisableButtonNextTurn;
     }
 
 	// Use this for initialization
@@ -30,33 +30,30 @@ public class GUIManager : MonoBehaviour {
 	
 	}
 
+    //GUI button
     public void NextTurn()
     {
         MegaMan.NextTurn();
     }
 
-    public void EnableButtonCollect(TurnPhase turnPhase)
+    public void EnableButtonCollect()
     {
-        if(turnPhase == TurnPhase.Place)
-            ButtonCollectObj.SetActive(true);
+        ButtonCollectObj.SetActive(true);
     }
 
-    public void DisableButtonCollect(TurnPhase turnPhase)
+    public void DisableButtonCollect()
     {
-        if (turnPhase == TurnPhase.Place)
-            ButtonCollectObj.SetActive(false);
+        ButtonCollectObj.SetActive(false);
     }
 
-    public void EnableButtonNextTurn(TurnPhase turnPhase)
+    public void EnableButtonNextTurn()
     {
-        if (turnPhase == TurnPhase.Buy)
-            ButtonNextTurnObj.SetActive(true);
+        ButtonNextTurnObj.SetActive(true);
     }
 
-    public void DisableButtonNextTurn(TurnPhase turnPhase)
+    public void DisableButtonNextTurn()
     {
-        if (turnPhase == TurnPhase.Buy)
-            ButtonNextTurnObj.SetActive(false);
+        ButtonNextTurnObj.SetActive(false);
     }
 
     public void CollectAndGoToBuyPhase()

@@ -13,6 +13,105 @@ public class EventManager : MonoBehaviour
     public delegate void d_IntPlayer(int value, Player player);
     public delegate void d_string(string text);
 
+    public static class Phases
+    {
+        public static event d_NoArgVoid BeginningOfTurn_OnEnter;
+        public static event d_NoArgVoid BeginningOfTurn_OnExit;
+
+        public static event d_NoArgVoid PlayCardsAndPlaceTokens_OnEnter;
+        public static event d_NoArgVoid PlayCardsAndPlaceTokens_OnExit;
+
+        public static event d_NoArgVoid Collect_OnEnter;
+        public static event d_NoArgVoid Collect_OnExit;
+
+        public static event d_NoArgVoid BuyFromShop_OnEnter;
+        public static event d_NoArgVoid BuyFromShop_OnExit;
+
+        public static event d_NoArgVoid EndOfTurn_OnEnter;
+        public static event d_NoArgVoid EndOfTurn_OnExit;
+
+        public static void Enter_BeginningOfTurn()
+        {
+            if (BeginningOfTurn_OnEnter != null)
+            {
+                BeginningOfTurn_OnEnter();
+            }
+        }
+
+        public static void Exit_BeginningOfTurn()
+        {
+            if (BeginningOfTurn_OnExit != null)
+            {
+                BeginningOfTurn_OnExit();
+            }
+        }
+
+        public static void Enter_PlayCardsAndPlaceTokens()
+        {
+            if (PlayCardsAndPlaceTokens_OnEnter != null)
+            {
+                PlayCardsAndPlaceTokens_OnEnter();
+            }
+        }
+
+        public static void Exit_PlayCardsAndPlaceTokens()
+        {
+            if (PlayCardsAndPlaceTokens_OnExit != null)
+            {
+                PlayCardsAndPlaceTokens_OnExit();
+            }
+        }
+
+        public static void Enter_Collect()
+        {
+            if (Collect_OnEnter != null)
+            {
+                Collect_OnEnter();
+            }
+        }
+
+        public static void Exit_Collect()
+        {
+            if (Collect_OnExit != null)
+            {
+                Collect_OnExit();
+            }
+        }
+
+        public static void Enter_BuyFromShop()
+        {
+            if (BuyFromShop_OnEnter != null)
+            {
+                BuyFromShop_OnEnter();
+            }
+        }
+
+        public static void Exit_BuyFromShop()
+        {
+            if (BuyFromShop_OnExit != null)
+            {
+                BuyFromShop_OnExit();
+            }
+        }
+
+        public static void Enter_EndOfTurn()
+        {
+            if (EndOfTurn_OnEnter != null)
+            {
+                EndOfTurn_OnEnter();
+            }
+        }
+
+        public static void Exit_EndOfTurn()
+        {
+            if (EndOfTurn_OnExit != null)
+            {
+                EndOfTurn_OnExit();
+            }
+        }
+    }
+
+    public static event d_NoArgVoid OnStartGame;
     public static event d_TurnPhase OnTurnPhaseBegin;
     public static event d_TurnPhase OnTurnPhaseEnd;
     public static event d_TurnPhase OnTryTurnPhaseChange;
@@ -25,6 +124,14 @@ public class EventManager : MonoBehaviour
     public static event d_NoArgVoid OnTurnEnd;
     public static event d_string OnDisplayTextInAnnouncement;
 
+    public static void StartGame()
+    {
+        if (OnStartGame != null)
+        {
+            OnStartGame();
+        }
+    }
+
     public static void TryChangeTurnPhase(TurnPhase turnPhase)
     {
         TurnPhase previousTurnPhase = TurnPhases.CurrentTurnPhase;
@@ -34,17 +141,17 @@ public class EventManager : MonoBehaviour
         }
     }
 
-    public static void ChangeTurnPhase(TurnPhase turnPhase, TurnPhase previousTurnPhase)
-    {
-        if (OnTurnPhaseEnd != null)
-            OnTurnPhaseEnd(previousTurnPhase);
+    //public static void ChangeTurnPhase(TurnPhase turnPhase, TurnPhase previousTurnPhase)
+    //{
+    //    if (OnTurnPhaseEnd != null)
+    //        OnTurnPhaseEnd(previousTurnPhase);
 
-        if (previousTurnPhase == TurnPhase.End)
-            EndTurn();
+    //    //if (previousTurnPhase == TurnPhase.End)
+    //    //    EndTurn();
 
-        if (OnTurnPhaseBegin != null)
-            OnTurnPhaseBegin(turnPhase);
-}
+    //    if (OnTurnPhaseBegin != null)
+    //        OnTurnPhaseBegin(turnPhase);
+    //}
 
     public static void TryDrawCard(int value)
     {

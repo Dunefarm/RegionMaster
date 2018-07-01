@@ -11,7 +11,7 @@ public class Hand
     public Hand(Transform handTrans)
     {
         CardInHandPoint = handTrans;
-        EventManager.OnTurnPhaseBegin += OnTurnPhaseChange;
+        EventManager.Phases.EndOfTurn_OnEnter += AtEndOfTurn;
     }
 
     public void PutCardsInHand(List<Card> cards)
@@ -79,11 +79,8 @@ public class Hand
         WhoHoldsThisCard.Clear();
     }
 
-    public void OnTurnPhaseChange(TurnPhase newPhase)
+    public void AtEndOfTurn()
     {
-        if (newPhase == TurnPhase.End)
-        {
-            //DiscardHand();
-        }
+        //DiscardHand();
     }
 }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class MegaManager : MonoBehaviour
 {
 
-    public GameObject DeckPrefab;
+    //public GameObject DeckPrefab;
     public GameObject DiscardPilePrefab;
     public LayerMask TableLayerMask;
 
@@ -58,7 +58,9 @@ public class MegaManager : MonoBehaviour
 
     void Awake()
     {
-        EventManager.OnTurnPhaseBegin += OnTurnPhaseBegin;
+        //EventManager.OnTurnPhaseBegin += OnTurnPhaseBegin;
+        EventManager.Phases.BeginningOfTurn_OnEnter += AtBeginningOfTurn;
+        EventManager.Phases.EndOfTurn_OnEnter += AtEndOfTurn;
         TurnPhases = gameObject.AddComponent<TurnPhases>();
         CollectionManager = new CollectionManager(this);
     }
@@ -84,8 +86,12 @@ public class MegaManager : MonoBehaviour
 
     void StartGame()
     {
-        //EventManager.ActivatePlayer(_currentPlayerNumber);
-        EventManager.TryChangeTurnPhase(TurnPhase.Beginning);
+        _currentPlayerNumber = Random.Range(0,1);
+        EventManager.ActivatePlayer(_currentPlayerNumber);
+        CurrentPlayerDrawsCards(3);
+
+        EventManager.StartGame();
+        //EventManager.TryChangeTurnPhase(TurnPhase.Beginning);
     }
 
     void SetupAbilityResolver()
@@ -101,24 +107,24 @@ public class MegaManager : MonoBehaviour
             Table = (Instantiate(Resources.Load("Prefabs/Table")) as GameObject).GetComponent<Table>();
 
         GridManager.AssignGrid(Table.GetComponentInChildren<Grid>());
-        GridManager.SetupNewGame();
+        GridManager.SetupGridManager();
 
         Shop = Table.GetComponentInChildren<Shop>();
         Markers = Table.GetComponentInChildren<Markers>();
     }
 
-    void SetUpGrid()
-    {
-        Grid grid = Instantiate(Resources.Load("Prefabs/Grid") as GameObject).GetComponent<Grid>();
-        GridManager.AssignGrid(grid);
-        GridManager.SetupNewGame();
-    }
+    //void SetUpGrid()
+    //{
+    //    Grid grid = Instantiate(Resources.Load("Prefabs/Grid") as GameObject).GetComponent<Grid>();
+    //    GridManager.AssignGrid(grid);
+    //    GridManager.SetupNewGame();
+    //}
 
-    void SetupMarkerHolder()
-    {
-        Markers markers = Instantiate(Resources.Load("Prefabs/MarkerHolder") as GameObject).GetComponent<Markers>();
-        Markers = markers;
-    }
+    //void SetupMarkerHolder()
+    //{
+    //    Markers markers = Instantiate(Resources.Load("Prefabs/MarkerHolder") as GameObject).GetComponent<Markers>();
+    //    Markers = markers;
+    //}
 
     void SetupPlayers()
     {
@@ -140,13 +146,13 @@ public class MegaManager : MonoBehaviour
     public void OnTurnPhaseBegin(TurnPhase newPhase)
     {
         if (newPhase == TurnPhase.Beginning)
-            BeginningOfTurn();
+            AtBeginningOfTurn();
 
         else if (newPhase == TurnPhase.End)
-            EndOfTurn();
+            AtEndOfTurn();
     }
 
-    void BeginningOfTurn()
+    void AtBeginningOfTurn()
     {
         NextPlayer();
         CurrentPlayerDrawsCards(3);
@@ -163,7 +169,7 @@ public class MegaManager : MonoBehaviour
         Players[_currentPlayerNumber].DrawCards(amount);
     }
 
-    void EndOfTurn()
+    void AtEndOfTurn()
     {
         Markers.ClearMarkers();
         Players[_currentPlayerNumber].Hand.DiscardHand();

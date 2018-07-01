@@ -29,50 +29,72 @@ public class TurnPhases : MonoBehaviour {
 
     public void SetCurrentTurnPhase(TurnPhase newPhase)
     {
-        TurnPhase previousTurnPhase = CurrentTurnPhase;
+        EndPreviousTurnPhase(CurrentTurnPhase);
+        StartNextTurnPhase(newPhase);
+    }
+
+    void EndPreviousTurnPhase(TurnPhase previousTurnPhase)
+    {
+        switch (previousTurnPhase)
+        {
+            case TurnPhase.Beginning:
+                EventManager.Phases.Exit_BeginningOfTurn();
+                break;
+            case TurnPhase.Place:
+                EventManager.Phases.Exit_PlayCardsAndPlaceTokens();
+                break;
+            case TurnPhase.Buy:
+                EventManager.Phases.Exit_BuyFromShop();
+                break;
+            case TurnPhase.End:
+                EventManager.Phases.Exit_EndOfTurn();
+                break;
+            default:
+                break;
+        }
+    }
+
+    void StartNextTurnPhase(TurnPhase newPhase)
+    {
         CurrentTurnPhase = newPhase;
-        bool success = true;
         switch (newPhase)
         {
             case TurnPhase.Beginning:
-                SetCurrentTurnPhaseToBeginning();
+                EventManager.Phases.Enter_BeginningOfTurn();
                 break;
             case TurnPhase.Place:
-                SetCurrentTurnPhaseToPlace();
+                EventManager.Phases.Enter_PlayCardsAndPlaceTokens();
                 break;
             case TurnPhase.Buy:
-                SetCurrentTurnPhaseToBuy();
+                EventManager.Phases.Enter_BuyFromShop();
                 break;
             case TurnPhase.End:
-                SetCurrentTurnPhaseToEnd();
+                EventManager.Phases.Enter_EndOfTurn();
                 break;
             default:
-                success = false;
                 break;
         }
-        if (success)
-            EventManager.ChangeTurnPhase(newPhase, previousTurnPhase);
     }
 
-    public void SetCurrentTurnPhaseToBeginning()
-    {
-        CurrentTurnPhase = TurnPhase.Beginning;
-    }
+    //public void SetCurrentTurnPhaseToBeginning()
+    //{
+    //    CurrentTurnPhase = TurnPhase.Beginning;
+    //}
 
-    public void SetCurrentTurnPhaseToPlace()
-    {
-        CurrentTurnPhase = TurnPhase.Place;
-    }
+    //public void SetCurrentTurnPhaseToPlace()
+    //{
+    //    CurrentTurnPhase = TurnPhase.Place;
+    //}
 
-    public void SetCurrentTurnPhaseToBuy()
-    {
-        CurrentTurnPhase = TurnPhase.Buy;
-    }
+    //public void SetCurrentTurnPhaseToBuy()
+    //{
+    //    CurrentTurnPhase = TurnPhase.Buy;
+    //}
 
-    public void SetCurrentTurnPhaseToEnd()
-    {
-        CurrentTurnPhase = TurnPhase.End;
-    }
+    //public void SetCurrentTurnPhaseToEnd()
+    //{
+    //    CurrentTurnPhase = TurnPhase.End;
+    //}
 
     public void NextTurnPhase()
     {

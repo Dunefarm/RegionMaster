@@ -42,31 +42,31 @@ public class Grid : MonoBehaviour {
 
         return;
 
-        float rowLength = CellSize * (GridSize + 1);
-        Vector3 rowPos = startPos + Vector3.right * (rowLength * 0.5f);
+        //float rowLength = CellSize * (GridSize + 1);
+        //Vector3 rowPos = startPos + Vector3.right * (rowLength * 0.5f);
         
 
-        float columnHeight = CellSize * (GridSize + 1);
-        Vector3 columnPos = startPos + Vector3.down * (columnHeight * 0.5f);
+        //float columnHeight = CellSize * (GridSize + 1);
+        //Vector3 columnPos = startPos + Vector3.down * (columnHeight * 0.5f);
 
-        Vector3 rowEnd = rowPos + Vector3.down * columnHeight;
-        Transform rowEndObj = (Instantiate(GridDividerPrefab, rowEnd, Quaternion.identity, _transform) as GameObject).transform;
-        rowEndObj.name = "RowEnd";
+        //Vector3 rowEnd = rowPos + Vector3.down * columnHeight;
+        //Transform rowEndObj = (Instantiate(GridDividerPrefab, rowEnd, Quaternion.identity, _transform) as GameObject).transform;
+        //rowEndObj.name = "RowEnd";
 
-        GameObject startPosObj = Instantiate(GridDividerPrefab, startPos, Quaternion.identity, _transform) as GameObject;
-        startPosObj.name = "Start pos";
+        //GameObject startPosObj = Instantiate(GridDividerPrefab, startPos, Quaternion.identity, _transform) as GameObject;
+        //startPosObj.name = "Start pos";
 
-        for (int i = 0; i < GridSize + 1; i++)
-        {
-            Vector3 pos = Vector3.Lerp(rowPos, rowEnd, (float)i / (float)GridSize);
-            Transform row = (Instantiate(GridDividerPrefab, pos, Quaternion.identity, _transform) as GameObject).transform;
-            row.localScale = new Vector3(rowLength, row.localScale.y, row.localScale.z);
-            row.name = "GridRow" + (i + 1);
-        }
-        for (int j = 0; j < GridSize + 1; j++)
-        {
-            Transform column = (Instantiate(GridDividerPrefab, columnPos + Vector3.right * j * CellSize, Quaternion.identity, _transform) as GameObject).transform;
-            column.localScale = new Vector3(column.localScale.x, columnHeight, column.localScale.z);
-        }
+        //for (int i = 0; i < GridSize + 1; i++)
+        //{
+        //    Vector3 pos = Vector3.Lerp(rowPos, rowEnd, (float)i / (float)GridSize);
+        //    Transform row = (Instantiate(GridDividerPrefab, pos, Quaternion.identity, _transform) as GameObject).transform;
+        //    row.localScale = new Vector3(rowLength, row.localScale.y, row.localScale.z);
+        //    row.name = "GridRow" + (i + 1);
+        //}
+        //for (int j = 0; j < GridSize + 1; j++)
+        //{
+        //    Transform column = (Instantiate(GridDividerPrefab, columnPos + Vector3.right * j * CellSize, Quaternion.identity, _transform) as GameObject).transform;
+        //    column.localScale = new Vector3(column.localScale.x, columnHeight, column.localScale.z);
+        //}
     }
 }

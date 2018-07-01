@@ -20,10 +20,16 @@ public static class GridManager {
         grid = newGrid;
     }
 
+    public static void SetupGridManager()
+    {
+        SetupGrid();
+        EventManager.OnStartGame += SetupNewGame;
+    }
+
     public static void SetupNewGame()
     {
         CreateStartingTokenBag();
-        SetupGrid();
+        RefillGrid();
     }
 
     static void CreateStartingTokenBag()
@@ -55,7 +61,7 @@ public static class GridManager {
                 GridCells[i, j] = new GridCell(grid.GridCoordinateToVector3(coord));
             }
         }
-        RefillGrid();
+        //RefillGrid();
     }
 
     public static void RefillGrid()
