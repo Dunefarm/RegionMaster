@@ -36,6 +36,11 @@ public class Player
         EventManager.OnActivatePlayer += ActivatePlayer;
     }
 
+    public static Player GetCurrentPlayer
+    {
+        get { return MegaManager.CurrentPlayer; }
+    }
+
     private void SetupDeck()
     {
         GameObject deckPrefab = Resources.Load("Prefabs/Deck") as GameObject;
