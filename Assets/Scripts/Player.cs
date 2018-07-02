@@ -140,7 +140,7 @@ public class Player
 
     private void OnOpponentHealthClicked()
     {
-        if (TurnPhases.IsCurrentPhase(TurnPhase.Buy) || TurnPhases.IsCurrentPhase(TurnPhase.Main))
+        if (TurnPhases.IsCurrentPhase(TurnPhase.Main))
         {
            // DealDamageToOpponent(DamageDisplay.Damage);
             //DamageDisplay.SetDamageDisplayed(0);

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum TurnPhase { Beginning, Main, Buy, End }
+public enum TurnPhase { Beginning, Main, End }
 
 
 public class TurnPhases : MonoBehaviour {
@@ -101,9 +101,9 @@ public class TurnPhases : MonoBehaviour {
         if (CurrentTurnPhase == TurnPhase.Beginning)
             EventManager.TryChangeTurnPhase(TurnPhase.Main);
         else if (CurrentTurnPhase == TurnPhase.Main)
-            EventManager.TryChangeTurnPhase(TurnPhase.Buy);
-        else if (CurrentTurnPhase == TurnPhase.Buy)
             EventManager.TryChangeTurnPhase(TurnPhase.End);
+        //else if (CurrentTurnPhase == TurnPhase.Buy)
+        //    EventManager.TryChangeTurnPhase(TurnPhase.End);
         else if (CurrentTurnPhase == TurnPhase.End)
             EventManager.TryChangeTurnPhase(TurnPhase.Beginning);
     }

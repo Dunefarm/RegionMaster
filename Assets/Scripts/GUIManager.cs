@@ -56,12 +56,12 @@ public class GUIManager : MonoBehaviour {
         ButtonEndTurnObj.SetActive(false);
     }
 
-    public void CollectAndGoToBuyPhase()
-    {
-        //List<GridCell> cells = GridManager.GetCompletedRegions(MegaManager.CurrentPlayer); //TODO: Make into event
-        //List<Token> tokens = GridManager.PullTokensFromGrid(cells);
-        //MegaManager.CollectionManager.AddTokensToPool(tokens);
-        //EventManager.CollectTokens();
-        EventManager.TryChangeTurnPhase(TurnPhase.Buy);
-    }
+    //public void CollectAndGoToBuyPhase()
+    //{
+    //    //List<GridCell> cells = GridManager.GetCompletedRegions(MegaManager.CurrentPlayer); //TODO: Make into event
+    //    //List<Token> tokens = GridManager.PullTokensFromGrid(cells);
+    //    //MegaManager.CollectionManager.AddTokensToPool(tokens);
+    //    //EventManager.CollectTokens();
+    //    EventManager.TryChangeTurnPhase(TurnPhase.Buy);
+    //}
 }
