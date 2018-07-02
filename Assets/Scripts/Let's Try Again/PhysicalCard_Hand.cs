@@ -21,7 +21,7 @@ public class PhysicalCard_Hand : PhysicalCard {
 
     public override void OnMouseHold(Vector3 mousePos, Camera cam)
     {
-        if (!TurnPhases.IsCurrentPhase(TurnPhase.Place))
+        if (!TurnPhases.IsCurrentPhase(TurnPhase.Main))
             return;
 
         ZoomOut();

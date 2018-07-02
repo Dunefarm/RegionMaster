@@ -18,14 +18,14 @@ public class EventManager : MonoBehaviour
         public static event d_NoArgVoid BeginningOfTurn_OnEnter;
         public static event d_NoArgVoid BeginningOfTurn_OnExit;
 
-        public static event d_NoArgVoid PlayCardsAndPlaceTokens_OnEnter;
-        public static event d_NoArgVoid PlayCardsAndPlaceTokens_OnExit;
+        public static event d_NoArgVoid MainPhase_OnEnter;
+        public static event d_NoArgVoid MainPhase_OnExit;
 
-        public static event d_NoArgVoid Collect_OnEnter;
-        public static event d_NoArgVoid Collect_OnExit;
+        //public static event d_NoArgVoid Collect_OnEnter;
+        //public static event d_NoArgVoid Collect_OnExit;
 
-        public static event d_NoArgVoid BuyFromShop_OnEnter;
-        public static event d_NoArgVoid BuyFromShop_OnExit;
+        //public static event d_NoArgVoid BuyFromShop_OnEnter;
+        //public static event d_NoArgVoid BuyFromShop_OnExit;
 
         public static event d_NoArgVoid EndOfTurn_OnEnter;
         public static event d_NoArgVoid EndOfTurn_OnExit;
@@ -46,53 +46,53 @@ public class EventManager : MonoBehaviour
             }
         }
 
-        public static void Enter_PlayCardsAndPlaceTokens()
+        public static void Enter_MainPhase()
         {
-            if (PlayCardsAndPlaceTokens_OnEnter != null)
+            if (MainPhase_OnEnter != null)
             {
-                PlayCardsAndPlaceTokens_OnEnter();
+                MainPhase_OnEnter();
             }
         }
 
-        public static void Exit_PlayCardsAndPlaceTokens()
+        public static void Exit_MainPhase()
         {
-            if (PlayCardsAndPlaceTokens_OnExit != null)
+            if (MainPhase_OnExit != null)
             {
-                PlayCardsAndPlaceTokens_OnExit();
+                MainPhase_OnExit();
             }
         }
 
-        public static void Enter_Collect()
-        {
-            if (Collect_OnEnter != null)
-            {
-                Collect_OnEnter();
-            }
-        }
+        //public static void Enter_Collect()
+        //{
+        //    if (Collect_OnEnter != null)
+        //    {
+        //        Collect_OnEnter();
+        //    }
+        //}
 
-        public static void Exit_Collect()
-        {
-            if (Collect_OnExit != null)
-            {
-                Collect_OnExit();
-            }
-        }
+        //public static void Exit_Collect()
+        //{
+        //    if (Collect_OnExit != null)
+        //    {
+        //        Collect_OnExit();
+        //    }
+        //}
 
-        public static void Enter_BuyFromShop()
-        {
-            if (BuyFromShop_OnEnter != null)
-            {
-                BuyFromShop_OnEnter();
-            }
-        }
+        //public static void Enter_BuyFromShop()
+        //{
+        //    if (BuyFromShop_OnEnter != null)
+        //    {
+        //        BuyFromShop_OnEnter();
+        //    }
+        //}
 
-        public static void Exit_BuyFromShop()
-        {
-            if (BuyFromShop_OnExit != null)
-            {
-                BuyFromShop_OnExit();
-            }
-        }
+        //public static void Exit_BuyFromShop()
+        //{
+        //    if (BuyFromShop_OnExit != null)
+        //    {
+        //        BuyFromShop_OnExit();
+        //    }
+        //}
 
         public static void Enter_EndOfTurn()
         {

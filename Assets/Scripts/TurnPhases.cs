@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum TurnPhase { Beginning, Place, Buy, End }
+public enum TurnPhase { Beginning, Main, Buy, End }
 
 
 public class TurnPhases : MonoBehaviour {
@@ -40,12 +40,12 @@ public class TurnPhases : MonoBehaviour {
             case TurnPhase.Beginning:
                 EventManager.Phases.Exit_BeginningOfTurn();
                 break;
-            case TurnPhase.Place:
-                EventManager.Phases.Exit_PlayCardsAndPlaceTokens();
+            case TurnPhase.Main:
+                EventManager.Phases.Exit_MainPhase();
                 break;
-            case TurnPhase.Buy:
-                EventManager.Phases.Exit_BuyFromShop();
-                break;
+            //case TurnPhase.Buy:
+            //    EventManager.Phases.Exit_BuyFromShop();
+            //    break;
             case TurnPhase.End:
                 EventManager.Phases.Exit_EndOfTurn();
                 break;
@@ -62,12 +62,12 @@ public class TurnPhases : MonoBehaviour {
             case TurnPhase.Beginning:
                 EventManager.Phases.Enter_BeginningOfTurn();
                 break;
-            case TurnPhase.Place:
-                EventManager.Phases.Enter_PlayCardsAndPlaceTokens();
+            case TurnPhase.Main:
+                EventManager.Phases.Enter_MainPhase();
                 break;
-            case TurnPhase.Buy:
-                EventManager.Phases.Enter_BuyFromShop();
-                break;
+            //case TurnPhase.Buy:
+            //    EventManager.Phases.Enter_BuyFromShop();
+            //    break;
             case TurnPhase.End:
                 EventManager.Phases.Enter_EndOfTurn();
                 break;
@@ -99,8 +99,8 @@ public class TurnPhases : MonoBehaviour {
     public void NextTurnPhase()
     {
         if (CurrentTurnPhase == TurnPhase.Beginning)
-            EventManager.TryChangeTurnPhase(TurnPhase.Place);
-        else if (CurrentTurnPhase == TurnPhase.Place)
+            EventManager.TryChangeTurnPhase(TurnPhase.Main);
+        else if (CurrentTurnPhase == TurnPhase.Main)
             EventManager.TryChangeTurnPhase(TurnPhase.Buy);
         else if (CurrentTurnPhase == TurnPhase.Buy)
             EventManager.TryChangeTurnPhase(TurnPhase.End);

@@ -135,7 +135,7 @@ public class MegaManager : MonoBehaviour
         }
     }
 
-    public void NextTurn()
+    public void EndTurn()
     {
         List<Token> tokens = CollectionManager.PullOutAllTokens();
         GridManager.TokenBag.AddTokens(tokens);

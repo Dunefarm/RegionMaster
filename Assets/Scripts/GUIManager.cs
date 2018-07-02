@@ -8,16 +8,16 @@ public class GUIManager : MonoBehaviour {
     public MegaManager MegaMan;
 
     public GameObject ButtonCollectObj;
-    public GameObject ButtonNextTurnObj;
+    public GameObject ButtonEndTurnObj;
     public Image PlayerTurnIcon;
 
     void Awake()
     {
-        EventManager.Phases.PlayCardsAndPlaceTokens_OnEnter += EnableButtonCollect;
-        EventManager.Phases.PlayCardsAndPlaceTokens_OnExit += DisableButtonCollect;
+        //EventManager.Phases.MainPhase_OnEnter += EnableButtonCollect;
+        //EventManager.Phases.MainPhase_OnExit += DisableButtonCollect;
 
-        EventManager.Phases.BuyFromShop_OnEnter += EnableButtonNextTurn;
-        EventManager.Phases.BuyFromShop_OnExit += DisableButtonNextTurn;
+        EventManager.Phases.MainPhase_OnEnter += EnableButtonEndTurn;
+        EventManager.Phases.MainPhase_OnExit += DisableButtonEndTurn;
     }
 
 	// Use this for initialization
@@ -31,9 +31,9 @@ public class GUIManager : MonoBehaviour {
 	}
 
     //GUI button
-    public void NextTurn()
+    public void EndTurn()
     {
-        MegaMan.NextTurn();
+        MegaMan.EndTurn();
     }
 
     public void EnableButtonCollect()
@@ -46,14 +46,14 @@ public class GUIManager : MonoBehaviour {
         ButtonCollectObj.SetActive(false);
     }
 
-    public void EnableButtonNextTurn()
+    public void EnableButtonEndTurn()
     {
-        ButtonNextTurnObj.SetActive(true);
+        ButtonEndTurnObj.SetActive(true);
     }
 
-    public void DisableButtonNextTurn()
+    public void DisableButtonEndTurn()
     {
-        ButtonNextTurnObj.SetActive(false);
+        ButtonEndTurnObj.SetActive(false);
     }
 
     public void CollectAndGoToBuyPhase()

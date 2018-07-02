@@ -25,7 +25,7 @@ public class Damage {
         if (MegaManager.CurrentPlayer.Damage != this)
             return;
 
-        if (TurnPhases.IsCurrentPhase(TurnPhase.Buy) ||TurnPhases.IsCurrentPhase(TurnPhase.Place))
+        if (TurnPhases.IsCurrentPhase(TurnPhase.Buy) ||TurnPhases.IsCurrentPhase(TurnPhase.Main))
         {
             EventManager.DealDamageToPlayer(DamageInPool, MegaManager.CurrentOpponent);
             EmptyPool();

@@ -77,7 +77,7 @@ public class GridCell {
 
     private bool CanPlaceCurrentPlayerMarker()
     {
-        return (TurnPhases.CurrentTurnPhase == TurnPhase.Place
+        return (TurnPhases.CurrentTurnPhase == TurnPhase.Main
             && _owner == null
             && MegaManager.Markers.ColorAmount(Token.Color) > 0);
     }

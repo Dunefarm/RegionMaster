@@ -23,7 +23,7 @@ public class PhysicalCard_Shop : PhysicalCard {
 
     public override void OnMouseHold(Vector3 mousePos, Camera cam)
     {
-        if (!_draggingCard && (!TurnPhases.IsCurrentPhase(TurnPhase.Buy) || !MegaManager.CollectionManager.CheckIfCanAfford(Card.ManaCost)))
+        if (!_draggingCard && (!TurnPhases.IsCurrentPhase(TurnPhase.Main) || !MegaManager.CollectionManager.CheckIfCanAfford(Card.ManaCost)))
             return;
 
         ZoomOut();
