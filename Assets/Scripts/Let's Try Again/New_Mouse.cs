@@ -74,6 +74,9 @@ public class New_Mouse : MonoBehaviour {
         CustomBehaviour cust = trans.GetComponent<CustomBehaviour>();
         if (cust != null)
             return cust;
+
+        return null;
+
         Transform t = trans.parent;
         while (t != null)
         {
