@@ -5,6 +5,12 @@ using System.Collections.Generic;
 public class AbilityResolver {
 
     public static List<CardAbility> AbilitiesPending = new List<CardAbility>();
+    static CardAbility AbilityCurrentBeingResolved;
+
+    public AbilityResolver()
+    {
+        EventManager.Abilities.CardAbilityResolved += AbilityResolved;
+    }
 
     public static void AddCardAbility(CardAbility cardAbility, bool andActivate = false)
     {
@@ -30,18 +36,25 @@ public class AbilityResolver {
             DoneResolvingAbilities();
             return;
         }
-        AbilitiesPending[0].ActivateAbility();
-        ResolveAbility(AbilitiesPending[0]);
+        AbilityCurrentBeingResolved = AbilitiesPending[0];
+        AbilityCurrentBeingResolved.ActivateAbility();
+        //ResolveAbility(AbilitiesPending[0]);
     }
 
-    static void ResolveAbility(CardAbility ability)
-    {
-        AbilitiesPending.Remove(ability);
-        ability.ResolveAbility();
-    }
+    //static void ResolveAbility(CardAbility ability)
+    //{
+    //    AbilitiesPending.Remove(ability);
+    //    ability.ResolveAbility();
+    //}
 
     static void DoneResolvingAbilities()
     {
         //Something happens... Game unpauses, bla bla, something.
+    }
+
+    static void AbilityResolved(CardAbility cardAbility)
+    {
+        AbilitiesPending.Remove(cardAbility);
+        ActivateNextAbility();
     }
 }

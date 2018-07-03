@@ -46,18 +46,7 @@ public class PhysicalCard : CustomBehaviour {
             Transform.position = Card.MegaMan.CamMan.CardCloseUpPoint.position;
             Transform.rotation = Card.MegaMan.CamMan.CardCloseUpPoint.rotation;
         }
-    }
-
-    public void ReturnToHand()
-    {
-        Card.Owner.Hand.PutCardInHand(Card);
-    }
-
-    public override void OnMouseClicked()
-    {
-        _properties.SetOutlineActive(!_properties.Outline.activeInHierarchy);
-        //ToggleZoomIn(); //I'd rather this works better before I implement it fo real...
-    }
+    }    
 
     public override void OnMouseUpOff()
     {

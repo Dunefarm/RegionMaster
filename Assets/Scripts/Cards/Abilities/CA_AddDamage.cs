@@ -9,5 +9,6 @@ public class CA_AddDamage : CardAbility
     public override void ActivateAbility()
     {
         EventManager.AddDamageToPool(Damage);
+        ResolveAbility();
     }
 }

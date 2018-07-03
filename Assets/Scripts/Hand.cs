@@ -8,6 +8,8 @@ public class Hand
     public List<Card> Cards = new List<Card>();
     public Transform CardInHandPoint;
 
+    public int CardCount { get { return Cards.Count; } }
+
     public Hand(Transform handTrans)
     {
         CardInHandPoint = handTrans;

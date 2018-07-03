@@ -9,5 +9,6 @@ public class CA_Heal : CardAbility
     public override void ActivateAbility()
     {
         EventManager.HealPlayer(HealAmount, Player.GetCurrentPlayer);
+        ResolveAbility();
     }
 }

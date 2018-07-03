@@ -16,5 +16,6 @@ public class CA_MultiplyScore : CardAbility
             _duplicatedTokens.Add(Token.CreateToken(manaToken.Color, true));
         }
         MegaManager.CollectionManager.AddTokensToPool(_duplicatedTokens);
+        ResolveAbility();
     }
 }

@@ -9,5 +9,6 @@ public class CA_MultiplyDamage : CardAbility
     public override void ActivateAbility()
     {        
         EventManager.AddDamageToPool(Player.GetCurrentPlayer.Damage.DamageInPool * (MultiplyBy - 1));
+        ResolveAbility();
     }
 }

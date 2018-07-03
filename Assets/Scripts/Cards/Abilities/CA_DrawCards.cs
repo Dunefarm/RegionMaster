@@ -9,5 +9,6 @@ public class CA_DrawCards : CardAbility
     public override void ActivateAbility()
     {
         MegaManager.CurrentPlayer.DrawCards(AmountToDraw);
+        ResolveAbility();
     }
 }

@@ -12,6 +12,8 @@ public class EventManager : MonoBehaviour
     public delegate void d_Manacost(ManaCost manaCost);
     public delegate void d_IntPlayer(int value, Player player);
     public delegate void d_string(string text);
+    public delegate void d_Card(Card card);
+    public delegate void d_CardAbility(CardAbility cardAbility);
 
     public static class Phases
     {
@@ -107,6 +109,59 @@ public class EventManager : MonoBehaviour
             if (EndOfTurn_OnExit != null)
             {
                 EndOfTurn_OnExit();
+            }
+        }
+    }
+
+    public static class Cards
+    {
+        public static event d_NoArgVoid CardsInHandSetToSelectable;
+        public static event d_NoArgVoid CardsInHandSetToStandard;
+        public static event d_Card SelectedCardInHand;
+        public static event d_Card DeselectedCardInHand;
+
+        public static void SelectCardInHand(Card card)
+        {
+            if (SelectedCardInHand != null)
+            {
+                SelectedCardInHand(card);
+            }
+        }
+
+        public static void DeselectCardInHand(Card card)
+        {
+            if (DeselectedCardInHand != null)
+            {
+                DeselectedCardInHand(card);
+            }
+        }
+
+        public static void SetCardsInHandToSelectable()
+        {
+            if (CardsInHandSetToSelectable != null)
+            {
+                CardsInHandSetToSelectable();
+            }
+        }
+
+        public static void SetCardsInHandToStandard()
+        {
+            if (CardsInHandSetToStandard != null)
+            {
+                CardsInHandSetToStandard();
+            }
+        }
+    }
+
+    public static class Abilities
+    {
+        public static event d_CardAbility CardAbilityResolved;
+
+        public static void ResolveCardAbility(CardAbility cardAbility)
+        {
+            if (CardAbilityResolved != null)
+            {
+                CardAbilityResolved(cardAbility);
             }
         }
     }

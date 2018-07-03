@@ -6,6 +6,8 @@ public class CardAbility : MonoBehaviour {
     [HideInInspector]
     public Card Card;
 
+    protected bool _activated = false;
+
     void Awake()
     {
     }
@@ -16,7 +18,8 @@ public class CardAbility : MonoBehaviour {
 
     public virtual void ResolveAbility()
     {
-        AbilityResolver.ActivateNextAbility();
+        _activated = false;
+        EventManager.Abilities.ResolveCardAbility(this);
     }
 
 }

@@ -9,6 +9,7 @@ public class CA_GiveMarkers : CardAbility
     {
         ManaCost manaCost = new ManaCost(Red, Green, Blue);
         EventManager.AddMarkersToMarkerPool(manaCost);
+        ResolveAbility();
     }
 
 }
