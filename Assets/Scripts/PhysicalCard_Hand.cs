@@ -69,7 +69,7 @@ public class PhysicalCard_Hand : PhysicalCard {
 
     public override void OnMouseClicked()
     {
-        print("Clicked " + Card.Name + ". State: " + CurrentState + ". Selected: " + _selected + ".");
+        //print("Clicked " + Card.Name + ". State: " + CurrentState + ". Selected: " + _selected + ".");
         if (CurrentState == InteractState.Selectable)
         {
             if(_selected)

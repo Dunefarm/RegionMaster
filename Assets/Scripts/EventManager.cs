@@ -5,6 +5,7 @@ public class EventManager : MonoBehaviour
 {
 
     public delegate void d_NoArgVoid();
+    public delegate void d_Bool(bool value);
     public delegate void d_TurnPhase(TurnPhase turnPhase);
     public delegate void d_TurnPhaseTwice(TurnPhase turnPhase, TurnPhase previousTurnPhase);
     public delegate void d_int(int value);
@@ -153,7 +154,57 @@ public class EventManager : MonoBehaviour
         }
     }
 
-    public static class Abilities
+    public static class GUI
+    {
+        public static event d_Bool ConfirmButtonEnabled;
+        public static event d_NoArgVoid ConfirmButtonDisabled;
+        public static event d_NoArgVoid ConfirmButtonPressed;
+
+        public static event d_NoArgVoid EndTurnButtonEnabled;
+        public static event d_NoArgVoid EndTurnButtonDisabled;
+
+        public static void EnableConfirmButton(bool clickable)
+        {
+            if (ConfirmButtonEnabled != null)
+            {
+                ConfirmButtonEnabled(clickable);
+            }
+        }
+
+        public static void DisableConfirmButton()
+        {
+            if (ConfirmButtonDisabled != null)
+            {
+                ConfirmButtonDisabled();
+            }
+        }
+
+        public static void PressConfirmButton()
+        {
+            if (ConfirmButtonPressed != null)
+            {
+                ConfirmButtonPressed();
+            }
+        }
+
+        public static void EnableEndTurnButton()
+        {
+            if (EndTurnButtonEnabled != null)
+            {
+                EndTurnButtonEnabled();
+            }
+        }
+
+        public static void DisableEndTurnButton()
+        {
+            if (EndTurnButtonDisabled != null)
+            {
+                EndTurnButtonDisabled();
+            }
+        }
+    }
+
+        public static class Abilities
     {
         public static event d_CardAbility CardAbilityResolved;
 
