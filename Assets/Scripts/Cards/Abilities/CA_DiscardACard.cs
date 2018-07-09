@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CA_DiscardACardTest : CardAbility
+public class CA_DiscardACard : CardAbility
 {
     public int AmountToDiscard = 1;
 
