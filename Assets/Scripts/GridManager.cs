@@ -171,4 +171,62 @@ public static class GridManager {
         if (tokens.Count > 0)
             RefillGrid();
     }
+
+    public static class Count
+    {
+        public static int Tokens(Token.ColorType color)
+        {
+            int count = 0;
+            foreach (GridCell gridCell in GridCells)
+            {
+                if (gridCell.Token.Color == color)
+                    count++;
+            }
+            return count;
+        }
+
+        public static int Tokens(Token.ColorType firstColor, Token.ColorType secondColor)
+        {
+            int count = 0;
+            foreach (GridCell gridCell in GridCells)
+            {
+                if (gridCell.Token.Color == firstColor || gridCell.Token.Color == secondColor)
+                    count++;
+            }
+            return count;
+        }
+
+        public static int Tokens(Player owner)
+        {
+            int count = 0;
+            foreach (GridCell gridCell in GridCells)
+            {
+                if (gridCell.Owner == owner)
+                    count++;
+            }
+            return count;
+        }
+
+        public static int Tokens(Player owner, Token.ColorType color)
+        {
+            int count = 0;
+            foreach (GridCell gridCell in GridCells)
+            {
+                if (gridCell.Owner == owner && gridCell.Token.Color == color)
+                    count++;
+            }
+            return count;
+        }
+
+        public static int Tokens(Player owner, Token.ColorType firstColor, Token.ColorType secondColor)
+        {
+            int count = 0;
+            foreach (GridCell gridCell in GridCells)
+            {
+                if (gridCell.Owner == owner && (gridCell.Token.Color == firstColor || gridCell.Token.Color == secondColor))
+                    count++;
+            }
+            return count;
+        }
+    }
 }

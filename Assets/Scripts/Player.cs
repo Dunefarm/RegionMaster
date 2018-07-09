@@ -41,6 +41,11 @@ public class Player
         get { return MegaManager.CurrentPlayer; }
     }
 
+    public static Player GetCurrentOpponent
+    {
+        get { return MegaManager.CurrentOpponent; }
+    }
+
     private void SetupDeck()
     {
         GameObject deckPrefab = Resources.Load("Prefabs/Deck") as GameObject;
